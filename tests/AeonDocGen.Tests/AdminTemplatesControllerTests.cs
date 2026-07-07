@@ -111,7 +111,7 @@ public class AdminTemplatesControllerTests
     public async Task ListTemplates_Returns400_WhenTenantIdHeaderInvalid()
     {
         var jwt = CreateTestJwt();
-        SetupHttpContext(authorization: $"Bearer {jwt}", tenantId: "not-a-guid");
+        SetupHttpContext(authorization: $"Bearer {jwt}", tenantId: "");
         _authServiceMock.Setup(a => a.ValidateTokenAsync(jwt, It.IsAny<CancellationToken>()))
             .ReturnsAsync(new AuthenticatedUser { UserId = _userId, TenantId = _tenantId, Role = "Admin" });
 

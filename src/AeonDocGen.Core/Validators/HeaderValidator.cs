@@ -1,5 +1,6 @@
 // TR: LLD-0029 | ORIGIN: MID_LEVEL_DESIGN-0029
 using AeonDocGen.Core.DTOs;
+using AeonDocGen.Core.Utilities;
 
 namespace AeonDocGen.Core.Validators;
 
@@ -43,7 +44,7 @@ public static class HeaderValidator
     public static (bool IsValid, Guid TenantId, StandardErrorDto? Error) ValidateTenantIdHeader(
         string? tenantIdHeader, string traceId)
     {
-        if (string.IsNullOrWhiteSpace(tenantIdHeader) || !Guid.TryParse(tenantIdHeader, out var tenantId))
+        if (!OpaqueIdentifier.TryNormalize(tenantIdHeader, "tenant", out var tenantId))
         {
             return (false, Guid.Empty, new StandardErrorDto
             {

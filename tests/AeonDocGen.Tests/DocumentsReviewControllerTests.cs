@@ -2,6 +2,7 @@ using AeonDocGen.Api.Controllers;
 using AeonDocGen.Api.Policies;
 using AeonDocGen.Core.DTOs;
 using AeonDocGen.Core.Interfaces;
+using AeonDocGen.Core.Utilities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -151,22 +152,60 @@ public class DocumentsReviewControllerTests
     }
 
     [Fact]
-    public async Task ReviewDocument_InvalidProjectId_Returns400()
+    public async Task ReviewDocument_EmptyProjectId_Returns400()
     {
         SetupAuth();
         var request = new DocumentReviewRequestDto { Action = "submit" };
-        var result = await _controller.ReviewDocument("not-a-guid", _documentId.ToString(), request, CancellationToken.None);
+        var result = await _controller.ReviewDocument("", _documentId.ToString(), request, CancellationToken.None);
 
         var objResult = Assert.IsType<BadRequestObjectResult>(result);
         Assert.Equal("INVALID_REQUEST", ((StandardErrorDto)objResult.Value!).Code);
     }
 
     [Fact]
-    public async Task ReviewDocument_InvalidDocumentId_Returns400()
+    public async Task ReviewDocument_OpaqueIds_Succeeds()
+    {
+        var opaqueProjectId = "prj-001";
+        var opaqueDocumentId = "doc-001";
+        OpaqueIdentifier.TryNormalize(opaqueProjectId, "project", out var normalizedProjectId);
+
+        _controller.HttpContext.Request.Headers["Authorization"] = "Bearer valid-token";
+        _controller.HttpContext.Request.Headers["X-Tenant-Id"] = _tenantId.ToString();
+        _controller.HttpContext.Request.Headers["Idempotency-Key"] = "key-1";
+        _controller.HttpContext.Request.Headers["If-Match"] = "\"1-abc\"";
+        _authServiceMock.Setup(s => s.ValidateTokenAsync("valid-token", It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new AuthenticatedUser
+            {
+                UserId = _userId,
+                TenantId = _tenantId,
+                Role = "Sustainability Consultant",
+                Permissions = new HashSet<string>(new[] { "documents.review" }, StringComparer.OrdinalIgnoreCase),
+                ProjectScopeIds = new HashSet<Guid> { normalizedProjectId }
+            });
+        _serviceMock.Setup(s => s.ReviewDocumentAsync(
+            It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<Guid>(),
+            It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(),
+            It.IsAny<DocumentReviewRequestDto>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new DocumentReviewResponseDto
+            {
+                DocumentId = "doc-opaque",
+                ProjectId = "prj-opaque",
+                ReviewStatus = "draft"
+            });
+
+        var request = new DocumentReviewRequestDto { Action = "submit" };
+        var result = await _controller.ReviewDocument(opaqueProjectId, opaqueDocumentId, request, CancellationToken.None);
+
+        var objResult = Assert.IsType<OkObjectResult>(result);
+        Assert.Equal(200, objResult.StatusCode);
+    }
+
+    [Fact]
+    public async Task ReviewDocument_EmptyDocumentId_Returns400()
     {
         SetupAuth();
         var request = new DocumentReviewRequestDto { Action = "submit" };
-        var result = await _controller.ReviewDocument(_projectId.ToString(), "not-a-guid", request, CancellationToken.None);
+        var result = await _controller.ReviewDocument(_projectId.ToString(), "", request, CancellationToken.None);
 
         var objResult = Assert.IsType<BadRequestObjectResult>(result);
         Assert.Equal("INVALID_REQUEST", ((StandardErrorDto)objResult.Value!).Code);

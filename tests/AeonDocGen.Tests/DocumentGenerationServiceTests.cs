@@ -4,6 +4,7 @@ using AeonDocGen.Core.DTOs;
 using AeonDocGen.Core.Interfaces;
 using AeonDocGen.Core.Models;
 using AeonDocGen.Core.Services;
+using AeonDocGen.Core.Utilities;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -145,6 +146,55 @@ public class DocumentGenerationServiceTests
     }
 
     [Fact]
+    public async Task GenerateDocument_OpaqueIdentifiers_AreAccepted()
+    {
+        var opaqueTemplateId = "tmpl-001";
+        var opaqueSourceId = "src-001";
+        var normalizedSourceId = OpaqueIdentifier.TryNormalize(opaqueSourceId, "source", out var sourceGuid) ? sourceGuid : Guid.Empty;
+
+        _projectRepoMock.Setup(r => r.ExistsAsync(_projectId, _tenantId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(true);
+        _templateRepoMock.Setup(r => r.GetByIdAsync(It.IsAny<Guid>(), _tenantId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new TemplateEntity
+            {
+                TemplateId = Guid.NewGuid(),
+                TenantId = _tenantId,
+                Name = "Opaque Template",
+                DocumentType = "narrative",
+                CurrentVersion = "1.0",
+                IsActive = true
+            });
+        _templateRepoMock.Setup(r => r.GetLatestPublishedVersionAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new TemplateVersionEntity
+            {
+                TemplateVersionId = Guid.NewGuid(),
+                TemplateId = Guid.NewGuid(),
+                TemplateVersion = "1.0",
+                IsPublished = true,
+                CreatedAt = DateTime.UtcNow
+            });
+        _sourceRepoMock.Setup(r => r.ResolveSourceEntityTypesAsync(
+                It.IsAny<IReadOnlyCollection<Guid>>(), _projectId, _tenantId, _userId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new Dictionary<Guid, string> { [normalizedSourceId] = "artifact" });
+
+        var request = new GenerateDocumentRequestDto
+        {
+            DocumentType = "narrative",
+            Format = "pdf",
+            TemplateId = opaqueTemplateId,
+            IncludeBranding = false,
+            SourceIds = new List<string> { opaqueSourceId }
+        };
+
+        var result = await _service.GenerateDocumentAsync(
+            _tenantId, _projectId, _userId, "corr-opaque", "key-opaque", request);
+
+        Assert.Equal("narrative", result.DocumentType);
+        Assert.Equal(opaqueTemplateId, request.TemplateId);
+        Assert.Equal("draft", result.ReviewStatus);
+    }
+
+    [Fact]
     public async Task GenerateDocument_EmptyDocumentType_ThrowsArgumentException()
     {
         var request = CreateValidRequest();
@@ -229,7 +279,7 @@ public class DocumentGenerationServiceTests
 
         var ex = await Assert.ThrowsAsync<ArgumentException>(() =>
             _service.GenerateDocumentAsync(_tenantId, Guid.Empty, _userId, "corr-1", "key-empty-project", request));
-        Assert.Equal("projectId must be a non-empty valid identifier.", ex.Message);
+        Assert.Equal("projectId must be a non-empty identifier.", ex.Message);
     }
 
     [Fact]

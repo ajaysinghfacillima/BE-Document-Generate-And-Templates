@@ -147,29 +147,29 @@ public class DocumentReviewRequestValidatorTests
 
     // Route parameter validation
     [Fact]
-    public void ValidateRouteParameters_ValidIds_ReturnsValid()
+    public void ValidateRouteParameters_OpaqueIds_ReturnsValid()
     {
         var (isValid, error) = DocumentReviewRequestValidator.ValidateRouteParameters(
-            Guid.NewGuid().ToString(), Guid.NewGuid().ToString(), "trace-1");
+            "prj-001", "doc-001", "trace-1");
         Assert.True(isValid);
         Assert.Null(error);
     }
 
     [Fact]
-    public void ValidateRouteParameters_InvalidProjectId_ReturnsError()
+    public void ValidateRouteParameters_EmptyProjectId_ReturnsError()
     {
         var (isValid, error) = DocumentReviewRequestValidator.ValidateRouteParameters(
-            "not-guid", Guid.NewGuid().ToString(), "trace-1");
+            "", "doc-001", "trace-1");
         Assert.False(isValid);
         Assert.Equal("INVALID_REQUEST_BODY", error!.Code);
         Assert.Contains("projectId", error.Message);
     }
 
     [Fact]
-    public void ValidateRouteParameters_InvalidDocumentId_ReturnsError()
+    public void ValidateRouteParameters_EmptyDocumentId_ReturnsError()
     {
         var (isValid, error) = DocumentReviewRequestValidator.ValidateRouteParameters(
-            Guid.NewGuid().ToString(), "not-guid", "trace-1");
+            "prj-001", "", "trace-1");
         Assert.False(isValid);
         Assert.Equal("INVALID_REQUEST_BODY", error!.Code);
         Assert.Contains("documentId", error.Message);

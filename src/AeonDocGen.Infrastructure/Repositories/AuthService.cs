@@ -5,6 +5,7 @@ using System.Text;
 using AeonDocGen.Core.DTOs;
 using AeonDocGen.Core.Interfaces;
 using AeonDocGen.Core.Models;
+using AeonDocGen.Core.Utilities;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -48,7 +49,8 @@ public sealed class AuthService : IAuthService
                             ?? principal.Claims.FirstOrDefault(c => c.Type == "role")?.Value
                             ?? string.Empty;
 
-            if (!Guid.TryParse(userIdClaim, out var userId) || !Guid.TryParse(tenantIdClaim, out var tenantId))
+            if (!OpaqueIdentifier.TryNormalize(userIdClaim, "user", out var userId) ||
+                !OpaqueIdentifier.TryNormalize(tenantIdClaim, "tenant", out var tenantId))
             {
                 return Task.FromResult<AuthenticatedUser?>(null);
             }
@@ -60,7 +62,7 @@ public sealed class AuthService : IAuthService
 
             var projectIds = principal.Claims
                 .Where(c => c.Type == "project_id")
-                .Select(c => Guid.TryParse(c.Value, out var pid) ? pid : Guid.Empty)
+                .Select(c => OpaqueIdentifier.TryNormalize(c.Value, "project", out var pid) ? pid : Guid.Empty)
                 .Where(pid => pid != Guid.Empty)
                 .ToHashSet();
 

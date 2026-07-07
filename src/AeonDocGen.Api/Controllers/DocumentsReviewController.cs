@@ -3,6 +3,7 @@ using System.Diagnostics;
 using AeonDocGen.Api.Policies;
 using AeonDocGen.Core.DTOs;
 using AeonDocGen.Core.Interfaces;
+using AeonDocGen.Core.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -57,25 +58,25 @@ public sealed class DocumentsReviewController : ControllerBase
             });
         }
 
-        if (string.IsNullOrWhiteSpace(projectId) || !Guid.TryParse(projectId, out var projectGuid))
+        if (!OpaqueIdentifier.TryNormalize(projectId, "project", out var projectGuid))
         {
             return BadRequest(new StandardErrorDto
             {
                 Status = StatusCodes.Status400BadRequest,
                 TraceId = traceId,
                 Code = "INVALID_REQUEST",
-                Message = "projectId must be a valid non-empty identifier."
+                Message = "projectId must be a non-empty identifier."
             });
         }
 
-        if (string.IsNullOrWhiteSpace(documentId) || !Guid.TryParse(documentId, out var documentGuid))
+        if (!OpaqueIdentifier.TryNormalize(documentId, "document", out var documentGuid))
         {
             return BadRequest(new StandardErrorDto
             {
                 Status = StatusCodes.Status400BadRequest,
                 TraceId = traceId,
                 Code = "INVALID_REQUEST",
-                Message = "documentId must be a valid non-empty identifier."
+                Message = "documentId must be a non-empty identifier."
             });
         }
 

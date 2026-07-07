@@ -189,17 +189,17 @@ public class DocumentGenerationRequestValidatorTests
 
     // Project ID validation
     [Fact]
-    public void ValidateProjectId_ValidGuid_ReturnsValid()
+    public void ValidateProjectId_OpaqueString_ReturnsValid()
     {
-        var (isValid, error) = DocumentGenerationRequestValidator.ValidateProjectId(Guid.NewGuid().ToString(), "trace-1");
+        var (isValid, error) = DocumentGenerationRequestValidator.ValidateProjectId("prj-001", "trace-1");
         Assert.True(isValid);
         Assert.Null(error);
     }
 
     [Fact]
-    public void ValidateProjectId_InvalidGuid_ReturnsError()
+    public void ValidateProjectId_Empty_ReturnsError()
     {
-        var (isValid, error) = DocumentGenerationRequestValidator.ValidateProjectId("not-a-guid", "trace-1");
+        var (isValid, error) = DocumentGenerationRequestValidator.ValidateProjectId("", "trace-1");
         Assert.False(isValid);
         Assert.Equal("INVALID_REQUEST", error!.Code);
     }
@@ -220,11 +220,11 @@ public class DocumentGenerationRequestValidatorTests
     }
 
     [Fact]
-    public void ValidateProjectId_EmptyGuid_ReturnsError()
+    public void ValidateProjectId_Whitespace_ReturnsError()
     {
-        var (isValid, error) = DocumentGenerationRequestValidator.ValidateProjectId(Guid.Empty.ToString(), "trace-1");
+        var (isValid, error) = DocumentGenerationRequestValidator.ValidateProjectId("   ", "trace-1");
         Assert.False(isValid);
-        Assert.Equal("projectId must be a non-empty valid identifier.", error!.Message);
+        Assert.Equal("projectId must be a non-empty identifier.", error!.Message);
     }
 
     [Fact]

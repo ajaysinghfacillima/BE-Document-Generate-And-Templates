@@ -46,6 +46,29 @@ public class AuthServiceTests
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
+    private static string BuildOpaqueToken(JwtSettings settings, string userId, string tenantId, string projectId, DateTime notBefore, DateTime expires)
+    {
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(settings.SigningKey));
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        var token = new JwtSecurityToken(
+            issuer: settings.Issuer,
+            audience: settings.Audience,
+            claims: new[]
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, userId),
+                new Claim(ClaimTypes.NameIdentifier, userId),
+                new Claim("tenant_id", tenantId),
+                new Claim(ClaimTypes.Role, "Admin"),
+                new Claim("permission", "documents.generate"),
+                new Claim("project_id", projectId)
+            },
+            notBefore: notBefore,
+            expires: expires,
+            signingCredentials: creds);
+
+        return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
     [Fact]
     public async Task ValidateTokenAsync_ValidToken_ReturnsUser()
     {
@@ -64,6 +87,26 @@ public class AuthServiceTests
         Assert.Equal(userId, result!.UserId);
         Assert.Equal(tenantId, result.TenantId);
         Assert.True(result.HasPermission("documents.generate"));
+    }
+
+    [Fact]
+    public async Task ValidateTokenAsync_OpaqueIdentifiers_ReturnsUser()
+    {
+        var refreshRepo = new Mock<IRefreshTokenRepository>();
+        var service = new AuthService(
+            Options.Create(_settings),
+            refreshRepo.Object,
+            new Mock<ILogger<AuthService>>().Object);
+
+        var token = BuildOpaqueToken(_settings, "usr-001", "ten-001", "prj-001", DateTime.UtcNow.AddMinutes(-1), DateTime.UtcNow.AddMinutes(10));
+
+        var result = await service.ValidateTokenAsync(token, CancellationToken.None);
+
+        Assert.NotNull(result);
+        Assert.NotEqual(Guid.Empty, result!.UserId);
+        Assert.NotEqual(Guid.Empty, result.TenantId);
+        Assert.True(result.HasPermission("documents.generate"));
+        Assert.NotEmpty(result.ProjectScopeIds);
     }
 
     [Fact]

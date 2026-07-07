@@ -2,6 +2,7 @@ using AeonDocGen.Api.Controllers;
 using AeonDocGen.Api.Policies;
 using AeonDocGen.Core.DTOs;
 using AeonDocGen.Core.Interfaces;
+using AeonDocGen.Core.Utilities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -102,10 +103,10 @@ public class DocumentsGenerationControllerTests
     }
 
     [Fact]
-    public async Task GenerateDocument_InvalidProjectId_Returns400()
+    public async Task GenerateDocument_EmptyProjectId_Returns400()
     {
         SetupAuth();
-        var result = await _controller.GenerateDocument("not-a-guid", new GenerateDocumentRequestDto(), CancellationToken.None);
+        var result = await _controller.GenerateDocument("", new GenerateDocumentRequestDto(), CancellationToken.None);
 
         var objResult = Assert.IsType<BadRequestObjectResult>(result);
         var error = Assert.IsType<StandardErrorDto>(objResult.Value);
@@ -113,15 +114,59 @@ public class DocumentsGenerationControllerTests
     }
 
     [Fact]
-    public async Task GenerateDocument_EmptyGuidProjectId_Returns400()
+    public async Task GenerateDocument_OpaqueProjectId_Succeeds()
+    {
+        var opaqueProjectId = "prj-001";
+        OpaqueIdentifier.TryNormalize(opaqueProjectId, "project", out var normalizedProjectId);
+
+        _controller.HttpContext.Request.Headers["Authorization"] = "Bearer valid-token";
+        _controller.HttpContext.Request.Headers["X-Tenant-Id"] = _tenantId.ToString();
+        _controller.HttpContext.Request.Headers["Idempotency-Key"] = "key-default";
+        _authServiceMock.Setup(s => s.ValidateTokenAsync("valid-token", It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new AuthenticatedUser
+            {
+                UserId = _userId,
+                TenantId = _tenantId,
+                Role = "Sustainability Consultant",
+                Permissions = new HashSet<string>(new[] { "documents.generate" }, StringComparer.OrdinalIgnoreCase),
+                ProjectScopeIds = new HashSet<Guid> { normalizedProjectId }
+            });
+        _serviceMock.Setup(s => s.GenerateDocumentAsync(
+            It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<string>(), It.IsAny<string>(),
+            It.IsAny<GenerateDocumentRequestDto>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new DocumentArtifactResponseDto
+            {
+                Id = "doc-opaque",
+                DocumentType = "narrative",
+                Format = "pdf",
+                ReviewStatus = "draft"
+            });
+
+        var request = new GenerateDocumentRequestDto
+        {
+            DocumentType = "narrative",
+            Format = "pdf",
+            TemplateId = "tmpl-001",
+            IncludeBranding = false,
+            SourceIds = new List<string> { "src-001" }
+        };
+
+        var result = await _controller.GenerateDocument(opaqueProjectId, request, CancellationToken.None);
+
+        var objResult = Assert.IsType<ObjectResult>(result);
+        Assert.Equal(201, objResult.StatusCode);
+    }
+
+    [Fact]
+    public async Task GenerateDocument_WhitespaceProjectId_Returns400()
     {
         SetupAuth();
-        var result = await _controller.GenerateDocument(Guid.Empty.ToString(), new GenerateDocumentRequestDto(), CancellationToken.None);
+        var result = await _controller.GenerateDocument("   ", new GenerateDocumentRequestDto(), CancellationToken.None);
 
         var objResult = Assert.IsType<BadRequestObjectResult>(result);
         var error = Assert.IsType<StandardErrorDto>(objResult.Value);
         Assert.Equal("INVALID_REQUEST", error.Code);
-        Assert.Equal("projectId must be a non-empty valid identifier.", error.Message);
+        Assert.Equal("projectId must be a non-empty identifier.", error.Message);
     }
 
     [Fact]

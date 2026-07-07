@@ -8,6 +8,7 @@ using System.Text.Json;
 using AeonDocGen.Core.DTOs;
 using AeonDocGen.Core.Interfaces;
 using AeonDocGen.Core.Models;
+using AeonDocGen.Core.Utilities;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -94,7 +95,7 @@ public sealed class DocumentGenerationService : IDocumentGenerationService
 
         if (projectId == Guid.Empty)
         {
-            throw new ArgumentException("projectId must be a non-empty valid identifier.");
+            throw new ArgumentException("projectId must be a non-empty identifier.");
         }
 
         // Check idempotency
@@ -123,9 +124,9 @@ public sealed class DocumentGenerationService : IDocumentGenerationService
         }
 
         // Validate template
-        if (!Guid.TryParse(request.TemplateId, out var templateId))
+        if (!OpaqueIdentifier.TryNormalize(request.TemplateId, "template", out var templateId))
         {
-            throw new ArgumentException("templateId must be a valid identifier.");
+            throw new ArgumentException("templateId must be a non-empty identifier.");
         }
 
         var template = await _templateResolutionRepository.GetByIdAsync(templateId, tenantId, cancellationToken);
@@ -160,9 +161,9 @@ public sealed class DocumentGenerationService : IDocumentGenerationService
         var parsedSourceIds = new List<Guid>();
         foreach (var sourceIdStr in request.SourceIds)
         {
-            if (!Guid.TryParse(sourceIdStr, out var sourceId))
+            if (!OpaqueIdentifier.TryNormalize(sourceIdStr, "source", out var sourceId))
             {
-                throw new ArgumentException($"sourceId '{sourceIdStr}' is not a valid identifier.");
+                throw new ArgumentException($"sourceId '{sourceIdStr}' must be a non-empty identifier.");
             }
             parsedSourceIds.Add(sourceId);
         }

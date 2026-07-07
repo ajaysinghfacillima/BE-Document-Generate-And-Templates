@@ -69,7 +69,7 @@ public class ErrorContractTests
 
         var httpContext = new DefaultHttpContext();
         httpContext.Request.Headers["Authorization"] = $"Bearer {jwt}";
-        httpContext.Request.Headers["X-Tenant-Id"] = "invalid-guid";
+        httpContext.Request.Headers["X-Tenant-Id"] = "";
         controller.ControllerContext = new ControllerContext { HttpContext = httpContext };
 
         var result = await controller.ListTemplates(cancellationToken: CancellationToken.None);

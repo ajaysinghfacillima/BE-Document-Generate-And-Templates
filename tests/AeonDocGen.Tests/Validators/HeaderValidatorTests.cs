@@ -84,11 +84,12 @@ public class HeaderValidatorTests
     }
 
     [Fact]
-    public void ValidateTenantIdHeader_NotGuid_ReturnsInvalid()
+    public void ValidateTenantIdHeader_OpaqueString_ReturnsValid()
     {
-        var (isValid, _, error) = HeaderValidator.ValidateTenantIdHeader("not-a-guid", TraceId);
-        Assert.False(isValid);
-        Assert.Equal("INVALID_REQUEST", error!.Code);
+        var (isValid, tenantId, error) = HeaderValidator.ValidateTenantIdHeader("ten-001", TraceId);
+        Assert.True(isValid);
+        Assert.NotEqual(Guid.Empty, tenantId);
+        Assert.Null(error);
     }
 
     [Fact]

@@ -1,5 +1,6 @@
 // TR: LLD-0020 | ORIGIN: MID_LEVEL_DESIGN-0020
 using AeonDocGen.Core.DTOs;
+using AeonDocGen.Core.Utilities;
 
 namespace AeonDocGen.Core.Validators;
 
@@ -75,13 +76,13 @@ public static class DocumentGenerationRequestValidator
     // TR: LLD-0020 | ORIGIN: MID_LEVEL_DESIGN-0020
     public static (bool IsValid, StandardErrorDto? Error) ValidateProjectId(string? projectId, string traceId)
     {
-        if (string.IsNullOrWhiteSpace(projectId) || !Guid.TryParse(projectId, out var parsedProjectId) || parsedProjectId == Guid.Empty)
+        if (!OpaqueIdentifier.TryNormalize(projectId, "project", out _))
         {
             return (false, new StandardErrorDto
             {
                 TraceId = traceId,
                 Code = "INVALID_REQUEST",
-                Message = "projectId must be a non-empty valid identifier."
+                Message = "projectId must be a non-empty identifier."
             });
         }
         return (true, null);

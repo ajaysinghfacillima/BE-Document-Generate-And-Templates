@@ -122,7 +122,7 @@ public class BrandingAssetsControllerTests
     public async Task UploadBrandingAssets_InvalidTenantHeader_Returns400()
     {
         var jwt = CreateTestJwt();
-        SetupHttpContext($"Bearer {jwt}", "not-a-guid", idempotencyKey: "key-1");
+        SetupHttpContext($"Bearer {jwt}", "", idempotencyKey: "key-1");
         _authServiceMock.Setup(a => a.ValidateTokenAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new AuthenticatedUser { UserId = _userId, TenantId = _tenantId, Role = "Admin", Permissions = new HashSet<string>(new[] { "branding.settings.write" }, StringComparer.OrdinalIgnoreCase) });
         var result = await _controller.UploadBrandingAssets(null, null, null, CancellationToken.None);

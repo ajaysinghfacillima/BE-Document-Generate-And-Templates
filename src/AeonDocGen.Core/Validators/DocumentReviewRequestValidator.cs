@@ -1,5 +1,6 @@
 // TR: LLD-0021 | ORIGIN: MID_LEVEL_DESIGN-0021
 using AeonDocGen.Core.DTOs;
+using AeonDocGen.Core.Utilities;
 
 namespace AeonDocGen.Core.Validators;
 
@@ -69,23 +70,23 @@ public static class DocumentReviewRequestValidator
     public static (bool IsValid, StandardErrorDto? Error) ValidateRouteParameters(
         string? projectId, string? documentId, string traceId)
     {
-        if (string.IsNullOrWhiteSpace(projectId) || !Guid.TryParse(projectId, out _))
+        if (!OpaqueIdentifier.TryNormalize(projectId, "project", out _))
         {
             return (false, new StandardErrorDto
             {
                 TraceId = traceId,
                 Code = "INVALID_REQUEST_BODY",
-                Message = "projectId must be a valid non-empty identifier."
+                Message = "projectId must be a non-empty identifier."
             });
         }
 
-        if (string.IsNullOrWhiteSpace(documentId) || !Guid.TryParse(documentId, out _))
+        if (!OpaqueIdentifier.TryNormalize(documentId, "document", out _))
         {
             return (false, new StandardErrorDto
             {
                 TraceId = traceId,
                 Code = "INVALID_REQUEST_BODY",
-                Message = "documentId must be a valid non-empty identifier."
+                Message = "documentId must be a non-empty identifier."
             });
         }
 

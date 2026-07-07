@@ -155,7 +155,7 @@ public class ErrorMappingTests
 
         var httpContext = new DefaultHttpContext();
         httpContext.Request.Headers["Authorization"] = $"Bearer {jwt}";
-        httpContext.Request.Headers["X-Tenant-Id"] = "not-a-guid";
+        httpContext.Request.Headers["X-Tenant-Id"] = "";
         controller.ControllerContext = new ControllerContext { HttpContext = httpContext };
 
         var request = new GenerateDocumentRequestDto
@@ -508,7 +508,7 @@ public class ErrorMappingTests
             SourceIds = new List<string> { "src-001" }
         };
 
-        var result = await controller.GenerateDocument("not-a-guid", request, CancellationToken.None);
+        var result = await controller.GenerateDocument("", request, CancellationToken.None);
 
         var objectResult = Assert.IsType<BadRequestObjectResult>(result);
         var error = Assert.IsType<StandardErrorDto>(objectResult.Value);
@@ -527,7 +527,7 @@ public class ErrorMappingTests
 
         var request = new DocumentReviewRequestDto { Action = "submit" };
         var result = await controller.ReviewDocument(
-            "not-a-guid", Guid.NewGuid().ToString(), request, CancellationToken.None);
+            "", Guid.NewGuid().ToString(), request, CancellationToken.None);
 
         var objectResult = Assert.IsType<BadRequestObjectResult>(result);
         var error = Assert.IsType<StandardErrorDto>(objectResult.Value);
@@ -546,7 +546,7 @@ public class ErrorMappingTests
 
         var request = new DocumentReviewRequestDto { Action = "submit" };
         var result = await controller.ReviewDocument(
-            Guid.NewGuid().ToString(), "not-a-guid", request, CancellationToken.None);
+            Guid.NewGuid().ToString(), "", request, CancellationToken.None);
 
         var objectResult = Assert.IsType<BadRequestObjectResult>(result);
         var error = Assert.IsType<StandardErrorDto>(objectResult.Value);
