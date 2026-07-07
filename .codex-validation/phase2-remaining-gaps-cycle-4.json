@@ -1,0 +1,16 @@
+{
+  "Gaps": [
+    "Checklist: Close LLD/spec coverage gaps with traceable end-to-end tests for required flows.",
+    "Coverage: Validate sourceIds are supported, accessible, tenant/project scoped, and authorized for the requesting user."
+  ],
+  "Items": [
+    {
+      "Id": "GAP-0034",
+      "Text": "Checklist: Close LLD/spec coverage gaps with traceable end-to-end tests for required flows."
+    },
+    {
+      "Id": "GAP-0007",
+      "Text": "Coverage: Validate sourceIds are supported, accessible, tenant/project scoped, and authorized for the requesting user."
+    }
+  ]
+}

@@ -1,0 +1,667 @@
+{
+  "useCaseItems": [
+    {
+      "ItemId": "uc-branding-management",
+      "ItemKind": "use_case",
+      "Detail": {
+        "useCaseId": "uc-branding-management",
+        "useCaseName": "Manage branding assets",
+        "purpose": "Enable an Admin to upload, update, validate, and maintain AEON branding assets including logo files, color palette definitions, and font packages so they can be consistently applied to customer-facing templates, generated documents, and exports.",
+        "actor": "Admin",
+        "trigger": "Admin opens the Branding and Templates administration area and submits new or updated branding assets for tenant use.",
+        "preconditions": [
+          "The actor is authenticated as an Admin within the tenant context.",
+          "The tenant exists and is active.",
+          "The Admin has permission to manage branding configuration.",
+          "At least one branding management entry point is available through the admin console screen scr-admin-branding-templates.",
+          "Storage for branding assets is available and writable.",
+          "Branding and template administration changes are audit logged.",
+          "Document generation templates exist or will consume branding settings after successful update."
+        ],
+        "inputParameters": [
+          {
+            "name": "tenantId",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "adminUserId",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "logoFile",
+            "type": "binary",
+            "required": false
+          },
+          {
+            "name": "colorsJson",
+            "type": "object",
+            "required": false
+          },
+          {
+            "name": "fontsZip",
+            "type": "binary",
+            "required": false
+          },
+          {
+            "name": "idempotencyKey",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "inputSource": "Admin UI screen scr-admin-branding-templates invoking api-branding-assets-upload via multipart form submission with tenant and user context.",
+        "output": "Updated tenant branding asset configuration with persisted asset references, versioned metadata, validation outcome, and audit evidence available for downstream template and document generation processes.",
+        "mainFlow": [
+          "Admin navigates to the Branding and Templates administration screen.",
+          "System loads the current tenant branding configuration and allows the Admin to select updated branding inputs such as logo file, colors JSON, and fonts ZIP.",
+          "Admin submits one or more branding inputs.",
+          "System validates that the request is associated with an authenticated Admin and a valid tenant context.",
+          "System checks that at least one branding input is present in the request.",
+          "System validates the uploaded files and structured color configuration for allowed formats, file size, and content integrity.",
+          "System stores new branding files in secure storage and prepares normalized metadata for persistence.",
+          "System creates or updates the tenant branding record in the branding asset store.",
+          "System increments version and updates etag-style concurrency metadata for the branding asset record.",
+          "System records an immutable audit entry describing the branding change, actor, timestamps, and before or after values as applicable.",
+          "System returns the updated branding asset status and metadata to the Admin.",
+          "Subsequent template rendering and document generation flows use the updated branding assets for customer-facing outputs."
+        ],
+        "alternativeFlow": [
+          "Admin uploads only a logo file while retaining previously saved colors and fonts; system updates only the logo reference and preserves other existing branding elements.",
+          "Admin uploads only colorsJson; system updates palette configuration without changing stored logo or fonts.",
+          "Admin uploads only fontsZip; system updates font package reference while leaving logo and colors unchanged.",
+          "A tenant has no prior branding configuration; system creates the initial BrandingAsset record instead of updating an existing one.",
+          "Admin replays the same request with the same idempotency key; system returns the previously committed result without creating duplicate updates.",
+          "Branding assets are uploaded successfully but are not yet consumed by any generated document; system still persists the configuration for future document generation use."
+        ],
+        "exceptionFlow": [
+          "If the actor is not authenticated or tenant context is missing, the system rejects the request and records the failed access attempt.",
+          "If the actor lacks Admin privileges or branding management permission, the system denies the action and audits the authorization failure.",
+          "If no branding input is provided, the system rejects the request as invalid because at least one of logoFile, colorsJson, or fontsZip must be supplied.",
+          "If the uploaded logo file or fonts archive fails file validation, antivirus, or content checks, the system rejects the update and preserves the prior branding configuration.",
+          "If colorsJson is malformed or does not conform to expected color configuration structure, the system rejects the request and returns validation details.",
+          "If storage upload fails or the database update cannot be committed, the system rolls back the branding update and returns an error.",
+          "If an unexpected system exception occurs during persistence or audit logging, the system records diagnostic logs, returns a failure response, and leaves the previous branding state unchanged."
+        ],
+        "validationRules": [
+          "tenantId must reference an existing active tenant.",
+          "adminUserId must reference an authenticated active user.",
+          "The acting user must hold the Admin role or equivalent branding management permission.",
+          "At least one of logoFile, colorsJson, or fontsZip must be supplied.",
+          "logoFile, when present, must be an allowed image format supported by the branding workflow.",
+          "fontsZip, when present, must be a valid ZIP archive containing supported font files.",
+          "colorsJson, when present, must be valid JSON and parse successfully.",
+          "colorsJson should contain valid color values in approved format such as hex codes for configured brand color keys.",
+          "Uploaded files must pass content validation and malware scanning before being committed for use.",
+          "Request must include a non-empty idempotencyKey for safe retry behavior."
+        ],
+        "businessRules": [
+          "Branding changes are tenant-scoped and must not affect other tenants.",
+          "Branding and template administration changes do not require dual approval but must be fully audit logged.",
+          "The latest successful branding configuration becomes the active source for customer-facing document rendering.",
+          "If only part of the branding payload is supplied, unspecified branding components retain their previously active values.",
+          "Failed branding updates must not partially overwrite the active branding configuration.",
+          "Branding assets are used across customer-facing templates and generated documents in supported export formats.",
+          "Only Admin users can manage branding assets.",
+          "Idempotent retries must not create duplicate branding versions for the same logical request."
+        ],
+        "databaseTablesUsed": [
+          "BrandingAsset",
+          "Template",
+          "DocumentArtifact",
+          "AuditLog",
+          "Tenant",
+          "UserAccount",
+          "JobQueue"
+        ],
+        "externalServicesUsed": [
+          "Object storage or NAS for branding file persistence",
+          "Antivirus or file validation service used by ingestion pipeline"
+        ],
+        "methodsRequired": [
+          "authorizeAdminForBrandingManagement",
+          "validateBrandingUploadRequest",
+          "validateLogoFile",
+          "validateColorsJson",
+          "validateFontsArchive",
+          "scanUploadedFilesForThreats",
+          "storeBrandingFiles",
+          "createOrUpdateBrandingAssetRecord",
+          "writeAuditLogEntry",
+          "invalidateTemplateBrandingCache"
+        ],
+        "configurationRequired": [
+          "Allowed logo MIME types and file extensions",
+          "Allowed font file types within ZIP archives",
+          "Maximum upload size for branding assets",
+          "Tenant-scoped secure storage location for branding files",
+          "Audit retention policy for branding administration events",
+          "Template rendering configuration that resolves active BrandingAsset for a tenant"
+        ],
+        "loggingRequired": "Log request correlation id, tenant id, actor user id, validation outcomes, storage operations, database update result, and any failure diagnostics without logging sensitive file contents.",
+        "retryRequirement": "Client retries are supported through idempotency keys. Storage and transient persistence failures may be retried once internally when safe, but duplicate logical branding updates must be prevented.",
+        "transactionRequirement": "Database persistence of BrandingAsset metadata and audit creation should occur atomically. File storage and metadata update should follow a coordinated commit pattern so failed persistence does not leave an inconsistent active branding state.",
+        "sampleInput": {
+          "tenantId": "ten-001",
+          "adminUserId": "usr-admin-001",
+          "idempotencyKey": "9d694f5a-a49c-4b72-9707-36e7cc7c5f32",
+          "logoFile": "aeon-logo.png",
+          "colorsJson": {
+            "primary": "#003366",
+            "secondary": "#00A3E0",
+            "accent": "#F5A623",
+            "text": "#1F2937",
+            "background": "#FFFFFF"
+          },
+          "fontsZip": "aeon-brand-fonts.zip"
+        },
+        "sampleOutput": {
+          "brandingAssetId": "brand-001",
+          "tenantId": "ten-001",
+          "status": "updated",
+          "logoUpdated": true,
+          "colorsUpdated": true,
+          "fontsUpdated": true,
+          "updatedAt": "2026-06-09T10:45:00Z",
+          "appliesTo": [
+            "templates",
+            "generatedDocuments",
+            "exports"
+          ],
+          "auditRecorded": true
+        }
+      }
+    },
+    {
+      "ItemId": "uc-document-generation",
+      "ItemKind": "use_case",
+      "Detail": {
+        "useCaseId": "uc-document-generation",
+        "useCaseName": "Generate project documents",
+        "purpose": "Enable a Sustainability Consultant to generate project-specific narratives, calculators, reports, scorecards, checklists, simulation summaries, and form-ready outputs in supported formats using approved templates, project data, evidence, scorecards, and simulation results with branding, versioning, checksum generation, and human-review readiness.",
+        "actor": "Sustainability Consultant",
+        "trigger": "User opens the Documents screen for a project and submits a document generation request selecting document type, format, template, and source content.",
+        "preconditions": [
+          "The user is authenticated and has project-scoped permission to generate narratives or documents.",
+          "The target project exists and is accessible to the actor within the tenant.",
+          "At least one active template exists for the requested document type and output format.",
+          "Required project master data, scorecard data, evidence artifacts, or simulation outputs are available for the requested document type.",
+          "Branding assets may be available; if not, document generation proceeds without tenant branding where allowed by template rules.",
+          "The requested output format is one of the supported formats: PDF, DOCX, XLSX, JSON, or PPTX.",
+          "No live portal integration or RPA submission is expected; generated outputs are for manual review, download, or subsequent package assembly.",
+          "If AI-assisted content generation is invoked within document generation, the self-hosted India-resident AI gateway path to GPT-5.1 is reachable; otherwise generation is limited to non-AI template rendering paths or fails gracefully depending on document type."
+        ],
+        "inputParameters": [
+          {
+            "name": "projectId",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "documentType",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "format",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "templateId",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "includeBranding",
+            "type": "boolean",
+            "required": true
+          },
+          {
+            "name": "watermarkText",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "sourceIds",
+            "type": "array\u003Cstring\u003E",
+            "required": true
+          }
+        ],
+        "inputSource": "User input from scr-documents, projectId supplied as the API path parameter in api-documents-generate, request body fields for generation options, project-scoped system data, linked artifacts, scorecards, recommendations, pre-assessment outputs, and simulation results.",
+        "output": "A generated DocumentArtifact record with canonical fields including id, tenantId, createdAt, updatedAt, version, etag, projectId, documentType, format, templateId, templateVersion, brandingApplied, watermarkApplied, footerVersionText, storageUri, checksumSha256, and reviewStatus.",
+        "mainFlow": [
+          "The actor navigates to the project Documents screen.",
+          "The actor selects document type, output format, template, branding preference, optional watermark text, and the source records or artifacts to include.",
+          "The system submits the request to api-documents-generate using projectId in the path and generation options in the request body.",
+          "The system validates that the project, template, requested format, and source references are valid and accessible to the actor.",
+          "The system resolves the current published template version and binds the selected template to a pinned template version for deterministic output.",
+          "The system retrieves required project content such as project metadata, scorecard data, evidence artifacts, simulation outputs, pre-assessment outputs, or recommendations depending on document type.",
+          "If the document type requires AI-assisted narrative synthesis, the system sends a redacted and governed request through the self-hosted India-resident AI gateway to GPT-5.1 and receives generated content with explainability metadata.",
+          "The system merges source content into the template and renders the requested output format.",
+          "The system applies branding assets when requested and available.",
+          "The system applies version footer text and optional watermark if configured in the request or required by policy.",
+          "The system stores the generated output in managed storage and computes a SHA-256 checksum.",
+          "The system creates a document metadata record with review status set to draft.",
+          "The system records audit entries for the generation request and resulting document creation.",
+          "The system returns the generated document metadata to the UI for preview or download."
+        ],
+        "alternativeFlow": [
+          "If branding is requested but branding assets are not configured, the system generates the document without branding when the template supports unbranded output and records brandingApplied as false.",
+          "If watermark text is omitted, the system generates the output without watermark unless the selected template or tenant policy mandates watermarking.",
+          "If the requested document type is scorecard, checklist, calculator, or formReadyData, the system may complete generation using structured data rendering without AI-generated narrative content.",
+          "If the requested sourceIds include simulation job outputs, the system uses linked simulation result artifacts and summaries as document inputs.",
+          "If the requested format is JSON, the system produces a structured machine-readable output rather than a layout-focused branded visual document.",
+          "If a previously generated document of the same type already exists, the system creates a new document artifact rather than overwriting historical output."
+        ],
+        "exceptionFlow": [
+          "If the projectId does not exist or is outside the actor scope, the system rejects the request and logs an authorization or not-found event.",
+          "If the selected templateId is invalid, inactive, or not compatible with the requested document type or format, the system rejects the request.",
+          "If one or more sourceIds are invalid, inaccessible, or not suitable for the requested document type, the system rejects the request with validation details.",
+          "If mandatory project data required for the selected document type is missing, the system rejects the generation request and identifies missing dependencies.",
+          "If the self-hosted India AI gateway path is unavailable for a document type that depends on AI-assisted generation, the system fails the request or degrades to a non-AI path only when a compliant fallback exists.",
+          "If template rendering fails, storage write fails, checksum generation fails, or document persistence fails, the system marks the operation as failed, logs the error, and returns an error response without exposing partial sensitive content.",
+          "If the user loses permission during processing, the system prevents result access and records the incident in audit logs."
+        ],
+        "validationRules": [
+          "projectId must reference an existing project within the current tenant.",
+          "documentType must be one of narrative, calculator, simulationSummary, formReadyData, scorecard, checklist, report, or package.",
+          "format must be one of pdf, docx, xlsx, json, or pptx.",
+          "templateId must reference an existing active template.",
+          "templateId must support the requested documentType.",
+          "sourceIds must contain at least one valid source reference.",
+          "Each sourceId must belong to the same tenant and be accessible under the project scope.",
+          "sourceIds must resolve only to supported source entity types for document linkage: artifact, simulationJob, scorecard, preAssessmentRun, auditorQuery, or recommendation.",
+          "watermarkText, when provided, must meet configured length and character safety rules.",
+          "includeBranding must be boolean.",
+          "The request must include an idempotency context at the API level for side-effect-safe creation.",
+          "If AI is used, request content sent for generation must undergo redaction or minimization according to tenant AI governance policy."
+        ],
+        "businessRules": [
+          "Document generation supports only manual downstream use; no automated certification portal submission is performed at launch.",
+          "Generated outputs must use a pinned template version to preserve reproducibility and auditability.",
+          "Generated outputs must support AEON branding assets when configured and requested.",
+          "Generated outputs must include version footer text.",
+          "Optional watermarking is supported and may be applied based on request or tenant policy.",
+          "Each successful document generation must create a persistent document artifact with checksum and storage URI.",
+          "New document generation creates a new immutable output artifact rather than replacing prior generated history.",
+          "Review status for a newly generated document starts as draft until submitted into review workflow.",
+          "If AI-assisted generation is involved, the system must record explainability and audit metadata including rationale, evidence links where applicable, and model identifier.",
+          "Only supported formats and supported document types may be generated at MVP.",
+          "All generation actions and resulting metadata changes must be audit logged.",
+          "Branding and template administration are governed separately and do not require dual approval, but generated documents still inherit audited template and branding lineage."
+        ],
+        "databaseTablesUsed": [
+          "project.Project",
+          "content.Artifact",
+          "content.Template",
+          "content.TemplateVersion",
+          "content.BrandingAsset",
+          "content.DocumentArtifact",
+          "content.DocumentSource",
+          "project.Scorecard",
+          "project.ScorecardCredit",
+          "project.SimulationJob",
+          "project.PreAssessmentRun",
+          "project.Recommendation",
+          "project.RecommendationBackingAnalysis",
+          "ops.AuditLog",
+          "core.UserAccount"
+        ],
+        "externalServicesUsed": [
+          "api-documents-generate",
+          "Self-hosted India AI gateway to GPT-5.1 for AI-assisted content generation with PII minimization and provider training disabled",
+          "Object storage or NAS for generated document persistence"
+        ],
+        "methodsRequired": [
+          "validateGenerateDocumentRequest(projectId, documentType, format, templateId, sourceIds, actorUserId)",
+          "resolvePinnedTemplateVersion(templateId)",
+          "loadProjectDocumentSources(projectId, documentType, sourceIds)",
+          "generateNarrativeContentViaIndiaAIGateway(projectContext, sourceContent, templateContext)",
+          "renderDocumentOutput(documentType, format, templateVersion, mergedContent)",
+          "applyBranding(documentBinaryOrPayload, brandingAssetId)",
+          "applyWatermarkAndFooter(documentBinaryOrPayload, watermarkText, footerVersionText)",
+          "storeGeneratedDocument(projectId, renderedOutput, format)",
+          "computeDocumentChecksum(storageUriOrBinary)",
+          "createDocumentArtifactRecord(projectId, documentMetadata)",
+          "createDocumentSourceLinks(documentArtifactId, sourceIds)",
+          "writeAIInteractionLog(actorUserId, projectId, documentArtifactId, aiMetadata)",
+          "writeAuditLogForDocumentGeneration(actorUserId, projectId, documentArtifactId)"
+        ],
+        "configurationRequired": [
+          "Supported document types to template mappings",
+          "Supported output format matrix per document type",
+          "Template repository with active and published versions",
+          "Tenant branding asset configuration including logo, colors, and fonts",
+          "AI gateway endpoint, policy version, timeout, and redaction settings for AI-assisted document generation",
+          "Storage location configuration for generated documents",
+          "Footer version text format and watermark policy configuration",
+          "Retention policy for generated documents",
+          "RBAC permissions for document generation and document review submission"
+        ],
+        "loggingRequired": "Log request receipt, actor identity, tenant and project scope, selected document type and format, template resolution, source resolution summary, AI invocation metadata when used, render start and completion, storage outcome, checksum generation, document artifact creation, and any validation or processing failures using correlation identifiers.",
+        "retryRequirement": "Document generation request creation must be idempotent at the API boundary. Internal retries are allowed for transient storage or worker failures with bounded retry attempts, but AI-assisted content generation must avoid duplicate persisted document artifacts and must not create multiple outputs for the same idempotent request.",
+        "transactionRequirement": "Metadata persistence for generated document creation, source linkage creation, and audit logging should be transactionally consistent. Binary file generation and storage may occur outside the SQL transaction, but the final document artifact record must only be committed after successful storage and checksum calculation.",
+        "sampleInput": {
+          "projectId": "prj-001",
+          "documentType": "narrative",
+          "format": "docx",
+          "templateId": "tpl-credit-narrative-leed-v41",
+          "includeBranding": true,
+          "watermarkText": "Draft for internal review",
+          "sourceIds": [
+            "art-101",
+            "sim-204",
+            "sc-001"
+          ]
+        },
+        "sampleOutput": {
+          "id": "doc-789",
+          "tenantId": "ten-001",
+          "projectId": "prj-001",
+          "documentType": "narrative",
+          "format": "docx",
+          "templateId": "tpl-credit-narrative-leed-v41",
+          "templateVersion": "3.2",
+          "brandingApplied": true,
+          "watermarkApplied": true,
+          "footerVersionText": "v1.0",
+          "storageUri": "storage://tenant-001/projects/prj-001/documents/doc-789.docx",
+          "checksumSha256": "8f5c6f2f3d7b4f7a1d8f2a7e9c1b0d3f4a5b6c7d8e9f00112233445566778899",
+          "reviewStatus": "draft",
+          "createdAt": "2026-06-09T10:15:00Z",
+          "updatedAt": "2026-06-09T10:15:00Z",
+          "version": 1,
+          "etag": "\u00221-doc-789\u0022",
+          "tenantId": "ten-001"
+        }
+      }
+    },
+    {
+      "ItemId": "uc-document-review",
+      "ItemKind": "use_case",
+      "Detail": {
+        "useCaseId": "uc-document-review",
+        "useCaseName": "Review generated documents",
+        "purpose": "Allow a Sustainability Consultant to submit generated project documents for human review, start review processing, and record approve or reject decisions with full auditability before downstream packaging or submission use.",
+        "actor": "Sustainability Consultant",
+        "trigger": "The user selects a generated document on the Documents screen and submits it for review or records a review decision using api-documents-review.",
+        "preconditions": [
+          "The user is authenticated and tenant context is resolved.",
+          "The user has project-scoped permission to manage narratives or document reviews.",
+          "The project exists and is accessible to the actor under RBAC scope rules.",
+          "The target document has already been generated and stored as a document artifact.",
+          "The document belongs to the specified project.",
+          "The document is in a mutable review state and has not been superseded by a newer immutable package context.",
+          "Required template and branding references for the document version are already pinned on generation."
+        ],
+        "inputParameters": [
+          {
+            "name": "projectId",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "documentId",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "action",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "comments",
+            "type": "string",
+            "required": false
+          },
+          {
+            "name": "idempotencyKey",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "ifMatch",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "inputSource": "Documents screen scr-documents via POST /api/v1/projects/{projectId}/documents/{documentId}/review with authenticated session token, X-Tenant-Id header, Idempotency-Key header, and If-Match header.",
+        "output": "Updated document review status on the target document artifact, persisted document review event history, audit trail entry, and API response containing the updated document metadata.",
+        "mainFlow": [
+          "User opens the Documents screen and selects a generated document for review action.",
+          "System validates authentication, tenant context, project scope access, and permission to review generated documents.",
+          "System loads the project and target document artifact using projectId and documentId.",
+          "System verifies that the document belongs to the specified project and is eligible for the requested action.",
+          "If action is submit, system changes review status from draft to inReview and records a document review event.",
+          "If action is startReview, system records review-start intent and keeps the document in inReview state.",
+          "If action is approve, system updates the document review status to approved, records reviewer identity and review timestamp, and creates a document review event.",
+          "If action is reject, system updates the document review status to rejected, records reviewer identity and review timestamp, and creates a document review event with comments.",
+          "System writes an immutable audit log describing the state change, actor, target resource, correlation context, and before and after values.",
+          "System returns the updated document artifact to the caller.",
+          "System makes the updated review state available for subsequent package-building and document-list refresh operations."
+        ],
+        "alternativeFlow": [
+          "User submits a document that is already inReview; system treats the request idempotently and returns the current inReview document state.",
+          "User starts review on a document already inReview; system records the action idempotently or returns current state without duplicate status transition.",
+          "User approves a document that was previously rejected after a regenerated review cycle; system accepts the new decision only if the document remains mutable and current.",
+          "User rejects a document with explanatory comments; system stores the rejection comments and leaves the document available for regeneration or correction workflow.",
+          "A repeated request arrives with the same idempotency key; system returns the previously committed outcome without duplicating events.",
+          "An Admin with equivalent scoped permissions performs the action on behalf of the consultant under RBAC; system records the actual acting user in the audit trail."
+        ],
+        "exceptionFlow": [
+          "If authentication fails or tenant header is missing, system rejects the request and no review state is changed.",
+          "If the actor lacks project-scoped permission for document review, system denies the action and records an authorization failure audit event.",
+          "If projectId or documentId does not resolve to an existing accessible resource, system returns not found and no state is changed.",
+          "If the document does not belong to the specified project, system rejects the request as an invalid resource association.",
+          "If action is not one of submit, startReview, approve, or reject, system rejects the request as invalid input.",
+          "If an approve or reject action is attempted for a document that is not in a valid reviewable state, system rejects the transition.",
+          "If optimistic concurrency or duplicate processing safeguards detect a conflicting update, system returns a conflict-safe failure and preserves the last committed state.",
+          "If persistence of the document status update, review event, or audit log fails, system rolls back the transaction and returns an error.",
+          "If downstream audit logging is unavailable, system fails the operation rather than committing an unaudited sensitive state transition."
+        ],
+        "validationRules": [
+          "projectId must be a valid non-empty identifier.",
+          "documentId must be a valid non-empty identifier.",
+          "action must be one of submit, startReview, approve, or reject.",
+          "comments may be empty for submit or startReview but must not exceed configured maximum length.",
+          "comments should be provided for reject decisions to support human correction workflow traceability.",
+          "idempotencyKey is required for the review POST operation.",
+          "ifMatch must contain the current etag of the mutable DocumentArtifact being updated.",
+          "The referenced document must exist in content.DocumentArtifact.",
+          "The referenced project must exist in project.Project.",
+          "The document\u0027s projectId must equal the route projectId.",
+          "The document review status transition must comply with allowed state rules."
+        ],
+        "businessRules": [
+          "Document review is a human-in-the-loop control point before downstream submission usage.",
+          "Only users with appropriate RBAC permissions and project scope may submit or decide document reviews.",
+          "Review decisions must be fully auditable with actor, time, and comments where applicable.",
+          "Approved documents are eligible for downstream packaging and submission workflows.",
+          "Rejected documents remain traceable and may require regeneration or correction before reuse.",
+          "Normal review actions do not require dual approval.",
+          "Document review history is append-only through review events and separate from mutable current document status.",
+          "Idempotent processing must prevent duplicate review events for retried requests.",
+          "The system must preserve template pinning, branding, checksum, and version metadata generated before review.",
+          "Review state changes must not bypass project and tenant boundary enforcement."
+        ],
+        "databaseTablesUsed": [
+          "project.Project",
+          "content.DocumentArtifact",
+          "content.DocumentReviewEvent",
+          "core.UserAccount",
+          "ops.AuditLog"
+        ],
+        "externalServicesUsed": [],
+        "methodsRequired": [
+          "validateAuthenticatedUserContext",
+          "authorizeProjectScopedDocumentReview",
+          "getProjectById",
+          "getDocumentArtifactById",
+          "validateDocumentBelongsToProject",
+          "validateDocumentReviewTransition",
+          "validateIfMatchEtag",
+          "applyDocumentReviewStatusChange",
+          "recordDocumentReviewEvent",
+          "writeAuditLog",
+          "enforceIdempotencyKey",
+          "returnUpdatedDocumentArtifact"
+        ],
+        "configurationRequired": [
+          "RBAC permissions for Narratives and document review actions",
+          "Tenant business audit retention policy",
+          "Idempotency key retention configuration for POST operations",
+          "Maximum review comments length",
+          "Allowed document review state transition map",
+          "Audit logging enablement and immutable log policy"
+        ],
+        "loggingRequired": "Log correlation id, tenant id, project id, document id, actor user id, requested action, previous review status, resulting review status, idempotency outcome, authorization outcome, If-Match/etag validation outcome, and persistence result; create immutable audit entries for every successful or failed sensitive state transition.",
+        "retryRequirement": "Client retries are allowed only with the same idempotency key; server must ensure duplicate requests do not create duplicate review events or multiple status transitions. No automatic business retry after a validation or authorization failure.",
+        "transactionRequirement": "The document status update, reviewer metadata update, document review event insert, and audit log insert must execute in a single transactional unit and roll back together on failure.",
+        "sampleInput": {
+          "projectId": "prj-001",
+          "documentId": "doc-001",
+          "action": "approve",
+          "comments": "Reviewed and approved for submission package inclusion.",
+          "idempotencyKey": "9d2a4e4a-b9d2-4a6d-97dd-4d4f5e98b001",
+          "ifMatch": "\u00222-doc-001\u0022"
+        },
+        "sampleOutput": {
+          "id": "doc-001",
+          "tenantId": "ten-001",
+          "createdAt": "2026-06-09T10:15:00Z",
+          "updatedAt": "2026-06-09T11:05:24Z",
+          "version": 3,
+          "etag": "\u00223-doc-001\u0022",
+          "projectId": "prj-001",
+          "documentType": "narrative",
+          "format": "pdf",
+          "templateId": "tpl-narrative-leed-v41",
+          "templateVersion": "1.2",
+          "brandingApplied": true,
+          "watermarkApplied": false,
+          "footerVersionText": "v1.0",
+          "storageUri": "nas://tenant/ten-001/projects/prj-001/documents/doc-001.pdf",
+          "checksumSha256": "a3c55f0e8a7d1b53d6a76b8a9f0f4dd8d6b04f0fdcb6c8d3b0f0d1e2a3b4c5d6",
+          "reviewStatus": "approved",
+          "reviewedByUserId": "usr-014",
+          "reviewedAt": "2026-06-09T11:05:24Z"
+        },
+        "sourceDocuments": [
+          "FRD",
+          "HLD"
+        ],
+        "applicationType": "full_stack"
+      }
+    },
+    {
+      "ItemId": "uc-template-management",
+      "ItemKind": "use_case",
+      "Detail": {
+        "useCaseId": "uc-template-management",
+        "useCaseName": "View document templates",
+        "purpose": "Allow Admin users to view available document templates, current and historical versions, and supported document types so they can review template options used for generated outputs and administration.",
+        "actor": "Admin",
+        "trigger": "Admin opens template listing from the Admin Branding and Templates screen.",
+        "preconditions": [
+          "The user is authenticated with a valid session or access token.",
+          "The tenant context is resolved and active.",
+          "The user has Admin permission to view template metadata within the tenant scope.",
+          "Template metadata is available through api-admin-templates-list."
+        ],
+        "inputParameters": [],
+        "inputSource": "User interaction from scr-admin-branding-templates, with tenant context provided through the required X-Tenant-Id request header and actor identity derived from Authorization/session.",
+        "output": "A list of available document templates returned by api-admin-templates-list, where each item contains id, name, currentVersion, versions, and documentTypes.",
+        "mainFlow": [
+          "Admin navigates to the Admin Branding and Templates screen.",
+          "System verifies authentication, tenant context, and Admin authorization for template viewing.",
+          "System invokes api-admin-templates-list.",
+          "System retrieves the available templates visible to the tenant.",
+          "System returns the template list containing id, name, currentVersion, versions, and documentTypes.",
+          "UI renders the list for read-only review and optional downstream template selection."
+        ],
+        "alternativeFlow": [
+          "If no templates are available, the system returns an empty items array and the UI shows an empty state with no error.",
+          "If multiple template versions exist, the system shows the configured current version and the available versions for visibility."
+        ],
+        "exceptionFlow": [
+          "If the user is not authenticated, the system rejects the request and returns an authorization failure.",
+          "If the user lacks Admin permission to view template metadata, the system denies access.",
+          "If the tenant context is missing or invalid, the system aborts processing and returns a validation error.",
+          "If template records cannot be retrieved, the system returns an internal error.",
+          "If the API dependency api-admin-templates-list is unavailable, the use case fails gracefully and the UI presents an error with retry guidance."
+        ],
+        "validationRules": [
+          "Access must be authenticated and authorized for Admin template viewing.",
+          "Tenant context must be supplied via the required X-Tenant-Id request header.",
+          "Returned template metadata must remain tenant-scoped according to the API contract."
+        ],
+        "businessRules": [
+          "Template viewing is read-only in this use case; no create, update, publish, or retire action is performed.",
+          "Admin users can view template metadata exposed by the admin template listing API.",
+          "Current template version must be identifiable for each template.",
+          "The use case supports downstream document generation selection but does not itself generate documents."
+        ],
+        "databaseTablesUsed": [
+          "content.Template",
+          "content.TemplateVersion"
+        ],
+        "externalServicesUsed": [
+          "api-admin-templates-list"
+        ],
+        "methodsRequired": [
+          "validateAuthenticatedSession",
+          "authorizeTemplateViewAccess",
+          "invokeAdminTemplatesList",
+          "mapTemplateListResponse",
+          "handleTemplateListingFailure"
+        ],
+        "configurationRequired": [
+          "Tenant-scoped template catalog configuration.",
+          "RBAC permission mapping for template view access."
+        ],
+        "loggingRequired": "Log request receipt, tenant context, actor identity from authenticated context, result count, latency, and failures with correlation id.",
+        "retryRequirement": "UI may allow manual retry on transient failures. The use case is read-only and has no duplicate side effects.",
+        "transactionRequirement": "No explicit multi-entity write transaction is required because the use case is read-only.",
+        "sampleInput": {},
+        "sampleOutput": {
+          "items": [
+            {
+              "id": "tpl-001",
+              "name": "LEED Report Template",
+              "currentVersion": "2.0",
+              "versions": [
+                "1.0",
+                "1.1",
+                "2.0"
+              ],
+              "documentTypes": [
+                "report",
+                "scorecard"
+              ]
+            },
+            {
+              "id": "tpl-004",
+              "name": "LEED Narrative Template",
+              "currentVersion": "1.1",
+              "versions": [
+                "1.0",
+                "1.1"
+              ],
+              "documentTypes": [
+                "narrative"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "useCaseItemIds": [
+    "uc-branding-management",
+    "uc-document-generation",
+    "uc-document-review",
+    "uc-template-management"
+  ]
+}

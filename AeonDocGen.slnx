@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/AeonDocGen.Api/AeonDocGen.Api.csproj" />
+    <Project Path="src/AeonDocGen.Core/AeonDocGen.Core.csproj" />
+    <Project Path="src/AeonDocGen.Infrastructure/AeonDocGen.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/AeonDocGen.Tests/AeonDocGen.Tests.csproj" />
+  </Folder>
+</Solution>

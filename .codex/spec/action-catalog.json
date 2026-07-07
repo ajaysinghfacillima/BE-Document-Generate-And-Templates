@@ -1,0 +1,4447 @@
+{
+  "schemaVersion": "1.0",
+  "applicationType": "full_stack",
+  "generatedFromStepVersionId": null,
+  "backendApis": [
+    {
+      "apiId": "api-auth-login",
+      "apiName": "Authenticate Local User",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/auth/login",
+      "description": "Authenticate a local user and start a UI session.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-user-login"
+      ]
+    },
+    {
+      "apiId": "api-users-list",
+      "apiName": "List Users",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/users",
+      "description": "List users for a tenant.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-user-management",
+        "uc-rbac-management"
+      ]
+    },
+    {
+      "apiId": "api-users-create",
+      "apiName": "Create Local User",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/users",
+      "description": "Create a local user account.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-user-management"
+      ]
+    },
+    {
+      "apiId": "api-users-update",
+      "apiName": "Update User",
+      "httpMethod": "PATCH",
+      "endpointUrl": "/api/v1/users/{userId}",
+      "description": "Update user profile and assignments.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-user-management",
+        "uc-rbac-management"
+      ]
+    },
+    {
+      "apiId": "api-rbac-roles-list",
+      "apiName": "List Roles",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/rbac/roles",
+      "description": "List seeded and custom roles.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-rbac-management"
+      ]
+    },
+    {
+      "apiId": "api-rbac-roles-create",
+      "apiName": "Create Custom Role",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/rbac/roles",
+      "description": "Create a custom role template.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-rbac-management"
+      ]
+    },
+    {
+      "apiId": "api-projects-list",
+      "apiName": "List Projects",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/projects",
+      "description": "List projects for a tenant.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-project-management",
+        "uc-portfolio-analytics"
+      ]
+    },
+    {
+      "apiId": "api-projects-create",
+      "apiName": "Create Project",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/projects",
+      "description": "Create a new project.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-project-management",
+        "uc-project-intake"
+      ]
+    },
+    {
+      "apiId": "api-projects-update",
+      "apiName": "Update Project",
+      "httpMethod": "PATCH",
+      "endpointUrl": "/api/v1/projects/{projectId}",
+      "description": "Update project details including regional profile settings.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-project-management",
+        "uc-project-intake"
+      ]
+    },
+    {
+      "apiId": "api-milestones-list",
+      "apiName": "List Milestones",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/projects/{projectId}/milestones",
+      "description": "List milestones for a project.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-milestone-tracking"
+      ]
+    },
+    {
+      "apiId": "api-milestones-create",
+      "apiName": "Create Milestone",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/projects/{projectId}/milestones",
+      "description": "Create a project milestone.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-milestone-tracking"
+      ]
+    },
+    {
+      "apiId": "api-milestones-get",
+      "apiName": "Get Milestone",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/projects/{projectId}/milestones/{id}",
+      "description": "Get milestone details.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-milestone-tracking"
+      ]
+    },
+    {
+      "apiId": "api-milestones-update",
+      "apiName": "Update Milestone",
+      "httpMethod": "PATCH",
+      "endpointUrl": "/api/v1/projects/{projectId}/milestones/{id}",
+      "description": "Update milestone fields or status.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-milestone-tracking"
+      ]
+    },
+    {
+      "apiId": "api-milestones-delete",
+      "apiName": "Delete Milestone",
+      "httpMethod": "DELETE",
+      "endpointUrl": "/api/v1/projects/{projectId}/milestones/{id}",
+      "description": "Delete a milestone.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-milestone-tracking"
+      ]
+    },
+    {
+      "apiId": "api-budgets-list",
+      "apiName": "List Budgets",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/projects/{projectId}/budgets",
+      "description": "List budgets for a project.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-budget-tracking"
+      ]
+    },
+    {
+      "apiId": "api-budgets-create",
+      "apiName": "Create Budget",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/projects/{projectId}/budgets",
+      "description": "Create a project budget.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-budget-tracking"
+      ]
+    },
+    {
+      "apiId": "api-budgets-get",
+      "apiName": "Get Budget",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/projects/{projectId}/budgets/{id}",
+      "description": "Get budget details.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-budget-tracking"
+      ]
+    },
+    {
+      "apiId": "api-budgets-update",
+      "apiName": "Update Budget",
+      "httpMethod": "PATCH",
+      "endpointUrl": "/api/v1/projects/{projectId}/budgets/{id}",
+      "description": "Update budget amounts and thresholds.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-budget-tracking"
+      ]
+    },
+    {
+      "apiId": "api-regional-profiles-list",
+      "apiName": "List Regional Profiles",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/regional-profiles",
+      "description": "List regional profiles.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-regional-profile-management",
+        "uc-project-intake"
+      ]
+    },
+    {
+      "apiId": "api-admin-regional-profiles-create",
+      "apiName": "Create Regional Profile",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/admin/regional-profiles",
+      "description": "Admin create draft regional profile.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-regional-profile-management"
+      ]
+    },
+    {
+      "apiId": "api-admin-regional-profiles-update",
+      "apiName": "Update Regional Profile",
+      "httpMethod": "PATCH",
+      "endpointUrl": "/api/v1/admin/regional-profiles/{id}",
+      "description": "Admin update, publish, or retire a regional profile.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-regional-profile-management"
+      ]
+    },
+    {
+      "apiId": "api-rating-library-list",
+      "apiName": "List Rating Library Versions",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/rating-library/versions",
+      "description": "List rating library versions and addenda.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-rating-library-management"
+      ]
+    },
+    {
+      "apiId": "api-rating-library-create",
+      "apiName": "Create Rating Library Version",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/rating-library/versions",
+      "description": "Create or publish a rating library version.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-rating-library-management"
+      ]
+    },
+    {
+      "apiId": "api-preassessments-create",
+      "apiName": "Start Pre-assessment",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/projects/{projectId}/pre-assessments",
+      "description": "Start a pre-assessment run for a project.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-preassessment"
+      ]
+    },
+    {
+      "apiId": "api-preassessments-get",
+      "apiName": "Get Pre-assessment Result",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/projects/{projectId}/pre-assessments/{runId}",
+      "description": "Get pre-assessment run result.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-preassessment"
+      ]
+    },
+    {
+      "apiId": "api-interpretations-create",
+      "apiName": "Execute Credit Interpretation",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/projects/{projectId}/interpretations",
+      "description": "Execute credit interpretation for a project credit.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-credit-interpretation"
+      ]
+    },
+    {
+      "apiId": "api-scorecard-get",
+      "apiName": "Get Scorecard",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/projects/{id}/scorecard",
+      "description": "Get project scorecard.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-scorecard-management"
+      ]
+    },
+    {
+      "apiId": "api-scorecard-overrides-create",
+      "apiName": "Create Score Override",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/projects/{projectId}/scorecard/overrides",
+      "description": "Create a manual score override request.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-score-override"
+      ]
+    },
+    {
+      "apiId": "api-scorecard-overrides-approvals",
+      "apiName": "Approve or Reject Score Override",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/projects/{projectId}/scorecard/overrides/{overrideId}/approvals",
+      "description": "Approve or reject a score override request as part of the dual-approval workflow with segregation-of-duties enforcement.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN",
+        "HLD",
+        "FRD"
+      ],
+      "relatedUseCaseIds": [
+        "uc-score-override"
+      ]
+    },
+    {
+      "apiId": "api-scorecard-recalculate",
+      "apiName": "Recalculate Scorecard",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/projects/{projectId}/scorecard/recalculate",
+      "description": "Trigger explicit scorecard recalculation.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-scorecard-management",
+        "uc-what-if-scenario"
+      ]
+    },
+    {
+      "apiId": "api-recommendations-list",
+      "apiName": "List Recommendations",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/projects/{projectId}/recommendations",
+      "description": "List prioritized recommendations for a project.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-recommendations"
+      ]
+    },
+    {
+      "apiId": "api-recommendations-backing-list",
+      "apiName": "List Recommendation Backing Analyses",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/projects/{projectId}/recommendations/{recommendationId}/backing-analyses",
+      "description": "List simulations or calculators backing a recommendation, including quantitative impacts and runtime-budget-grounded references.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN",
+        "HLD"
+      ],
+      "relatedUseCaseIds": [
+        "uc-recommendations"
+      ]
+    },
+    {
+      "apiId": "api-whatif-create",
+      "apiName": "Create What-if Scenario",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/projects/{projectId}/what-if-scenarios",
+      "description": "Run and save a what-if scenario comparison.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-what-if-scenario"
+      ]
+    },
+    {
+      "apiId": "api-evidence-tasks-list",
+      "apiName": "List Evidence Tasks",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/projects/{projectId}/evidence/tasks",
+      "description": "List evidence tasks for a project.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-evidence-task-management"
+      ]
+    },
+    {
+      "apiId": "api-evidence-tasks-create",
+      "apiName": "Create Evidence Task",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/projects/{projectId}/evidence/tasks",
+      "description": "Create an evidence task.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-evidence-task-management"
+      ]
+    },
+    {
+      "apiId": "api-evidence-tasks-update",
+      "apiName": "Update Evidence Task",
+      "httpMethod": "PATCH",
+      "endpointUrl": "/api/v1/projects/{projectId}/evidence/tasks/{taskId}",
+      "description": "Update evidence task state, ownership, or rules.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-evidence-task-management"
+      ]
+    },
+    {
+      "apiId": "api-artifacts-get",
+      "apiName": "Get Artifact",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/artifacts/{artifactId}",
+      "description": "Get artifact metadata and processing state.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-artifact-upload",
+        "uc-evidence-repository-search"
+      ]
+    },
+    {
+      "apiId": "api-artifacts-search",
+      "apiName": "Search Artifacts",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/artifacts/search",
+      "description": "Search artifacts and metadata.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-evidence-repository-search"
+      ]
+    },
+    {
+      "apiId": "api-artifact-extraction-get",
+      "apiName": "Get Extraction Result",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/artifacts/{artifactId}/extraction",
+      "description": "Get extraction result for an artifact.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-extraction-review"
+      ]
+    },
+    {
+      "apiId": "api-artifact-extraction-review",
+      "apiName": "Review Extraction Result",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/artifacts/{artifactId}/extraction/review",
+      "description": "Approve, reject, or correct extraction output.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-extraction-review"
+      ]
+    },
+    {
+      "apiId": "api-artifact-classification-get",
+      "apiName": "Get Classification Result",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/artifacts/{artifactId}/classification",
+      "description": "Get classification result for an artifact.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-classification-review"
+      ]
+    },
+    {
+      "apiId": "api-artifact-classification-review",
+      "apiName": "Review Classification Result",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/artifacts/{artifactId}/classification/review",
+      "description": "Approve, reject, or correct artifact classification.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-classification-review"
+      ]
+    },
+    {
+      "apiId": "api-simulations-create",
+      "apiName": "Submit Simulation Job",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/projects/{projectId}/simulations",
+      "description": "Submit a simulation job limited to supported MVP types such as daylight, glare, energy, or other non-smoke workflows.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN",
+        "HLD"
+      ],
+      "relatedUseCaseIds": [
+        "uc-simulation-orchestration"
+      ]
+    },
+    {
+      "apiId": "api-simulations-get",
+      "apiName": "Get Simulation Job",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/projects/{projectId}/simulations/{jobId}",
+      "description": "Get simulation job details for supported MVP simulation types; smoke simulation workflows are out of scope at MVP.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN",
+        "HLD"
+      ],
+      "relatedUseCaseIds": [
+        "uc-simulation-orchestration"
+      ]
+    },
+    {
+      "apiId": "api-mapping-oneclick-fields",
+      "apiName": "Get OneClick LCA Mapping Fields",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/mapping-wizards/oneclicklca/fields",
+      "description": "Get mapping wizard fields for OneClick LCA.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-tool-mapping-management"
+      ]
+    },
+    {
+      "apiId": "api-mapping-oneclick-upsert",
+      "apiName": "Create or Update OneClick LCA Mapping",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/mapping-wizards/oneclicklca/mappings",
+      "description": "Create or update a OneClick LCA mapping definition.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-tool-mapping-management"
+      ]
+    },
+    {
+      "apiId": "api-mapping-tool-fields",
+      "apiName": "Get Tool Mapping Fields",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/mapping-wizards/{toolCode}/fields",
+      "description": "Get mapping wizard fields for supported tools.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-tool-mapping-management"
+      ]
+    },
+    {
+      "apiId": "api-mapping-tool-upsert",
+      "apiName": "Create or Update Tool Mapping",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/mapping-wizards/{toolCode}/mappings",
+      "description": "Create or update a mapping definition for supported tools.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-tool-mapping-management"
+      ]
+    },
+    {
+      "apiId": "api-oneclick-import",
+      "apiName": "Import OneClick LCA Data",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/integrations/oneclicklca/import",
+      "description": "Import data using a OneClick LCA mapping.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-tool-data-import-export"
+      ]
+    },
+    {
+      "apiId": "api-oneclick-export",
+      "apiName": "Export OneClick LCA Data",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/integrations/oneclicklca/export",
+      "description": "Export data using a OneClick LCA mapping.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-tool-data-import-export"
+      ]
+    },
+    {
+      "apiId": "api-tool-import",
+      "apiName": "Import Tool Data",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/integrations/{toolCode}/import",
+      "description": "Import data for supported tools via mapping.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-tool-data-import-export"
+      ]
+    },
+    {
+      "apiId": "api-tool-export",
+      "apiName": "Export Tool Data",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/integrations/{toolCode}/export",
+      "description": "Export data for supported tools via mapping.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-tool-data-import-export"
+      ]
+    },
+    {
+      "apiId": "api-iot-import",
+      "apiName": "Import IoT Data",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/integrations/iot/import",
+      "description": "Import IoT time-series streams using a mapping.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-tool-data-import-export"
+      ]
+    },
+    {
+      "apiId": "api-iot-export",
+      "apiName": "Export IoT Data",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/integrations/iot/export",
+      "description": "Export IoT streams for a project using a mapping.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-tool-data-import-export"
+      ]
+    },
+    {
+      "apiId": "api-documents-generate",
+      "apiName": "Generate Document",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/projects/{projectId}/documents/generate",
+      "description": "Generate a project document.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-document-generation"
+      ]
+    },
+    {
+      "apiId": "api-documents-review",
+      "apiName": "Review Document",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/projects/{projectId}/documents/{documentId}/review",
+      "description": "Submit document for human review or record review decision.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-document-review"
+      ]
+    },
+    {
+      "apiId": "api-packages-create",
+      "apiName": "Build Submission Package",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/projects/{projectId}/packages",
+      "description": "Build a submission package for manual portal upload.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN",
+        "FRD",
+        "HLD"
+      ],
+      "relatedUseCaseIds": [
+        "uc-submission-package-build"
+      ]
+    },
+    {
+      "apiId": "api-packages-get",
+      "apiName": "Get Submission Package",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/projects/{projectId}/packages/{packageId}",
+      "description": "Get package metadata and immutable history entry.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-submission-package-build",
+        "uc-submission-approval"
+      ]
+    },
+    {
+      "apiId": "api-packages-approval-request",
+      "apiName": "Request Package Approval",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/projects/{projectId}/packages/{packageId}/approval-requests",
+      "description": "Start package dual-approval workflow.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-submission-approval"
+      ]
+    },
+    {
+      "apiId": "api-packages-approvals",
+      "apiName": "Approve or Reject Package",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/projects/{projectId}/packages/{packageId}/approvals",
+      "description": "Approve or reject a submission package.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-submission-approval"
+      ]
+    },
+    {
+      "apiId": "api-qa-queries-list",
+      "apiName": "List Auditor Queries",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/projects/{projectId}/qa/queries",
+      "description": "List auditor Q and A threads, including read-only access patterns for invited external auditors.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN",
+        "FRD"
+      ],
+      "relatedUseCaseIds": [
+        "uc-auditor-qa-management",
+        "uc-external-auditor-qa-view"
+      ]
+    },
+    {
+      "apiId": "api-qa-queries-create",
+      "apiName": "Create Auditor Query Thread",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/projects/{projectId}/qa/queries",
+      "description": "Create an auditor Q and A thread.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-auditor-qa-management"
+      ]
+    },
+    {
+      "apiId": "api-qa-assistant-suggestions",
+      "apiName": "Generate Auditor Response Suggestion",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/projects/{projectId}/qa/queries/{queryId}/assistant-suggestions",
+      "description": "Generate AI suggestion for an auditor response.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-auditor-response-suggestion"
+      ]
+    },
+    {
+      "apiId": "api-qa-transitions",
+      "apiName": "Transition Auditor Query Workflow",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/projects/{projectId}/qa/queries/{queryId}/transitions",
+      "description": "Transition auditor Q and A workflow state.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-auditor-qa-management"
+      ]
+    },
+    {
+      "apiId": "api-canned-responses-list",
+      "apiName": "List Canned Responses",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/admin/canned-responses",
+      "description": "List canned responses.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-canned-response-management"
+      ]
+    },
+    {
+      "apiId": "api-canned-responses-create",
+      "apiName": "Create Canned Response",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/admin/canned-responses",
+      "description": "Create a canned response.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-canned-response-management"
+      ]
+    },
+    {
+      "apiId": "api-canned-responses-update",
+      "apiName": "Update Canned Response",
+      "httpMethod": "PATCH",
+      "endpointUrl": "/api/v1/admin/canned-responses/{id}",
+      "description": "Update a canned response.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-canned-response-management"
+      ]
+    },
+    {
+      "apiId": "api-canned-responses-delete",
+      "apiName": "Delete Canned Response",
+      "httpMethod": "DELETE",
+      "endpointUrl": "/api/v1/admin/canned-responses/{id}",
+      "description": "Delete a canned response.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-canned-response-management"
+      ]
+    },
+    {
+      "apiId": "api-notifications-list",
+      "apiName": "List Notifications",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/notifications",
+      "description": "List notifications.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-notification-monitoring"
+      ]
+    },
+    {
+      "apiId": "api-whatsapp-consent-create",
+      "apiName": "Record WhatsApp Consent",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/notifications/consents/whatsapp",
+      "description": "Record explicit WhatsApp consent.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN",
+        "FRD",
+        "HLD"
+      ],
+      "relatedUseCaseIds": [
+        "uc-whatsapp-consent-management"
+      ]
+    },
+    {
+      "apiId": "api-whatsapp-unsubscribe",
+      "apiName": "Unsubscribe WhatsApp Recipient",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/notifications/consents/whatsapp/unsubscribe",
+      "description": "Unsubscribe a WhatsApp recipient.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-whatsapp-consent-management"
+      ]
+    },
+    {
+      "apiId": "api-notification-rules-list",
+      "apiName": "List Notification Rules",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/admin/notification-rules",
+      "description": "Admin list notification rules.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-notification-rule-management"
+      ]
+    },
+    {
+      "apiId": "api-notification-rules-create",
+      "apiName": "Create Notification Rule",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/admin/notification-rules",
+      "description": "Admin create notification rule.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-notification-rule-management"
+      ]
+    },
+    {
+      "apiId": "api-notification-rules-update",
+      "apiName": "Update Notification Rule",
+      "httpMethod": "PATCH",
+      "endpointUrl": "/api/v1/admin/notification-rules/{id}",
+      "description": "Admin update notification rule.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-notification-rule-management"
+      ]
+    },
+    {
+      "apiId": "api-notification-rules-delete",
+      "apiName": "Delete Notification Rule",
+      "httpMethod": "DELETE",
+      "endpointUrl": "/api/v1/admin/notification-rules/{id}",
+      "description": "Admin delete notification rule.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-notification-rule-management"
+      ]
+    },
+    {
+      "apiId": "api-notification-settings-get",
+      "apiName": "Get Notification Settings",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/admin/notifications/settings",
+      "description": "Admin get notification settings including configured quiet hours from 21:00 to 08:00 IST.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN",
+        "FRD",
+        "HLD"
+      ],
+      "relatedUseCaseIds": [
+        "uc-notification-settings-management"
+      ]
+    },
+    {
+      "apiId": "api-notification-settings-update",
+      "apiName": "Update Notification Settings",
+      "httpMethod": "PUT",
+      "endpointUrl": "/api/v1/admin/notifications/settings",
+      "description": "Admin update notification settings including quiet hours from 21:00 to 08:00 IST.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN",
+        "FRD",
+        "HLD"
+      ],
+      "relatedUseCaseIds": [
+        "uc-notification-settings-management"
+      ]
+    },
+    {
+      "apiId": "api-standards-corpus-list",
+      "apiName": "List Standards Corpus Items",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/standards/corpus",
+      "description": "List standards corpus items.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-standards-corpus-management",
+        "uc-standards-qa"
+      ]
+    },
+    {
+      "apiId": "api-standards-corpus-create",
+      "apiName": "Create Standards Corpus Metadata",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/standards/corpus",
+      "description": "Create standards corpus metadata entry.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-standards-corpus-management"
+      ]
+    },
+    {
+      "apiId": "api-standards-corpus-upload",
+      "apiName": "Upload Standards Corpus Content",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/standards/corpus/{itemId}/upload",
+      "description": "Upload corpus content for a standards item.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-standards-corpus-management"
+      ]
+    },
+    {
+      "apiId": "api-standards-qa",
+      "apiName": "Standards Q and A",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/standards/qa",
+      "description": "Perform standards or CIR Q and A using licensed corpus content.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN",
+        "FRD",
+        "HLD"
+      ],
+      "relatedUseCaseIds": [
+        "uc-standards-qa"
+      ]
+    },
+    {
+      "apiId": "api-standards-corpus-update",
+      "apiName": "Update Standards Corpus Metadata",
+      "httpMethod": "PATCH",
+      "endpointUrl": "/api/v1/standards/corpus/{itemId}",
+      "description": "Update corpus metadata such as refresh cadence and license dates.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-standards-corpus-management"
+      ]
+    },
+    {
+      "apiId": "api-analytics-portfolio-get",
+      "apiName": "Get Portfolio Analytics",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/analytics/portfolio",
+      "description": "Get portfolio dashboard metrics.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-portfolio-analytics"
+      ]
+    },
+    {
+      "apiId": "api-analytics-portfolio-export-list",
+      "apiName": "List Portfolio Analytics Exports",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/analytics/portfolio/export",
+      "description": "List generated portfolio analytics exports.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-portfolio-analytics-export"
+      ]
+    },
+    {
+      "apiId": "api-analytics-portfolio-export-create",
+      "apiName": "Generate Portfolio Analytics Export",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/analytics/portfolio/export",
+      "description": "Generate portfolio analytics export.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-portfolio-analytics-export"
+      ]
+    },
+    {
+      "apiId": "api-risks-list",
+      "apiName": "List Risk Register Items",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/admin/risks",
+      "description": "List risk register items.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-risk-register-management"
+      ]
+    },
+    {
+      "apiId": "api-risks-get",
+      "apiName": "Get Risk Register Item",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/admin/risks/{id}",
+      "description": "Get risk register item by id.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-risk-register-management"
+      ]
+    },
+    {
+      "apiId": "api-risks-create",
+      "apiName": "Create Risk Register Item",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/admin/risks",
+      "description": "Create a risk register item.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-risk-register-management"
+      ]
+    },
+    {
+      "apiId": "api-risks-update",
+      "apiName": "Update Risk Register Item",
+      "httpMethod": "PATCH",
+      "endpointUrl": "/api/v1/admin/risks/{id}",
+      "description": "Update risk status, owner, mitigation, likelihood, or severity.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-risk-register-management"
+      ]
+    },
+    {
+      "apiId": "api-risks-monitor-update",
+      "apiName": "Monitor-driven Risk Register Update",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/admin/risks/monitor-updates",
+      "description": "Create or update risk register items from automated monitors and emit related notifications and audit entries.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN",
+        "HLD"
+      ],
+      "relatedUseCaseIds": [
+        "uc-risk-register-management"
+      ]
+    },
+    {
+      "apiId": "api-audit-logs-list",
+      "apiName": "Search Audit Logs",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/audit-logs",
+      "description": "Search audit logs.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN",
+        "FRD",
+        "HLD"
+      ],
+      "relatedUseCaseIds": [
+        "uc-audit-log-review"
+      ]
+    },
+    {
+      "apiId": "api-audit-exports-get",
+      "apiName": "Get Audit Export Status or Artifact",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/audit-exports/{id}",
+      "description": "Get restricted audit export status or artifact metadata.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN",
+        "HLD"
+      ],
+      "relatedUseCaseIds": [
+        "uc-audit-export-management"
+      ]
+    },
+    {
+      "apiId": "api-audit-exports-approvals",
+      "apiName": "Approve or Reject Audit Export",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/audit-exports/{id}/approvals",
+      "description": "Approve or reject a restricted audit export request under dual-approval governance.",
+      "sourceDocuments": [
+        "HLD",
+        "FRD"
+      ],
+      "relatedUseCaseIds": [
+        "uc-audit-export-management"
+      ]
+    },
+    {
+      "apiId": "api-webhooks-create",
+      "apiName": "Create Webhook Subscription",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/webhooks/subscriptions",
+      "description": "Create a webhook subscription.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN",
+        "FRD",
+        "HLD"
+      ],
+      "relatedUseCaseIds": [
+        "uc-webhook-subscription-management"
+      ]
+    },
+    {
+      "apiId": "api-retention-policies-list",
+      "apiName": "List Retention Policies",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/admin/retention-policies",
+      "description": "List retention policies.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-retention-policy-management"
+      ]
+    },
+    {
+      "apiId": "api-retention-policies-update",
+      "apiName": "Update Retention Policy",
+      "httpMethod": "PUT",
+      "endpointUrl": "/api/v1/admin/retention-policies/{policyId}",
+      "description": "Update a retention policy.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-retention-policy-management"
+      ]
+    },
+    {
+      "apiId": "api-tenant-export-create",
+      "apiName": "Request Tenant Export",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/admin/tenant-export-requests",
+      "description": "Request tenant data export.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-tenant-export-management"
+      ]
+    },
+    {
+      "apiId": "api-tenant-export-get",
+      "apiName": "Get Tenant Export Status",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/admin/tenant-export-requests/{requestId}",
+      "description": "Get tenant export request status.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-tenant-export-management"
+      ]
+    },
+    {
+      "apiId": "api-secure-deletions-create",
+      "apiName": "Create Secure Deletion Request",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/admin/secure-deletions",
+      "description": "Create a secure deletion request.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-secure-deletion-management"
+      ]
+    },
+    {
+      "apiId": "api-secure-deletions-update",
+      "apiName": "Action Secure Deletion Request",
+      "httpMethod": "PATCH",
+      "endpointUrl": "/api/v1/admin/secure-deletions/{requestId}",
+      "description": "Approve, reject, or execute a secure deletion request.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-secure-deletion-management"
+      ]
+    },
+    {
+      "apiId": "api-branding-assets-upload",
+      "apiName": "Upload Branding Assets",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/admin/branding/assets",
+      "description": "Upload branding assets such as logo, colors, and fonts.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN",
+        "FRD",
+        "HLD"
+      ],
+      "relatedUseCaseIds": [
+        "uc-branding-management"
+      ]
+    },
+    {
+      "apiId": "api-admin-templates-list",
+      "apiName": "List Admin Templates",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/admin/templates",
+      "description": "Admin-only internal listing of available document templates and versions.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN",
+        "HLD"
+      ],
+      "relatedUseCaseIds": [
+        "uc-template-management"
+      ]
+    },
+    {
+      "apiId": "api-models-list",
+      "apiName": "List Model Registry Entries",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/admin/models",
+      "description": "List model registry entries.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-model-registry-management"
+      ]
+    },
+    {
+      "apiId": "api-models-create",
+      "apiName": "Create Model Registry Entry",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/admin/models",
+      "description": "Create a model registry entry.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-model-registry-management"
+      ]
+    },
+    {
+      "apiId": "api-model-versions-create",
+      "apiName": "Add Model Version",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/admin/models/{modelId}/versions",
+      "description": "Add a model version to the registry.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-model-registry-management"
+      ]
+    },
+    {
+      "apiId": "api-addenda-sla-get",
+      "apiName": "Get Addenda SLA Configuration",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/admin/rating-library/addenda-sla",
+      "description": "Get addenda SLA configuration.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-addenda-sla-management"
+      ]
+    },
+    {
+      "apiId": "api-addenda-sla-update",
+      "apiName": "Update Addenda SLA Configuration",
+      "httpMethod": "PUT",
+      "endpointUrl": "/api/v1/admin/rating-library/addenda-sla",
+      "description": "Update addenda SLA configuration.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-addenda-sla-management"
+      ]
+    },
+    {
+      "apiId": "api-addenda-sla-status-list",
+      "apiName": "List Addenda SLA Statuses",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/admin/rating-library/addenda-sla/status",
+      "description": "List addenda SLA statuses.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-addenda-sla-management"
+      ]
+    },
+    {
+      "apiId": "api-policies-list",
+      "apiName": "List Policy Rules",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/admin/policies",
+      "description": "List policy rules.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-policy-management"
+      ]
+    },
+    {
+      "apiId": "api-policies-create",
+      "apiName": "Create Policy Rule",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/admin/policies",
+      "description": "Create a policy rule.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-policy-management"
+      ]
+    },
+    {
+      "apiId": "api-policies-get",
+      "apiName": "Get Policy Rule",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/admin/policies/{id}",
+      "description": "Get policy rule details.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-policy-management"
+      ]
+    },
+    {
+      "apiId": "api-policies-update",
+      "apiName": "Update Policy Rule",
+      "httpMethod": "PATCH",
+      "endpointUrl": "/api/v1/admin/policies/{id}",
+      "description": "Update a policy rule.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-policy-management"
+      ]
+    },
+    {
+      "apiId": "api-invites-create",
+      "apiName": "Create Access Invite",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/admin/invites",
+      "description": "Create an access invite for invite-only sharing.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-access-invite-management",
+        "uc-cross-organization-sharing"
+      ]
+    },
+    {
+      "apiId": "api-invites-list",
+      "apiName": "List Access Invites",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/admin/invites",
+      "description": "List access invites.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-access-invite-management"
+      ]
+    },
+    {
+      "apiId": "api-invites-accept",
+      "apiName": "Accept Access Invite",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/admin/invites/{id}/accept",
+      "description": "Accept an invite and create access grants.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-access-invite-management",
+        "uc-cross-organization-sharing"
+      ]
+    },
+    {
+      "apiId": "api-access-grants-create",
+      "apiName": "Grant Scoped Access",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/admin/access/grants",
+      "description": "Grant scoped access to a user.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-cross-organization-sharing",
+        "uc-rbac-management"
+      ]
+    },
+    {
+      "apiId": "api-access-grants-delete",
+      "apiName": "Revoke Scoped Access",
+      "httpMethod": "DELETE",
+      "endpointUrl": "/api/v1/admin/access/grants/{grantId}",
+      "description": "Revoke a scoped access grant.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-cross-organization-sharing",
+        "uc-rbac-management"
+      ]
+    },
+    {
+      "apiId": "api-transfer-requests-create",
+      "apiName": "Initiate Project Transfer",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/projects/{projectId}/transfer-requests",
+      "description": "Initiate dual-admin project transfer with explicit approver tracking, configurable source handover access expiry, and segregation-of-duties enforcement.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN",
+        "FRD",
+        "HLD"
+      ],
+      "relatedUseCaseIds": [
+        "uc-project-transfer"
+      ]
+    },
+    {
+      "apiId": "api-transfer-requests-confirm",
+      "apiName": "Confirm Project Transfer",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/projects/{projectId}/transfer-requests/{reqId}/confirm",
+      "description": "Second admin confirmation for project transfer.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-project-transfer"
+      ]
+    },
+    {
+      "apiId": "api-transfer-requests-reject",
+      "apiName": "Reject Project Transfer",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/projects/{projectId}/transfer-requests/{reqId}/reject",
+      "description": "Reject a project transfer request.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-project-transfer"
+      ]
+    },
+    {
+      "apiId": "api-anomalies-list",
+      "apiName": "List Anomalies",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/projects/{projectId}/anomalies",
+      "description": "List anomalies for a project.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-anomaly-management"
+      ]
+    },
+    {
+      "apiId": "api-anomalies-create",
+      "apiName": "Create Anomaly",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/projects/{projectId}/anomalies",
+      "description": "Create an anomaly entry.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN",
+        "FRD",
+        "HLD"
+      ],
+      "relatedUseCaseIds": [
+        "uc-anomaly-management"
+      ]
+    },
+    {
+      "apiId": "api-anomalies-get",
+      "apiName": "Get Anomaly",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/projects/{projectId}/anomalies/{id}",
+      "description": "Get anomaly details.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-anomaly-management"
+      ]
+    },
+    {
+      "apiId": "api-anomalies-update",
+      "apiName": "Update Anomaly",
+      "httpMethod": "PATCH",
+      "endpointUrl": "/api/v1/projects/{projectId}/anomalies/{id}",
+      "description": "Update anomaly status, flags, or links.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-anomaly-management"
+      ]
+    },
+    {
+      "apiId": "api-corrective-actions-list",
+      "apiName": "List Corrective Actions",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/projects/{projectId}/anomalies/{id}/proposed-actions",
+      "description": "List proposed corrective actions for an anomaly.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-corrective-action-management"
+      ]
+    },
+    {
+      "apiId": "api-corrective-actions-create",
+      "apiName": "Create Corrective Action",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/projects/{projectId}/anomalies/{id}/proposed-actions",
+      "description": "Propose a corrective action for an anomaly.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-corrective-action-management"
+      ]
+    },
+    {
+      "apiId": "api-corrective-actions-update",
+      "apiName": "Update Corrective Action",
+      "httpMethod": "PATCH",
+      "endpointUrl": "/api/v1/projects/{projectId}/anomalies/{id}/proposed-actions/{actionId}",
+      "description": "Accept, reject, or apply a corrective action.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-corrective-action-management"
+      ]
+    },
+    {
+      "apiId": "api-business-calendar-get",
+      "apiName": "Get Business Calendar",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/admin/business-calendar",
+      "description": "Get tenant business calendar.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-business-calendar-management"
+      ]
+    },
+    {
+      "apiId": "api-business-calendar-update",
+      "apiName": "Update Business Calendar",
+      "httpMethod": "PUT",
+      "endpointUrl": "/api/v1/admin/business-calendar",
+      "description": "Update tenant business calendar.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN"
+      ],
+      "relatedUseCaseIds": [
+        "uc-business-calendar-management"
+      ]
+    },
+    {
+      "apiId": "api-provider-credentials-create",
+      "apiName": "Create Provider Credential",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/admin/provider-credentials",
+      "description": "Create or rotate provider credentials at tenant scope with optional project override support.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN",
+        "HLD"
+      ],
+      "relatedUseCaseIds": [
+        "uc-provider-credential-management"
+      ]
+    },
+    {
+      "apiId": "api-artifacts-status",
+      "apiName": "Get Artifact Status",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/artifacts/{id}/status",
+      "description": "Get artifact processing status.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN",
+        "HLD"
+      ],
+      "relatedUseCaseIds": [
+        "uc-artifact-upload",
+        "uc-evidence-repository-search"
+      ]
+    },
+    {
+      "apiId": "api-submission-packages-status",
+      "apiName": "Get Submission Package Status",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/submission-packages/{id}/status",
+      "description": "Get submission package status.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN",
+        "HLD"
+      ],
+      "relatedUseCaseIds": [
+        "uc-submission-package-build",
+        "uc-submission-approval"
+      ]
+    },
+    {
+      "apiId": "api-auditor-queries-status",
+      "apiName": "Get Auditor Query Status",
+      "httpMethod": "GET",
+      "endpointUrl": "/api/v1/auditor-queries/{id}/status",
+      "description": "Get auditor query workflow status.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN",
+        "HLD"
+      ],
+      "relatedUseCaseIds": [
+        "uc-auditor-qa-management",
+        "uc-external-auditor-qa-view"
+      ]
+    },
+    {
+      "apiId": "api-artifacts-create",
+      "apiName": "Create Artifact",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/artifacts",
+      "description": "Upload a new artifact with source metadata and optional import template validation.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN",
+        "HLD"
+      ],
+      "relatedUseCaseIds": [
+        "uc-artifact-upload"
+      ]
+    },
+    {
+      "apiId": "api-audit-export-requests-create",
+      "apiName": "Initiate Restricted Audit Export",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/admin/audit-export-requests",
+      "description": "Initiate a restricted audit export request subject to required business Admin and Technical Admin approvals.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN",
+        "HLD"
+      ],
+      "relatedUseCaseIds": [
+        "uc-audit-export-management"
+      ]
+    },
+    {
+      "apiId": "api-training-permissions-create",
+      "apiName": "Create Training Permission Record",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/admin/training-permissions",
+      "description": "Create an explicit written permission record authorizing approved historical data usage for AI-assisted learning inputs.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN",
+        "HLD"
+      ],
+      "relatedUseCaseIds": [
+        "uc-training-permission-management"
+      ]
+    },
+    {
+      "apiId": "api-import-templates-upsert",
+      "apiName": "Create or Update Import Template",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/admin/import-templates",
+      "description": "Create or update an admin-configurable import template by artifact type including metadata schema, validation rules, naming rules, default credit mappings, and file-size override.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN",
+        "HLD"
+      ],
+      "relatedUseCaseIds": [
+        "uc-import-template-management"
+      ]
+    },
+    {
+      "apiId": "api-portal-configurations-upsert",
+      "apiName": "Create or Update Portal Configuration",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/admin/portal-configurations",
+      "description": "Create or update future-ready per-portal configuration and enablement controls while preserving manual-placeholder mode at MVP.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN",
+        "HLD"
+      ],
+      "relatedUseCaseIds": [
+        "uc-portal-configuration-management"
+      ]
+    },
+    {
+      "apiId": "api-restores-create",
+      "apiName": "Request Record Restore",
+      "httpMethod": "POST",
+      "endpointUrl": "/api/v1/restores",
+      "description": "Request restore of a soft-deleted record within the applied tenant policy restore window.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN",
+        "HLD"
+      ],
+      "relatedUseCaseIds": [
+        "uc-restore-request-management"
+      ]
+    },
+    {
+      "apiId": "api-ai-gateway-requests-create",
+      "apiName": "Create AI Gateway Request",
+      "httpMethod": "POST",
+      "endpointUrl": "/internal/v1/ai-gateway/requests",
+      "description": "Submit an approved internal AI-assisted request through the centralized AI Gateway. This internal platform API is required because the MID_LEVEL_DESIGN states that domain services call the AI Gateway over internal HTTPS REST only and defines AI Gateway internal request and response contracts, but does not expose a public API route for raw AI invocation. The API is used by approved domain services such as Pre-assessment Service, Credit Interpretation Service, Recommendation Service, Auditor Q and A Service, and Standards and CIR Q and A Service. The AI Gateway applies tenant isolation, policy enforcement, prompt sanitization, PII minimization, approved GPT 5.1 routing, response validation, citation validation, explainability logging, AIInteractionLog persistence, and controlled degradation handling.",
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN",
+        "MLD-Architecture-Implied"
+      ],
+      "relatedUseCaseIds": [
+        "uc-ai-gateway-internal-invocation"
+      ]
+    }
+  ],
+  "frontendScreens": [
+    {
+      "screenId": "scr-login",
+      "screenName": "Login",
+      "description": "Local user authentication screen for accessing the platform.",
+      "isScreenIncludeInNavBar": false,
+      "menuItemName": "",
+      "subMenuItem": "",
+      "subSubMenuItem": "",
+      "route": "/login",
+      "navigationType": "submit",
+      "triggerEvent": "Login button",
+      "roleAccess": [
+        "Sustainability Consultant",
+        "Owner",
+        "Architect",
+        "MEP Consultant",
+        "Landscape Consultant",
+        "Construction Team",
+        "Procurement Team",
+        "PMC",
+        "External Auditor",
+        "Admin"
+      ],
+      "relatedUseCaseIds": [
+        "uc-user-login"
+      ],
+      "relatedApiIds": [
+        "api-auth-login"
+      ]
+    },
+    {
+      "screenId": "scr-projects",
+      "screenName": "Projects",
+      "description": "Primary project listing and entry point for project intake and management.",
+      "isScreenIncludeInNavBar": true,
+      "menuItemName": "Projects",
+      "subMenuItem": "",
+      "subSubMenuItem": "",
+      "route": "/projects",
+      "navigationType": "click",
+      "triggerEvent": "Projects menu",
+      "roleAccess": [
+        "Sustainability Consultant",
+        "Owner",
+        "Architect",
+        "MEP Consultant",
+        "Landscape Consultant",
+        "Construction Team",
+        "Procurement Team",
+        "PMC",
+        "External Auditor",
+        "Admin"
+      ],
+      "relatedUseCaseIds": [
+        "uc-project-management",
+        "uc-project-intake"
+      ],
+      "relatedApiIds": [
+        "api-projects-list",
+        "api-projects-create",
+        "api-projects-update",
+        "api-regional-profiles-list"
+      ]
+    },
+    {
+      "screenId": "scr-project-detail",
+      "screenName": "Project Detail",
+      "description": "Project workspace for master data, status, and project-level operations.",
+      "isScreenIncludeInNavBar": false,
+      "menuItemName": "",
+      "subMenuItem": "",
+      "subSubMenuItem": "",
+      "route": "/projects/:projectId",
+      "navigationType": "click",
+      "triggerEvent": "Project row click",
+      "roleAccess": [
+        "Sustainability Consultant",
+        "Owner",
+        "Architect",
+        "MEP Consultant",
+        "Landscape Consultant",
+        "Construction Team",
+        "Procurement Team",
+        "PMC",
+        "External Auditor",
+        "Admin"
+      ],
+      "relatedUseCaseIds": [
+        "uc-project-management",
+        "uc-project-intake"
+      ],
+      "relatedApiIds": [
+        "api-projects-update",
+        "api-regional-profiles-list"
+      ]
+    },
+    {
+      "screenId": "scr-preassessment",
+      "screenName": "Pre-assessment",
+      "description": "Screen to launch and review AI-assisted project pre-assessment results.",
+      "isScreenIncludeInNavBar": true,
+      "menuItemName": "Projects",
+      "subMenuItem": "Pre-assessment",
+      "subSubMenuItem": "",
+      "route": "/projects/:projectId/pre-assessment",
+      "navigationType": "click",
+      "triggerEvent": "Pre-assessment tab",
+      "roleAccess": [
+        "Sustainability Consultant",
+        "Admin",
+        "Architect",
+        "MEP Consultant",
+        "Landscape Consultant",
+        "Owner",
+        "PMC"
+      ],
+      "relatedUseCaseIds": [
+        "uc-preassessment"
+      ],
+      "relatedApiIds": [
+        "api-preassessments-create",
+        "api-preassessments-get"
+      ]
+    },
+    {
+      "screenId": "scr-interpretation",
+      "screenName": "Credit Interpretation",
+      "description": "Screen to run and view credit applicability and rationale.",
+      "isScreenIncludeInNavBar": true,
+      "menuItemName": "Projects",
+      "subMenuItem": "Credit Interpretation",
+      "subSubMenuItem": "",
+      "route": "/projects/:projectId/interpretation",
+      "navigationType": "click",
+      "triggerEvent": "Credit Interpretation tab",
+      "roleAccess": [
+        "Sustainability Consultant",
+        "Admin",
+        "Architect",
+        "MEP Consultant",
+        "Landscape Consultant",
+        "PMC"
+      ],
+      "relatedUseCaseIds": [
+        "uc-credit-interpretation"
+      ],
+      "relatedApiIds": [
+        "api-interpretations-create"
+      ]
+    },
+    {
+      "screenId": "scr-evidence",
+      "screenName": "Evidence Repository",
+      "description": "Repository and task workspace for evidence uploads, tracking, validation, import-template-governed ingestion, and search.",
+      "isScreenIncludeInNavBar": true,
+      "menuItemName": "Projects",
+      "subMenuItem": "Evidence",
+      "subSubMenuItem": "",
+      "route": "/projects/:projectId/evidence",
+      "navigationType": "click",
+      "triggerEvent": "Evidence tab",
+      "roleAccess": [
+        "Sustainability Consultant",
+        "Admin",
+        "Architect",
+        "MEP Consultant",
+        "Landscape Consultant",
+        "Construction Team",
+        "Procurement Team",
+        "Owner",
+        "PMC",
+        "External Auditor"
+      ],
+      "relatedUseCaseIds": [
+        "uc-evidence-task-management",
+        "uc-artifact-upload",
+        "uc-evidence-repository-search",
+        "uc-extraction-review",
+        "uc-classification-review"
+      ],
+      "relatedApiIds": [
+        "api-evidence-tasks-list",
+        "api-evidence-tasks-create",
+        "api-evidence-tasks-update",
+        "api-artifacts-create",
+        "api-artifacts-get",
+        "api-artifacts-status",
+        "api-artifacts-search",
+        "api-artifact-extraction-get",
+        "api-artifact-extraction-review",
+        "api-artifact-classification-get",
+        "api-artifact-classification-review"
+      ]
+    },
+    {
+      "screenId": "scr-scorecard",
+      "screenName": "Scorecard",
+      "description": "Dynamic scorecard view with recalculation and scoring status.",
+      "isScreenIncludeInNavBar": true,
+      "menuItemName": "Projects",
+      "subMenuItem": "Scorecard",
+      "subSubMenuItem": "",
+      "route": "/projects/:projectId/scorecard",
+      "navigationType": "click",
+      "triggerEvent": "Scorecard tab",
+      "roleAccess": [
+        "Sustainability Consultant",
+        "Admin",
+        "Owner",
+        "PMC",
+        "External Auditor"
+      ],
+      "relatedUseCaseIds": [
+        "uc-scorecard-management"
+      ],
+      "relatedApiIds": [
+        "api-scorecard-get",
+        "api-scorecard-recalculate"
+      ]
+    },
+    {
+      "screenId": "scr-score-override",
+      "screenName": "Score Override Review",
+      "description": "Screen to create and review score override requests requiring justification and approvals.",
+      "isScreenIncludeInNavBar": false,
+      "menuItemName": "",
+      "subMenuItem": "",
+      "subSubMenuItem": "",
+      "route": "/projects/:projectId/scorecard/overrides",
+      "navigationType": "click",
+      "triggerEvent": "Override action",
+      "roleAccess": [
+        "Sustainability Consultant",
+        "Admin"
+      ],
+      "relatedUseCaseIds": [
+        "uc-score-override"
+      ],
+      "relatedApiIds": [
+        "api-scorecard-overrides-create",
+        "api-scorecard-overrides-approvals"
+      ]
+    },
+    {
+      "screenId": "scr-recommendations",
+      "screenName": "Recommendations",
+      "description": "Prioritized recommendation workspace for compliance pathways and impact analysis.",
+      "isScreenIncludeInNavBar": true,
+      "menuItemName": "Projects",
+      "subMenuItem": "Recommendations",
+      "subSubMenuItem": "",
+      "route": "/projects/:projectId/recommendations",
+      "navigationType": "click",
+      "triggerEvent": "Recommendations tab",
+      "roleAccess": [
+        "Sustainability Consultant",
+        "Admin",
+        "Architect",
+        "MEP Consultant",
+        "Landscape Consultant",
+        "Owner",
+        "PMC"
+      ],
+      "relatedUseCaseIds": [
+        "uc-recommendations",
+        "uc-what-if-scenario"
+      ],
+      "relatedApiIds": [
+        "api-recommendations-list",
+        "api-recommendations-backing-list",
+        "api-whatif-create",
+        "api-scorecard-recalculate"
+      ]
+    },
+    {
+      "screenId": "scr-simulations",
+      "screenName": "Simulations",
+      "description": "Screen to submit, monitor, and review simulation jobs and outputs.",
+      "isScreenIncludeInNavBar": true,
+      "menuItemName": "Projects",
+      "subMenuItem": "Simulations",
+      "subSubMenuItem": "",
+      "route": "/projects/:projectId/simulations",
+      "navigationType": "click",
+      "triggerEvent": "Simulations tab",
+      "roleAccess": [
+        "Sustainability Consultant",
+        "Admin",
+        "Architect",
+        "MEP Consultant",
+        "PMC"
+      ],
+      "relatedUseCaseIds": [
+        "uc-simulation-orchestration"
+      ],
+      "relatedApiIds": [
+        "api-simulations-create",
+        "api-simulations-get"
+      ]
+    },
+    {
+      "screenId": "scr-documents",
+      "screenName": "Documents",
+      "description": "Screen to generate and review narratives, calculators, reports, and form-ready outputs.",
+      "isScreenIncludeInNavBar": true,
+      "menuItemName": "Projects",
+      "subMenuItem": "Documents",
+      "subSubMenuItem": "",
+      "route": "/projects/:projectId/documents",
+      "navigationType": "click",
+      "triggerEvent": "Documents tab",
+      "roleAccess": [
+        "Sustainability Consultant",
+        "Admin",
+        "Owner",
+        "PMC"
+      ],
+      "relatedUseCaseIds": [
+        "uc-document-generation",
+        "uc-document-review"
+      ],
+      "relatedApiIds": [
+        "api-documents-generate",
+        "api-documents-review",
+        "api-admin-templates-list"
+      ]
+    },
+    {
+      "screenId": "scr-packages",
+      "screenName": "Submission Packages",
+      "description": "Screen to build, review, approve, and download submission packages for manual upload.",
+      "isScreenIncludeInNavBar": true,
+      "menuItemName": "Projects",
+      "subMenuItem": "Submission Packages",
+      "subSubMenuItem": "",
+      "route": "/projects/:projectId/packages",
+      "navigationType": "click",
+      "triggerEvent": "Submission Packages tab",
+      "roleAccess": [
+        "Sustainability Consultant",
+        "Admin",
+        "Owner",
+        "PMC"
+      ],
+      "relatedUseCaseIds": [
+        "uc-submission-package-build",
+        "uc-submission-approval"
+      ],
+      "relatedApiIds": [
+        "api-packages-create",
+        "api-packages-get",
+        "api-packages-approval-request",
+        "api-packages-approvals",
+        "api-submission-packages-status"
+      ]
+    },
+    {
+      "screenId": "scr-auditor-qa",
+      "screenName": "Auditor Q and A",
+      "description": "Workspace for auditor queries, response drafting, review, approval, and sending. External Auditor access is read-only and grounded on list/view APIs only.",
+      "isScreenIncludeInNavBar": true,
+      "menuItemName": "Projects",
+      "subMenuItem": "Auditor Q and A",
+      "subSubMenuItem": "",
+      "route": "/projects/:projectId/qa",
+      "navigationType": "click",
+      "triggerEvent": "Auditor Q and A tab",
+      "roleAccess": [
+        "Sustainability Consultant",
+        "Admin",
+        "Owner",
+        "PMC",
+        "External Auditor"
+      ],
+      "relatedUseCaseIds": [
+        "uc-auditor-qa-management",
+        "uc-auditor-response-suggestion",
+        "uc-canned-response-management",
+        "uc-external-auditor-qa-view"
+      ],
+      "relatedApiIds": [
+        "api-qa-queries-list",
+        "api-qa-queries-create",
+        "api-qa-assistant-suggestions",
+        "api-qa-transitions",
+        "api-auditor-queries-status",
+        "api-canned-responses-list",
+        "api-canned-responses-create",
+        "api-canned-responses-update",
+        "api-canned-responses-delete"
+      ]
+    },
+    {
+      "screenId": "scr-standards-qa",
+      "screenName": "Standards and CIR Q and A",
+      "description": "Screen for searching licensed standards corpus and running standards or CIR question answering.",
+      "isScreenIncludeInNavBar": true,
+      "menuItemName": "Knowledge",
+      "subMenuItem": "Standards and CIR Q and A",
+      "subSubMenuItem": "",
+      "route": "/standards/qa",
+      "navigationType": "click",
+      "triggerEvent": "Standards menu",
+      "roleAccess": [
+        "Sustainability Consultant",
+        "Admin",
+        "Architect",
+        "MEP Consultant",
+        "Landscape Consultant",
+        "PMC"
+      ],
+      "relatedUseCaseIds": [
+        "uc-standards-qa",
+        "uc-standards-corpus-management"
+      ],
+      "relatedApiIds": [
+        "api-standards-corpus-list",
+        "api-standards-corpus-create",
+        "api-standards-corpus-upload",
+        "api-standards-qa",
+        "api-standards-corpus-update"
+      ]
+    },
+    {
+      "screenId": "scr-analytics",
+      "screenName": "Portfolio Analytics",
+      "description": "Dashboard for portfolio metrics, grouping, filtering, and exports.",
+      "isScreenIncludeInNavBar": true,
+      "menuItemName": "Analytics",
+      "subMenuItem": "",
+      "subSubMenuItem": "",
+      "route": "/analytics/portfolio",
+      "navigationType": "click",
+      "triggerEvent": "Analytics menu",
+      "roleAccess": [
+        "Sustainability Consultant",
+        "Admin",
+        "Owner",
+        "PMC"
+      ],
+      "relatedUseCaseIds": [
+        "uc-portfolio-analytics",
+        "uc-portfolio-analytics-export"
+      ],
+      "relatedApiIds": [
+        "api-analytics-portfolio-get",
+        "api-analytics-portfolio-export-list",
+        "api-analytics-portfolio-export-create"
+      ]
+    },
+    {
+      "screenId": "scr-notifications",
+      "screenName": "Notifications",
+      "description": "Screen to view notification history and delivery status.",
+      "isScreenIncludeInNavBar": true,
+      "menuItemName": "Notifications",
+      "subMenuItem": "",
+      "subSubMenuItem": "",
+      "route": "/notifications",
+      "navigationType": "click",
+      "triggerEvent": "Notifications menu",
+      "roleAccess": [
+        "Sustainability Consultant",
+        "Owner",
+        "Architect",
+        "MEP Consultant",
+        "Landscape Consultant",
+        "Construction Team",
+        "Procurement Team",
+        "PMC",
+        "External Auditor",
+        "Admin"
+      ],
+      "relatedUseCaseIds": [
+        "uc-notification-monitoring"
+      ],
+      "relatedApiIds": [
+        "api-notifications-list"
+      ]
+    },
+    {
+      "screenId": "scr-admin-rbac",
+      "screenName": "Admin RBAC",
+      "description": "Admin console screen for user, role, and access control management.",
+      "isScreenIncludeInNavBar": true,
+      "menuItemName": "Admin",
+      "subMenuItem": "RBAC",
+      "subSubMenuItem": "",
+      "route": "/admin/rbac",
+      "navigationType": "click",
+      "triggerEvent": "Admin RBAC menu",
+      "roleAccess": [
+        "Admin"
+      ],
+      "relatedUseCaseIds": [
+        "uc-user-management",
+        "uc-rbac-management"
+      ],
+      "relatedApiIds": [
+        "api-users-list",
+        "api-users-create",
+        "api-users-update",
+        "api-rbac-roles-list",
+        "api-rbac-roles-create",
+        "api-access-grants-create",
+        "api-access-grants-delete"
+      ]
+    },
+    {
+      "screenId": "scr-admin-rating-library",
+      "screenName": "Admin Rating Library",
+      "description": "Admin console screen for managing rating systems, versions, addenda, and SLA monitoring.",
+      "isScreenIncludeInNavBar": true,
+      "menuItemName": "Admin",
+      "subMenuItem": "Rating Library",
+      "subSubMenuItem": "",
+      "route": "/admin/rating-library",
+      "navigationType": "click",
+      "triggerEvent": "Admin Rating Library menu",
+      "roleAccess": [
+        "Admin"
+      ],
+      "relatedUseCaseIds": [
+        "uc-rating-library-management",
+        "uc-addenda-sla-management"
+      ],
+      "relatedApiIds": [
+        "api-rating-library-list",
+        "api-rating-library-create",
+        "api-addenda-sla-get",
+        "api-addenda-sla-update",
+        "api-addenda-sla-status-list"
+      ]
+    },
+    {
+      "screenId": "scr-admin-regional-profiles",
+      "screenName": "Admin Regional Profiles",
+      "description": "Admin console screen for managing regional profiles and weather mappings.",
+      "isScreenIncludeInNavBar": true,
+      "menuItemName": "Admin",
+      "subMenuItem": "Regional Profiles",
+      "subSubMenuItem": "",
+      "route": "/admin/regional-profiles",
+      "navigationType": "click",
+      "triggerEvent": "Admin Regional Profiles menu",
+      "roleAccess": [
+        "Admin"
+      ],
+      "relatedUseCaseIds": [
+        "uc-regional-profile-management"
+      ],
+      "relatedApiIds": [
+        "api-regional-profiles-list",
+        "api-admin-regional-profiles-create",
+        "api-admin-regional-profiles-update"
+      ]
+    },
+    {
+      "screenId": "scr-admin-notifications",
+      "screenName": "Admin Notifications",
+      "description": "Admin console screen for notification rules, quiet hours, and WhatsApp consent settings.",
+      "isScreenIncludeInNavBar": true,
+      "menuItemName": "Admin",
+      "subMenuItem": "Notifications",
+      "subSubMenuItem": "",
+      "route": "/admin/notifications",
+      "navigationType": "click",
+      "triggerEvent": "Admin Notifications menu",
+      "roleAccess": [
+        "Admin"
+      ],
+      "relatedUseCaseIds": [
+        "uc-notification-rule-management",
+        "uc-notification-settings-management",
+        "uc-whatsapp-consent-management"
+      ],
+      "relatedApiIds": [
+        "api-notification-rules-list",
+        "api-notification-rules-create",
+        "api-notification-rules-update",
+        "api-notification-rules-delete",
+        "api-notification-settings-get",
+        "api-notification-settings-update",
+        "api-whatsapp-consent-create",
+        "api-whatsapp-unsubscribe"
+      ]
+    },
+    {
+      "screenId": "scr-admin-governance",
+      "screenName": "Admin Governance",
+      "description": "Admin console screen for policies, invites, transfers, retention, deletion, business calendar, audit review, restricted audit export workflows, and related governance operations.",
+      "isScreenIncludeInNavBar": true,
+      "menuItemName": "Admin",
+      "subMenuItem": "Governance",
+      "subSubMenuItem": "",
+      "route": "/admin/governance",
+      "navigationType": "click",
+      "triggerEvent": "Admin Governance menu",
+      "roleAccess": [
+        "Admin",
+        "Technical Admin"
+      ],
+      "relatedUseCaseIds": [
+        "uc-policy-management",
+        "uc-access-invite-management",
+        "uc-cross-organization-sharing",
+        "uc-project-transfer",
+        "uc-retention-policy-management",
+        "uc-tenant-export-management",
+        "uc-secure-deletion-management",
+        "uc-business-calendar-management",
+        "uc-audit-log-review",
+        "uc-audit-export-management",
+        "uc-webhook-subscription-management"
+      ],
+      "relatedApiIds": [
+        "api-policies-list",
+        "api-policies-create",
+        "api-policies-get",
+        "api-policies-update",
+        "api-invites-create",
+        "api-invites-list",
+        "api-invites-accept",
+        "api-transfer-requests-create",
+        "api-transfer-requests-confirm",
+        "api-transfer-requests-reject",
+        "api-retention-policies-list",
+        "api-retention-policies-update",
+        "api-tenant-export-create",
+        "api-tenant-export-get",
+        "api-secure-deletions-create",
+        "api-secure-deletions-update",
+        "api-business-calendar-get",
+        "api-business-calendar-update",
+        "api-audit-logs-list",
+        "api-audit-exports-get",
+        "api-audit-export-requests-create",
+        "api-webhooks-create"
+      ]
+    },
+    {
+      "screenId": "scr-admin-risk-register",
+      "screenName": "Admin Risk Register",
+      "description": "Admin console screen for viewing and managing risk register items.",
+      "isScreenIncludeInNavBar": true,
+      "menuItemName": "Admin",
+      "subMenuItem": "Risk Register",
+      "subSubMenuItem": "",
+      "route": "/admin/risks",
+      "navigationType": "click",
+      "triggerEvent": "Admin Risk Register menu",
+      "roleAccess": [
+        "Admin"
+      ],
+      "relatedUseCaseIds": [
+        "uc-risk-register-management"
+      ],
+      "relatedApiIds": [
+        "api-risks-list",
+        "api-risks-get",
+        "api-risks-create",
+        "api-risks-update",
+        "api-risks-monitor-update"
+      ]
+    },
+    {
+      "screenId": "scr-admin-branding-templates",
+      "screenName": "Admin Branding and Templates",
+      "description": "Admin console screen for branding assets and template administration.",
+      "isScreenIncludeInNavBar": true,
+      "menuItemName": "Admin",
+      "subMenuItem": "Branding and Templates",
+      "subSubMenuItem": "",
+      "route": "/admin/branding-templates",
+      "navigationType": "click",
+      "triggerEvent": "Admin Branding and Templates menu",
+      "roleAccess": [
+        "Admin"
+      ],
+      "relatedUseCaseIds": [
+        "uc-branding-management",
+        "uc-template-management"
+      ],
+      "relatedApiIds": [
+        "api-branding-assets-upload",
+        "api-admin-templates-list"
+      ]
+    },
+    {
+      "screenId": "scr-admin-model-registry",
+      "screenName": "Admin Model Registry",
+      "description": "Admin console screen for model registry and version tracking.",
+      "isScreenIncludeInNavBar": true,
+      "menuItemName": "Admin",
+      "subMenuItem": "Model Registry",
+      "subSubMenuItem": "",
+      "route": "/admin/models",
+      "navigationType": "click",
+      "triggerEvent": "Admin Model Registry menu",
+      "roleAccess": [
+        "Admin"
+      ],
+      "relatedUseCaseIds": [
+        "uc-model-registry-management"
+      ],
+      "relatedApiIds": [
+        "api-models-list",
+        "api-models-create",
+        "api-model-versions-create"
+      ]
+    },
+    {
+      "screenId": "scr-tool-mappings",
+      "screenName": "Tool Mappings",
+      "description": "Screen for configuring tool schema mappings and import/export operations.",
+      "isScreenIncludeInNavBar": true,
+      "menuItemName": "Admin",
+      "subMenuItem": "Integrations",
+      "subSubMenuItem": "Tool Mappings",
+      "route": "/admin/integrations/mappings",
+      "navigationType": "click",
+      "triggerEvent": "Tool Mappings menu",
+      "roleAccess": [
+        "Admin"
+      ],
+      "relatedUseCaseIds": [
+        "uc-tool-mapping-management",
+        "uc-tool-data-import-export"
+      ],
+      "relatedApiIds": [
+        "api-mapping-oneclick-fields",
+        "api-mapping-oneclick-upsert",
+        "api-mapping-tool-fields",
+        "api-mapping-tool-upsert",
+        "api-oneclick-import",
+        "api-oneclick-export",
+        "api-tool-import",
+        "api-tool-export",
+        "api-iot-import",
+        "api-iot-export"
+      ]
+    },
+    {
+      "screenId": "scr-anomalies",
+      "screenName": "Anomalies and Corrective Actions",
+      "description": "Project-level screen for anomaly review and corrective action management.",
+      "isScreenIncludeInNavBar": true,
+      "menuItemName": "Projects",
+      "subMenuItem": "Anomalies",
+      "subSubMenuItem": "",
+      "route": "/projects/:projectId/anomalies",
+      "navigationType": "click",
+      "triggerEvent": "Anomalies tab",
+      "roleAccess": [
+        "Sustainability Consultant",
+        "Admin",
+        "PMC"
+      ],
+      "relatedUseCaseIds": [
+        "uc-anomaly-management",
+        "uc-corrective-action-management"
+      ],
+      "relatedApiIds": [
+        "api-anomalies-list",
+        "api-anomalies-create",
+        "api-anomalies-get",
+        "api-anomalies-update",
+        "api-corrective-actions-list",
+        "api-corrective-actions-create",
+        "api-corrective-actions-update"
+      ]
+    },
+    {
+      "screenId": "scr-project-controls",
+      "screenName": "Project Controls",
+      "description": "Project-level screen for milestones and budgets tracking.",
+      "isScreenIncludeInNavBar": true,
+      "menuItemName": "Projects",
+      "subMenuItem": "Project Controls",
+      "subSubMenuItem": "",
+      "route": "/projects/:projectId/controls",
+      "navigationType": "click",
+      "triggerEvent": "Project Controls tab",
+      "roleAccess": [
+        "Sustainability Consultant",
+        "Admin",
+        "Owner",
+        "PMC"
+      ],
+      "relatedUseCaseIds": [
+        "uc-milestone-tracking",
+        "uc-budget-tracking"
+      ],
+      "relatedApiIds": [
+        "api-milestones-list",
+        "api-milestones-create",
+        "api-milestones-get",
+        "api-milestones-update",
+        "api-milestones-delete",
+        "api-budgets-list",
+        "api-budgets-create",
+        "api-budgets-get",
+        "api-budgets-update"
+      ]
+    },
+    {
+      "screenId": "scr-admin-data-governance",
+      "screenName": "Admin Data Governance",
+      "description": "Admin console screen for training-permission authorization records, import templates, portal placeholder configurations, and restore requests.",
+      "isScreenIncludeInNavBar": true,
+      "menuItemName": "Admin",
+      "subMenuItem": "Data Governance",
+      "subSubMenuItem": "",
+      "route": "/admin/data-governance",
+      "navigationType": "click",
+      "triggerEvent": "Admin Data Governance menu",
+      "roleAccess": [
+        "Admin",
+        "Technical Admin"
+      ],
+      "relatedUseCaseIds": [
+        "uc-training-permission-management",
+        "uc-import-template-management",
+        "uc-portal-configuration-management",
+        "uc-restore-request-management",
+        "uc-provider-credential-management"
+      ],
+      "relatedApiIds": [
+        "api-training-permissions-create",
+        "api-import-templates-upsert",
+        "api-portal-configurations-upsert",
+        "api-restores-create",
+        "api-provider-credentials-create"
+      ]
+    }
+  ],
+  "useCases": [
+    {
+      "useCaseId": "uc-user-login",
+      "useCaseName": "User login",
+      "actor": "User",
+      "description": "Authenticate with local account credentials to access the platform.",
+      "relatedScreenIds": [
+        "scr-login"
+      ],
+      "relatedApiIds": [
+        "api-auth-login"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-user-management",
+      "useCaseName": "Manage users",
+      "actor": "Admin",
+      "description": "Create, list, and update local user accounts and assignments.",
+      "relatedScreenIds": [
+        "scr-admin-rbac"
+      ],
+      "relatedApiIds": [
+        "api-users-list",
+        "api-users-create",
+        "api-users-update"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-rbac-management",
+      "useCaseName": "Manage roles and access control",
+      "actor": "Admin",
+      "description": "Configure roles, permissions, and scoped access grants with auditability.",
+      "relatedScreenIds": [
+        "scr-admin-rbac"
+      ],
+      "relatedApiIds": [
+        "api-rbac-roles-list",
+        "api-rbac-roles-create",
+        "api-access-grants-create",
+        "api-access-grants-delete"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-project-management",
+      "useCaseName": "Manage projects",
+      "actor": "Sustainability Consultant",
+      "description": "Create, list, and update projects and project metadata.",
+      "relatedScreenIds": [
+        "scr-projects",
+        "scr-project-detail"
+      ],
+      "relatedApiIds": [
+        "api-projects-list",
+        "api-projects-create",
+        "api-projects-update"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-project-intake",
+      "useCaseName": "Capture project intake data",
+      "actor": "Sustainability Consultant",
+      "description": "Enter project master data including rating system, regional profile, and related setup data.",
+      "relatedScreenIds": [
+        "scr-projects",
+        "scr-project-detail"
+      ],
+      "relatedApiIds": [
+        "api-projects-create",
+        "api-projects-update",
+        "api-regional-profiles-list"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-rating-library-management",
+      "useCaseName": "Manage rating library",
+      "actor": "Admin",
+      "description": "Maintain supported rating systems, versions, and addenda.",
+      "relatedScreenIds": [
+        "scr-admin-rating-library"
+      ],
+      "relatedApiIds": [
+        "api-rating-library-list",
+        "api-rating-library-create"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-regional-profile-management",
+      "useCaseName": "Manage regional profiles",
+      "actor": "Admin",
+      "description": "Create and maintain region-specific profiles, climate mappings, and weather references.",
+      "relatedScreenIds": [
+        "scr-admin-regional-profiles"
+      ],
+      "relatedApiIds": [
+        "api-regional-profiles-list",
+        "api-admin-regional-profiles-create",
+        "api-admin-regional-profiles-update"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-preassessment",
+      "useCaseName": "Run project pre-assessment",
+      "actor": "Sustainability Consultant",
+      "description": "Run AI-assisted pre-assessment using project master data and optional uploaded artifacts to generate feasibility outputs, scores, graphs, and action items.",
+      "relatedScreenIds": [
+        "scr-preassessment"
+      ],
+      "relatedApiIds": [
+        "api-preassessments-create",
+        "api-preassessments-get"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-credit-interpretation",
+      "useCaseName": "Interpret credit applicability",
+      "actor": "Sustainability Consultant",
+      "description": "Execute credit interpretation based on project context, rules, addenda, and preferences with rationale and sources.",
+      "relatedScreenIds": [
+        "scr-interpretation"
+      ],
+      "relatedApiIds": [
+        "api-interpretations-create"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-evidence-task-management",
+      "useCaseName": "Manage evidence tasks",
+      "actor": "Sustainability Consultant",
+      "description": "Create, list, assign, and update evidence collection tasks with reminders, escalations, and validation rules.",
+      "relatedScreenIds": [
+        "scr-evidence"
+      ],
+      "relatedApiIds": [
+        "api-evidence-tasks-list",
+        "api-evidence-tasks-create",
+        "api-evidence-tasks-update"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-artifact-upload",
+      "useCaseName": "Upload project artifacts",
+      "actor": "Project Contributor",
+      "description": "Upload project artifacts such as PDFs, CAD or BIM files, spreadsheets, images, and emails for processing and evidence use, including source metadata and optional import-template-governed validation.",
+      "relatedScreenIds": [
+        "scr-evidence"
+      ],
+      "relatedApiIds": [
+        "api-artifacts-create",
+        "api-artifacts-get"
+      ],
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN",
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-evidence-repository-search",
+      "useCaseName": "Search evidence repository",
+      "actor": "User",
+      "description": "Search evidence artifacts by project, credit, tags, and metadata.",
+      "relatedScreenIds": [
+        "scr-evidence"
+      ],
+      "relatedApiIds": [
+        "api-artifacts-search",
+        "api-artifacts-get"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-extraction-review",
+      "useCaseName": "Review extraction results",
+      "actor": "Sustainability Consultant",
+      "description": "Review, approve, reject, or correct OCR and structured extraction results.",
+      "relatedScreenIds": [
+        "scr-evidence"
+      ],
+      "relatedApiIds": [
+        "api-artifact-extraction-get",
+        "api-artifact-extraction-review"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-classification-review",
+      "useCaseName": "Review artifact classification",
+      "actor": "Sustainability Consultant",
+      "description": "Review, approve, reject, or correct artifact-to-credit classification results.",
+      "relatedScreenIds": [
+        "scr-evidence"
+      ],
+      "relatedApiIds": [
+        "api-artifact-classification-get",
+        "api-artifact-classification-review"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-scorecard-management",
+      "useCaseName": "View and recalculate scorecard",
+      "actor": "Sustainability Consultant",
+      "description": "View dynamic project scorecard and trigger recalculation when needed.",
+      "relatedScreenIds": [
+        "scr-scorecard"
+      ],
+      "relatedApiIds": [
+        "api-scorecard-get",
+        "api-scorecard-recalculate"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-score-override",
+      "useCaseName": "Request score override",
+      "actor": "Sustainability Consultant",
+      "description": "Request a manual score override with justification, attachment, reason code, and approval workflow.",
+      "relatedScreenIds": [
+        "scr-score-override"
+      ],
+      "relatedApiIds": [
+        "api-scorecard-overrides-create",
+        "api-scorecard-overrides-approvals"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-recommendations",
+      "useCaseName": "Review compliance recommendations",
+      "actor": "Sustainability Consultant",
+      "description": "Review prioritized compliance pathways and alternatives with rationale, tradeoffs, expected points impacts, and backing simulations or calculators where applicable.",
+      "relatedScreenIds": [
+        "scr-recommendations"
+      ],
+      "relatedApiIds": [
+        "api-recommendations-list",
+        "api-recommendations-backing-list"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-what-if-scenario",
+      "useCaseName": "Run what-if scenario",
+      "actor": "Sustainability Consultant",
+      "description": "Run and save what-if scenario comparisons for target credits or parameter changes.",
+      "relatedScreenIds": [
+        "scr-recommendations"
+      ],
+      "relatedApiIds": [
+        "api-whatif-create",
+        "api-scorecard-recalculate"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-simulation-orchestration",
+      "useCaseName": "Submit and track simulations",
+      "actor": "Sustainability Consultant",
+      "description": "Submit simulation jobs, track execution status, and review generated outputs.",
+      "relatedScreenIds": [
+        "scr-simulations"
+      ],
+      "relatedApiIds": [
+        "api-simulations-create",
+        "api-simulations-get"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-document-generation",
+      "useCaseName": "Generate project documents",
+      "actor": "Sustainability Consultant",
+      "description": "Generate narratives, calculators, reports, scorecards, checklists, simulation summaries, and form-ready outputs in supported formats.",
+      "relatedScreenIds": [
+        "scr-documents"
+      ],
+      "relatedApiIds": [
+        "api-documents-generate",
+        "api-admin-templates-list"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-document-review",
+      "useCaseName": "Review generated documents",
+      "actor": "Sustainability Consultant",
+      "description": "Submit generated documents for human review and record approve or reject decisions.",
+      "relatedScreenIds": [
+        "scr-documents"
+      ],
+      "relatedApiIds": [
+        "api-documents-review"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-submission-package-build",
+      "useCaseName": "Build submission package",
+      "actor": "Sustainability Consultant",
+      "description": "Assemble a submission package with naming rules, versioning, checksums, and immutable history for manual portal upload.",
+      "relatedScreenIds": [
+        "scr-packages"
+      ],
+      "relatedApiIds": [
+        "api-packages-create",
+        "api-packages-get"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-submission-approval",
+      "useCaseName": "Approve submission package",
+      "actor": "Approver",
+      "description": "Request and complete dual approval for a submission package before finalization.",
+      "relatedScreenIds": [
+        "scr-packages"
+      ],
+      "relatedApiIds": [
+        "api-packages-approval-request",
+        "api-packages-approvals",
+        "api-packages-get"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-auditor-qa-management",
+      "useCaseName": "Manage auditor Q and A workflow",
+      "actor": "Sustainability Consultant",
+      "description": "Create, track, review, approve, send, and close auditor query responses with evidence-linked claims.",
+      "relatedScreenIds": [
+        "scr-auditor-qa"
+      ],
+      "relatedApiIds": [
+        "api-qa-queries-list",
+        "api-qa-queries-create",
+        "api-qa-transitions"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-external-auditor-qa-view",
+      "useCaseName": "View auditor Q and A as external auditor",
+      "actor": "External Auditor",
+      "description": "View project-specific auditor Q and A threads in a read-only manner when invited.",
+      "relatedScreenIds": [
+        "scr-auditor-qa"
+      ],
+      "relatedApiIds": [
+        "api-qa-queries-list"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-auditor-response-suggestion",
+      "useCaseName": "Generate auditor response suggestion",
+      "actor": "Sustainability Consultant",
+      "description": "Generate an AI-assisted auditor response suggestion with citations and human approval before sending.",
+      "relatedScreenIds": [
+        "scr-auditor-qa"
+      ],
+      "relatedApiIds": [
+        "api-qa-assistant-suggestions"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-canned-response-management",
+      "useCaseName": "Manage canned responses",
+      "actor": "Admin",
+      "description": "Create, update, list, and delete reusable canned responses for auditor workflows.",
+      "relatedScreenIds": [
+        "scr-auditor-qa"
+      ],
+      "relatedApiIds": [
+        "api-canned-responses-list",
+        "api-canned-responses-create",
+        "api-canned-responses-update",
+        "api-canned-responses-delete"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-standards-qa",
+      "useCaseName": "Run standards and CIR Q and A",
+      "actor": "Sustainability Consultant",
+      "description": "Ask questions over licensed and permitted content and receive cited answers with version identifiers.",
+      "relatedScreenIds": [
+        "scr-standards-qa"
+      ],
+      "relatedApiIds": [
+        "api-standards-qa",
+        "api-standards-corpus-list"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-standards-corpus-management",
+      "useCaseName": "Manage standards corpus",
+      "actor": "Admin",
+      "description": "Create, upload, list, and update standards corpus metadata and content with license constraints.",
+      "relatedScreenIds": [
+        "scr-standards-qa"
+      ],
+      "relatedApiIds": [
+        "api-standards-corpus-list",
+        "api-standards-corpus-create",
+        "api-standards-corpus-upload",
+        "api-standards-corpus-update"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-notification-monitoring",
+      "useCaseName": "View notifications",
+      "actor": "User",
+      "description": "View notification history and delivery status across channels.",
+      "relatedScreenIds": [
+        "scr-notifications"
+      ],
+      "relatedApiIds": [
+        "api-notifications-list"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-whatsapp-consent-management",
+      "useCaseName": "Manage WhatsApp consent",
+      "actor": "Admin",
+      "description": "Record WhatsApp consent and process unsubscribe requests with auditable evidence.",
+      "relatedScreenIds": [
+        "scr-admin-notifications"
+      ],
+      "relatedApiIds": [
+        "api-whatsapp-consent-create",
+        "api-whatsapp-unsubscribe"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-notification-rule-management",
+      "useCaseName": "Manage notification rules",
+      "actor": "Admin",
+      "description": "Configure event-based notification rules, channels, templates, escalations, and quiet-hours behavior.",
+      "relatedScreenIds": [
+        "scr-admin-notifications"
+      ],
+      "relatedApiIds": [
+        "api-notification-rules-list",
+        "api-notification-rules-create",
+        "api-notification-rules-update",
+        "api-notification-rules-delete"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-notification-settings-management",
+      "useCaseName": "Manage notification settings",
+      "actor": "Admin",
+      "description": "Configure notification timezone and default escalation settings, including quiet hours from 21:00 to 08:00 IST.",
+      "relatedScreenIds": [
+        "scr-admin-notifications"
+      ],
+      "relatedApiIds": [
+        "api-notification-settings-get",
+        "api-notification-settings-update"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-portfolio-analytics",
+      "useCaseName": "View portfolio analytics",
+      "actor": "Admin",
+      "description": "View portfolio-level dashboards for energy, carbon, water, waste, acceptance rate, and cycle time with filters and grouping.",
+      "relatedScreenIds": [
+        "scr-analytics"
+      ],
+      "relatedApiIds": [
+        "api-analytics-portfolio-get",
+        "api-projects-list"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-portfolio-analytics-export",
+      "useCaseName": "Export portfolio analytics",
+      "actor": "Admin",
+      "description": "Generate and list portfolio analytics exports in supported output formats.",
+      "relatedScreenIds": [
+        "scr-analytics"
+      ],
+      "relatedApiIds": [
+        "api-analytics-portfolio-export-list",
+        "api-analytics-portfolio-export-create"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-risk-register-management",
+      "useCaseName": "Manage risk register",
+      "actor": "Admin",
+      "description": "Create, review, update, and receive automated monitor-driven updates for project or portfolio risks with ownership, severity, likelihood, and mitigations.",
+      "relatedScreenIds": [
+        "scr-admin-risk-register"
+      ],
+      "relatedApiIds": [
+        "api-risks-list",
+        "api-risks-get",
+        "api-risks-create",
+        "api-risks-update",
+        "api-risks-monitor-update"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-audit-log-review",
+      "useCaseName": "Review audit logs",
+      "actor": "Admin",
+      "description": "Search and review immutable audit logs for system and user actions.",
+      "relatedScreenIds": [
+        "scr-admin-governance"
+      ],
+      "relatedApiIds": [
+        "api-audit-logs-list"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-audit-export-management",
+      "useCaseName": "Manage restricted audit exports",
+      "actor": "Admin",
+      "description": "Request, initiate, and retrieve restricted audit exports using dual approval with one business Admin approver and one Technical Admin approver under requester-approver separation.",
+      "relatedScreenIds": [
+        "scr-admin-governance"
+      ],
+      "relatedApiIds": [
+        "api-audit-exports-get",
+        "api-audit-export-requests-create"
+      ],
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN",
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-webhook-subscription-management",
+      "useCaseName": "Manage webhook subscriptions",
+      "actor": "Admin",
+      "description": "Create webhook subscriptions for outbound event delivery.",
+      "relatedScreenIds": [
+        "scr-admin-governance"
+      ],
+      "relatedApiIds": [
+        "api-webhooks-create"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-retention-policy-management",
+      "useCaseName": "Manage retention policies",
+      "actor": "Admin",
+      "description": "Review and update retention policies for governed data entities.",
+      "relatedScreenIds": [
+        "scr-admin-governance"
+      ],
+      "relatedApiIds": [
+        "api-retention-policies-list",
+        "api-retention-policies-update"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-tenant-export-management",
+      "useCaseName": "Request tenant export",
+      "actor": "Admin",
+      "description": "Request and track tenant-level data export.",
+      "relatedScreenIds": [
+        "scr-admin-governance"
+      ],
+      "relatedApiIds": [
+        "api-tenant-export-create",
+        "api-tenant-export-get"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-secure-deletion-management",
+      "useCaseName": "Manage secure deletion request",
+      "actor": "Admin",
+      "description": "Create and process secure deletion requests with approvals.",
+      "relatedScreenIds": [
+        "scr-admin-governance"
+      ],
+      "relatedApiIds": [
+        "api-secure-deletions-create",
+        "api-secure-deletions-update"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-branding-management",
+      "useCaseName": "Manage branding assets",
+      "actor": "Admin",
+      "description": "Upload and manage AEON branding assets for customer-facing documents and templates.",
+      "relatedScreenIds": [
+        "scr-admin-branding-templates"
+      ],
+      "relatedApiIds": [
+        "api-branding-assets-upload"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-template-management",
+      "useCaseName": "View document templates",
+      "actor": "Admin",
+      "description": "View available document templates and versions used for generated outputs.",
+      "relatedScreenIds": [
+        "scr-admin-branding-templates",
+        "scr-documents"
+      ],
+      "relatedApiIds": [
+        "api-admin-templates-list"
+      ],
+      "sourceDocuments": [
+        "HLD",
+        "MID_LEVEL_DESIGN"
+      ]
+    },
+    {
+      "useCaseId": "uc-model-registry-management",
+      "useCaseName": "Manage model registry",
+      "actor": "Admin",
+      "description": "Create and maintain AI model registry entries and versions.",
+      "relatedScreenIds": [
+        "scr-admin-model-registry"
+      ],
+      "relatedApiIds": [
+        "api-models-list",
+        "api-models-create",
+        "api-model-versions-create"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-addenda-sla-management",
+      "useCaseName": "Manage addenda SLA",
+      "actor": "Admin",
+      "description": "View and update addenda SLA configuration and monitor status.",
+      "relatedScreenIds": [
+        "scr-admin-rating-library"
+      ],
+      "relatedApiIds": [
+        "api-addenda-sla-get",
+        "api-addenda-sla-update",
+        "api-addenda-sla-status-list"
+      ],
+      "sourceDocuments": [
+        "HLD",
+        "MID_LEVEL_DESIGN"
+      ]
+    },
+    {
+      "useCaseId": "uc-policy-management",
+      "useCaseName": "Manage governance policies",
+      "actor": "Admin",
+      "description": "Create, view, and update approval and access policy rules.",
+      "relatedScreenIds": [
+        "scr-admin-governance"
+      ],
+      "relatedApiIds": [
+        "api-policies-list",
+        "api-policies-create",
+        "api-policies-get",
+        "api-policies-update"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-access-invite-management",
+      "useCaseName": "Manage access invites",
+      "actor": "Admin",
+      "description": "Create, list, and accept access invites for invite-only sharing.",
+      "relatedScreenIds": [
+        "scr-admin-governance"
+      ],
+      "relatedApiIds": [
+        "api-invites-create",
+        "api-invites-list",
+        "api-invites-accept"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-cross-organization-sharing",
+      "useCaseName": "Manage cross-organization sharing",
+      "actor": "Admin",
+      "description": "Grant or revoke scoped cross-organization access by invite and explicit grant.",
+      "relatedScreenIds": [
+        "scr-admin-governance"
+      ],
+      "relatedApiIds": [
+        "api-invites-create",
+        "api-invites-accept",
+        "api-access-grants-create",
+        "api-access-grants-delete"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-project-transfer",
+      "useCaseName": "Transfer project between organizations",
+      "actor": "Source Admin and Destination Admin",
+      "description": "Initiate, confirm, or reject dual-admin project transfer between organizations.",
+      "relatedScreenIds": [
+        "scr-admin-governance"
+      ],
+      "relatedApiIds": [
+        "api-transfer-requests-create",
+        "api-transfer-requests-confirm",
+        "api-transfer-requests-reject"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-anomaly-management",
+      "useCaseName": "Manage anomalies",
+      "actor": "Sustainability Consultant",
+      "description": "Create, review, and update anomalies and cross-credit data quality issues for a project.",
+      "relatedScreenIds": [
+        "scr-anomalies"
+      ],
+      "relatedApiIds": [
+        "api-anomalies-list",
+        "api-anomalies-create",
+        "api-anomalies-get",
+        "api-anomalies-update"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-corrective-action-management",
+      "useCaseName": "Manage corrective actions",
+      "actor": "Sustainability Consultant",
+      "description": "Propose, review, and apply corrective actions linked to anomalies.",
+      "relatedScreenIds": [
+        "scr-anomalies"
+      ],
+      "relatedApiIds": [
+        "api-corrective-actions-list",
+        "api-corrective-actions-create",
+        "api-corrective-actions-update"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-business-calendar-management",
+      "useCaseName": "Manage business calendar",
+      "actor": "Admin",
+      "description": "Review and update tenant business calendar for SLA and reminder calculations.",
+      "relatedScreenIds": [
+        "scr-admin-governance"
+      ],
+      "relatedApiIds": [
+        "api-business-calendar-get",
+        "api-business-calendar-update"
+      ],
+      "sourceDocuments": [
+        "HLD",
+        "MID_LEVEL_DESIGN"
+      ]
+    },
+    {
+      "useCaseId": "uc-tool-mapping-management",
+      "useCaseName": "Manage tool mappings",
+      "actor": "Admin",
+      "description": "Configure field mappings for supported external tools and versions.",
+      "relatedScreenIds": [
+        "scr-tool-mappings"
+      ],
+      "relatedApiIds": [
+        "api-mapping-oneclick-fields",
+        "api-mapping-oneclick-upsert",
+        "api-mapping-tool-fields",
+        "api-mapping-tool-upsert"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-tool-data-import-export",
+      "useCaseName": "Import and export tool data",
+      "actor": "Admin",
+      "description": "Run import and export operations for supported tools and IoT streams using mapping definitions.",
+      "relatedScreenIds": [
+        "scr-tool-mappings"
+      ],
+      "relatedApiIds": [
+        "api-oneclick-import",
+        "api-oneclick-export",
+        "api-tool-import",
+        "api-tool-export",
+        "api-iot-import",
+        "api-iot-export"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-milestone-tracking",
+      "useCaseName": "Track project milestones",
+      "actor": "Sustainability Consultant",
+      "description": "Create, update, and monitor project milestones and stage progress.",
+      "relatedScreenIds": [
+        "scr-project-controls"
+      ],
+      "relatedApiIds": [
+        "api-milestones-list",
+        "api-milestones-create",
+        "api-milestones-get",
+        "api-milestones-update",
+        "api-milestones-delete"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-budget-tracking",
+      "useCaseName": "Track project budget",
+      "actor": "Sustainability Consultant",
+      "description": "Create, update, and monitor project budgets and variance thresholds.",
+      "relatedScreenIds": [
+        "scr-project-controls"
+      ],
+      "relatedApiIds": [
+        "api-budgets-list",
+        "api-budgets-create",
+        "api-budgets-get",
+        "api-budgets-update"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-provider-credential-management",
+      "useCaseName": "Manage provider credentials",
+      "actor": "Admin",
+      "description": "Create and manage tenant-scoped provider credentials with governed rotation and optional project-level overrides.",
+      "relatedScreenIds": [
+        "scr-admin-data-governance"
+      ],
+      "relatedApiIds": [
+        "api-provider-credentials-create"
+      ],
+      "sourceDocuments": [
+        "FRD",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-training-permission-management",
+      "useCaseName": "Manage training data permissions",
+      "actor": "Admin",
+      "description": "Create and govern explicit written permission records for approved historical data use in AI-assisted learning inputs.",
+      "relatedScreenIds": [
+        "scr-admin-data-governance"
+      ],
+      "relatedApiIds": [
+        "api-training-permissions-create"
+      ],
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-import-template-management",
+      "useCaseName": "Manage import templates",
+      "actor": "Admin",
+      "description": "Create and update artifact-type import templates controlling metadata schema, mandatory fields, validation rules, naming rules, default credit mappings, and file-size overrides.",
+      "relatedScreenIds": [
+        "scr-admin-data-governance"
+      ],
+      "relatedApiIds": [
+        "api-import-templates-upsert"
+      ],
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-portal-configuration-management",
+      "useCaseName": "Manage portal placeholder configurations",
+      "actor": "Admin",
+      "description": "Configure future-ready certification portal placeholders, template-set mappings, and enablement controls while keeping manual packaging mode at MVP.",
+      "relatedScreenIds": [
+        "scr-admin-data-governance"
+      ],
+      "relatedApiIds": [
+        "api-portal-configurations-upsert"
+      ],
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-restore-request-management",
+      "useCaseName": "Request soft-delete restore",
+      "actor": "Admin",
+      "description": "Request restoration of soft-deleted records within the tenant-configured restore window subject to policy controls.",
+      "relatedScreenIds": [
+        "scr-admin-data-governance"
+      ],
+      "relatedApiIds": [
+        "api-restores-create"
+      ],
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN",
+        "HLD"
+      ]
+    },
+    {
+      "useCaseId": "uc-ai-gateway-internal-invocation",
+      "useCaseName": "AI Gateway Internal Invocation",
+      "actor": "Domain Service",
+      "description": "Approved domain services submit AI-assisted requests to the internal AI Gateway so that all AI processing is centralized, policy-controlled, tenant-isolated, auditable, explainable, and routed only through the approved GPT 5.1 gateway path. This use case supports AI-enabled business flows such as pre-assessment, credit interpretation, recommendations, auditor response suggestions, and standards Q and A without exposing raw AI provider calls as public APIs.",
+      "relatedScreenIds": [],
+      "relatedApiIds": [
+        "api-ai-gateway-requests-create"
+      ],
+      "sourceDocuments": [
+        "MID_LEVEL_DESIGN",
+        "MLD-Architecture-Implied"
+      ]
+    }
+  ],
+  "frontendBackendMappings": [
+    {
+      "mappingId": "map-login-authenticate",
+      "screenId": "scr-login",
+      "actionName": "Authenticate user",
+      "backendApiIds": [
+        "api-auth-login"
+      ],
+      "useCaseIds": [
+        "uc-user-login"
+      ]
+    },
+    {
+      "mappingId": "map-projects-create",
+      "screenId": "scr-projects",
+      "actionName": "Create project",
+      "backendApiIds": [
+        "api-projects-create"
+      ],
+      "useCaseIds": [
+        "uc-project-management",
+        "uc-project-intake"
+      ]
+    },
+    {
+      "mappingId": "map-projects-list",
+      "screenId": "scr-projects",
+      "actionName": "View project list",
+      "backendApiIds": [
+        "api-projects-list"
+      ],
+      "useCaseIds": [
+        "uc-project-management"
+      ]
+    },
+    {
+      "mappingId": "map-project-detail-update",
+      "screenId": "scr-project-detail",
+      "actionName": "Update project details",
+      "backendApiIds": [
+        "api-projects-update",
+        "api-regional-profiles-list"
+      ],
+      "useCaseIds": [
+        "uc-project-management",
+        "uc-project-intake"
+      ]
+    },
+    {
+      "mappingId": "map-preassessment-run",
+      "screenId": "scr-preassessment",
+      "actionName": "Run pre-assessment",
+      "backendApiIds": [
+        "api-preassessments-create"
+      ],
+      "useCaseIds": [
+        "uc-preassessment"
+      ]
+    },
+    {
+      "mappingId": "map-preassessment-view",
+      "screenId": "scr-preassessment",
+      "actionName": "View pre-assessment result",
+      "backendApiIds": [
+        "api-preassessments-get"
+      ],
+      "useCaseIds": [
+        "uc-preassessment"
+      ]
+    },
+    {
+      "mappingId": "map-interpretation-run",
+      "screenId": "scr-interpretation",
+      "actionName": "Execute interpretation",
+      "backendApiIds": [
+        "api-interpretations-create"
+      ],
+      "useCaseIds": [
+        "uc-credit-interpretation"
+      ]
+    },
+    {
+      "mappingId": "map-evidence-task-manage",
+      "screenId": "scr-evidence",
+      "actionName": "Manage evidence tasks",
+      "backendApiIds": [
+        "api-evidence-tasks-list",
+        "api-evidence-tasks-create",
+        "api-evidence-tasks-update"
+      ],
+      "useCaseIds": [
+        "uc-evidence-task-management"
+      ]
+    },
+    {
+      "mappingId": "map-evidence-upload",
+      "screenId": "scr-evidence",
+      "actionName": "Upload artifact",
+      "backendApiIds": [
+        "api-artifacts-create",
+        "api-artifacts-get"
+      ],
+      "useCaseIds": [
+        "uc-artifact-upload"
+      ]
+    },
+    {
+      "mappingId": "map-evidence-search",
+      "screenId": "scr-evidence",
+      "actionName": "Search evidence repository",
+      "backendApiIds": [
+        "api-artifacts-search",
+        "api-artifacts-get"
+      ],
+      "useCaseIds": [
+        "uc-evidence-repository-search"
+      ]
+    },
+    {
+      "mappingId": "map-extraction-review",
+      "screenId": "scr-evidence",
+      "actionName": "Review extraction output",
+      "backendApiIds": [
+        "api-artifact-extraction-get",
+        "api-artifact-extraction-review"
+      ],
+      "useCaseIds": [
+        "uc-extraction-review"
+      ]
+    },
+    {
+      "mappingId": "map-classification-review",
+      "screenId": "scr-evidence",
+      "actionName": "Review classification output",
+      "backendApiIds": [
+        "api-artifact-classification-get",
+        "api-artifact-classification-review"
+      ],
+      "useCaseIds": [
+        "uc-classification-review"
+      ]
+    },
+    {
+      "mappingId": "map-evidence-artifact-status",
+      "screenId": "scr-evidence",
+      "actionName": "Refresh artifact processing status",
+      "backendApiIds": [
+        "api-artifacts-status"
+      ],
+      "useCaseIds": [
+        "uc-artifact-upload"
+      ]
+    },
+    {
+      "mappingId": "map-scorecard-view",
+      "screenId": "scr-scorecard",
+      "actionName": "View scorecard",
+      "backendApiIds": [
+        "api-scorecard-get"
+      ],
+      "useCaseIds": [
+        "uc-scorecard-management"
+      ]
+    },
+    {
+      "mappingId": "map-scorecard-recalculate",
+      "screenId": "scr-scorecard",
+      "actionName": "Recalculate scorecard",
+      "backendApiIds": [
+        "api-scorecard-recalculate"
+      ],
+      "useCaseIds": [
+        "uc-scorecard-management"
+      ]
+    },
+    {
+      "mappingId": "map-score-override-create",
+      "screenId": "scr-score-override",
+      "actionName": "Request score override",
+      "backendApiIds": [
+        "api-scorecard-overrides-create",
+        "api-scorecard-overrides-approvals"
+      ],
+      "useCaseIds": [
+        "uc-score-override"
+      ]
+    },
+    {
+      "mappingId": "map-recommendations-view",
+      "screenId": "scr-recommendations",
+      "actionName": "View recommendations",
+      "backendApiIds": [
+        "api-recommendations-list",
+        "api-recommendations-backing-list"
+      ],
+      "useCaseIds": [
+        "uc-recommendations"
+      ]
+    },
+    {
+      "mappingId": "map-whatif-run",
+      "screenId": "scr-recommendations",
+      "actionName": "Run what-if scenario",
+      "backendApiIds": [
+        "api-whatif-create",
+        "api-scorecard-recalculate"
+      ],
+      "useCaseIds": [
+        "uc-what-if-scenario"
+      ]
+    },
+    {
+      "mappingId": "map-simulations-submit-track",
+      "screenId": "scr-simulations",
+      "actionName": "Submit and track simulation",
+      "backendApiIds": [
+        "api-simulations-create",
+        "api-simulations-get"
+      ],
+      "useCaseIds": [
+        "uc-simulation-orchestration"
+      ]
+    },
+    {
+      "mappingId": "map-documents-generate",
+      "screenId": "scr-documents",
+      "actionName": "Generate document",
+      "backendApiIds": [
+        "api-documents-generate",
+        "api-admin-templates-list"
+      ],
+      "useCaseIds": [
+        "uc-document-generation",
+        "uc-template-management"
+      ]
+    },
+    {
+      "mappingId": "map-documents-review",
+      "screenId": "scr-documents",
+      "actionName": "Review generated document",
+      "backendApiIds": [
+        "api-documents-review"
+      ],
+      "useCaseIds": [
+        "uc-document-review"
+      ]
+    },
+    {
+      "mappingId": "map-packages-build",
+      "screenId": "scr-packages",
+      "actionName": "Build submission package",
+      "backendApiIds": [
+        "api-packages-create",
+        "api-packages-get"
+      ],
+      "useCaseIds": [
+        "uc-submission-package-build"
+      ]
+    },
+    {
+      "mappingId": "map-packages-approve",
+      "screenId": "scr-packages",
+      "actionName": "Request and complete package approval",
+      "backendApiIds": [
+        "api-packages-approval-request",
+        "api-packages-approvals",
+        "api-packages-get"
+      ],
+      "useCaseIds": [
+        "uc-submission-approval"
+      ]
+    },
+    {
+      "mappingId": "map-packages-status",
+      "screenId": "scr-packages",
+      "actionName": "Refresh submission package status",
+      "backendApiIds": [
+        "api-submission-packages-status"
+      ],
+      "useCaseIds": [
+        "uc-submission-package-build",
+        "uc-submission-approval"
+      ]
+    },
+    {
+      "mappingId": "map-auditor-qa-manage",
+      "screenId": "scr-auditor-qa",
+      "actionName": "Manage auditor query workflow",
+      "backendApiIds": [
+        "api-qa-queries-list",
+        "api-qa-queries-create",
+        "api-qa-transitions"
+      ],
+      "useCaseIds": [
+        "uc-auditor-qa-management",
+        "uc-external-auditor-qa-view"
+      ]
+    },
+    {
+      "mappingId": "map-auditor-qa-suggest",
+      "screenId": "scr-auditor-qa",
+      "actionName": "Generate AI response suggestion",
+      "backendApiIds": [
+        "api-qa-assistant-suggestions"
+      ],
+      "useCaseIds": [
+        "uc-auditor-response-suggestion"
+      ]
+    },
+    {
+      "mappingId": "map-auditor-qa-status",
+      "screenId": "scr-auditor-qa",
+      "actionName": "Refresh auditor query status",
+      "backendApiIds": [
+        "api-auditor-queries-status"
+      ],
+      "useCaseIds": [
+        "uc-auditor-qa-management",
+        "uc-external-auditor-qa-view"
+      ]
+    },
+    {
+      "mappingId": "map-canned-responses-manage",
+      "screenId": "scr-auditor-qa",
+      "actionName": "Manage canned responses",
+      "backendApiIds": [
+        "api-canned-responses-list",
+        "api-canned-responses-create",
+        "api-canned-responses-update",
+        "api-canned-responses-delete"
+      ],
+      "useCaseIds": [
+        "uc-canned-response-management"
+      ]
+    },
+    {
+      "mappingId": "map-standards-qa-run",
+      "screenId": "scr-standards-qa",
+      "actionName": "Ask standards question",
+      "backendApiIds": [
+        "api-standards-qa",
+        "api-standards-corpus-list"
+      ],
+      "useCaseIds": [
+        "uc-standards-qa"
+      ]
+    },
+    {
+      "mappingId": "map-standards-corpus-manage",
+      "screenId": "scr-standards-qa",
+      "actionName": "Manage standards corpus",
+      "backendApiIds": [
+        "api-standards-corpus-list",
+        "api-standards-corpus-create",
+        "api-standards-corpus-upload",
+        "api-standards-corpus-update"
+      ],
+      "useCaseIds": [
+        "uc-standards-corpus-management"
+      ]
+    },
+    {
+      "mappingId": "map-analytics-view",
+      "screenId": "scr-analytics",
+      "actionName": "View portfolio analytics",
+      "backendApiIds": [
+        "api-analytics-portfolio-get"
+      ],
+      "useCaseIds": [
+        "uc-portfolio-analytics"
+      ]
+    },
+    {
+      "mappingId": "map-analytics-export",
+      "screenId": "scr-analytics",
+      "actionName": "Export portfolio analytics",
+      "backendApiIds": [
+        "api-analytics-portfolio-export-list",
+        "api-analytics-portfolio-export-create"
+      ],
+      "useCaseIds": [
+        "uc-portfolio-analytics-export"
+      ]
+    },
+    {
+      "mappingId": "map-notifications-view",
+      "screenId": "scr-notifications",
+      "actionName": "View notifications",
+      "backendApiIds": [
+        "api-notifications-list"
+      ],
+      "useCaseIds": [
+        "uc-notification-monitoring"
+      ]
+    },
+    {
+      "mappingId": "map-admin-rbac-manage",
+      "screenId": "scr-admin-rbac",
+      "actionName": "Manage users roles and grants",
+      "backendApiIds": [
+        "api-users-list",
+        "api-users-create",
+        "api-users-update",
+        "api-rbac-roles-list",
+        "api-rbac-roles-create",
+        "api-access-grants-create",
+        "api-access-grants-delete"
+      ],
+      "useCaseIds": [
+        "uc-user-management",
+        "uc-rbac-management"
+      ]
+    },
+    {
+      "mappingId": "map-admin-rating-library-manage",
+      "screenId": "scr-admin-rating-library",
+      "actionName": "Manage rating library and addenda SLA",
+      "backendApiIds": [
+        "api-rating-library-list",
+        "api-rating-library-create",
+        "api-addenda-sla-get",
+        "api-addenda-sla-update",
+        "api-addenda-sla-status-list"
+      ],
+      "useCaseIds": [
+        "uc-rating-library-management",
+        "uc-addenda-sla-management"
+      ]
+    },
+    {
+      "mappingId": "map-admin-regional-profiles-manage",
+      "screenId": "scr-admin-regional-profiles",
+      "actionName": "Manage regional profiles",
+      "backendApiIds": [
+        "api-regional-profiles-list",
+        "api-admin-regional-profiles-create",
+        "api-admin-regional-profiles-update"
+      ],
+      "useCaseIds": [
+        "uc-regional-profile-management"
+      ]
+    },
+    {
+      "mappingId": "map-admin-notifications-manage",
+      "screenId": "scr-admin-notifications",
+      "actionName": "Manage notification rules settings and WhatsApp consent",
+      "backendApiIds": [
+        "api-notification-rules-list",
+        "api-notification-rules-create",
+        "api-notification-rules-update",
+        "api-notification-rules-delete",
+        "api-notification-settings-get",
+        "api-notification-settings-update",
+        "api-whatsapp-consent-create",
+        "api-whatsapp-unsubscribe"
+      ],
+      "useCaseIds": [
+        "uc-notification-rule-management",
+        "uc-notification-settings-management",
+        "uc-whatsapp-consent-management"
+      ]
+    },
+    {
+      "mappingId": "map-admin-governance-manage",
+      "screenId": "scr-admin-governance",
+      "actionName": "Manage governance operations",
+      "backendApiIds": [
+        "api-policies-list",
+        "api-policies-create",
+        "api-policies-get",
+        "api-policies-update",
+        "api-invites-create",
+        "api-invites-list",
+        "api-invites-accept",
+        "api-transfer-requests-create",
+        "api-transfer-requests-confirm",
+        "api-transfer-requests-reject",
+        "api-retention-policies-list",
+        "api-retention-policies-update",
+        "api-tenant-export-create",
+        "api-tenant-export-get",
+        "api-secure-deletions-create",
+        "api-secure-deletions-update",
+        "api-business-calendar-get",
+        "api-business-calendar-update",
+        "api-audit-logs-list",
+        "api-audit-exports-get",
+        "api-audit-export-requests-create",
+        "api-webhooks-create"
+      ],
+      "useCaseIds": [
+        "uc-policy-management",
+        "uc-access-invite-management",
+        "uc-cross-organization-sharing",
+        "uc-project-transfer",
+        "uc-retention-policy-management",
+        "uc-tenant-export-management",
+        "uc-secure-deletion-management",
+        "uc-business-calendar-management",
+        "uc-audit-log-review",
+        "uc-audit-export-management",
+        "uc-webhook-subscription-management"
+      ]
+    },
+    {
+      "mappingId": "map-admin-risks-manage",
+      "screenId": "scr-admin-risk-register",
+      "actionName": "Manage risk register",
+      "backendApiIds": [
+        "api-risks-list",
+        "api-risks-get",
+        "api-risks-create",
+        "api-risks-update",
+        "api-risks-monitor-update"
+      ],
+      "useCaseIds": [
+        "uc-risk-register-management"
+      ]
+    },
+    {
+      "mappingId": "map-admin-branding-templates-manage",
+      "screenId": "scr-admin-branding-templates",
+      "actionName": "Manage branding and view templates",
+      "backendApiIds": [
+        "api-branding-assets-upload",
+        "api-admin-templates-list"
+      ],
+      "useCaseIds": [
+        "uc-branding-management",
+        "uc-template-management"
+      ]
+    },
+    {
+      "mappingId": "map-admin-model-registry-manage",
+      "screenId": "scr-admin-model-registry",
+      "actionName": "Manage model registry",
+      "backendApiIds": [
+        "api-models-list",
+        "api-models-create",
+        "api-model-versions-create"
+      ],
+      "useCaseIds": [
+        "uc-model-registry-management"
+      ]
+    },
+    {
+      "mappingId": "map-tool-mappings-manage",
+      "screenId": "scr-tool-mappings",
+      "actionName": "Manage mappings and import export tool data",
+      "backendApiIds": [
+        "api-mapping-oneclick-fields",
+        "api-mapping-oneclick-upsert",
+        "api-mapping-tool-fields",
+        "api-mapping-tool-upsert",
+        "api-oneclick-import",
+        "api-oneclick-export",
+        "api-tool-import",
+        "api-tool-export",
+        "api-iot-import",
+        "api-iot-export"
+      ],
+      "useCaseIds": [
+        "uc-tool-mapping-management",
+        "uc-tool-data-import-export"
+      ]
+    },
+    {
+      "mappingId": "map-anomalies-manage",
+      "screenId": "scr-anomalies",
+      "actionName": "Manage anomalies and corrective actions",
+      "backendApiIds": [
+        "api-anomalies-list",
+        "api-anomalies-create",
+        "api-anomalies-get",
+        "api-anomalies-update",
+        "api-corrective-actions-list",
+        "api-corrective-actions-create",
+        "api-corrective-actions-update"
+      ],
+      "useCaseIds": [
+        "uc-anomaly-management",
+        "uc-corrective-action-management"
+      ]
+    },
+    {
+      "mappingId": "map-project-controls-manage",
+      "screenId": "scr-project-controls",
+      "actionName": "Manage milestones and budgets",
+      "backendApiIds": [
+        "api-milestones-list",
+        "api-milestones-create",
+        "api-milestones-get",
+        "api-milestones-update",
+        "api-milestones-delete",
+        "api-budgets-list",
+        "api-budgets-create",
+        "api-budgets-get",
+        "api-budgets-update"
+      ],
+      "useCaseIds": [
+        "uc-milestone-tracking",
+        "uc-budget-tracking"
+      ]
+    },
+    {
+      "mappingId": "map-admin-data-governance-manage",
+      "screenId": "scr-admin-data-governance",
+      "actionName": "Manage training permissions import templates portal placeholders restore requests and provider credentials",
+      "backendApiIds": [
+        "api-training-permissions-create",
+        "api-import-templates-upsert",
+        "api-portal-configurations-upsert",
+        "api-restores-create",
+        "api-provider-credentials-create"
+      ],
+      "useCaseIds": [
+        "uc-training-permission-management",
+        "uc-import-template-management",
+        "uc-portal-configuration-management",
+        "uc-restore-request-management",
+        "uc-provider-credential-management"
+      ]
+    }
+  ]
+}

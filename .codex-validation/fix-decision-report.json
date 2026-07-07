@@ -1,0 +1,9 @@
+{
+  "isPass": true,
+  "reason": "GAP-0009 is implemented: malware-scanning integration is present in Integration Catalog and Integration Detail, and runtime wiring aligns with MalwareScannerClient dependency.",
+  "verifiedFixes": [
+    "Checklist: Add Integration Catalog and Integration Catalog Detail coverage for malware-scanning integration and align with runtime MalwareScannerClient dependency."
+  ],
+  "remainingGapIds": [],
+  "remainingGaps": []
+}

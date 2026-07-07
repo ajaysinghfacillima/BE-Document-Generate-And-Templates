@@ -1,0 +1,201 @@
+{
+  "useCaseId": "uc-document-generation",
+  "useCaseName": "Generate project documents",
+  "purpose": "Enable a Sustainability Consultant to generate project-specific narratives, calculators, reports, scorecards, checklists, simulation summaries, and form-ready outputs in supported formats using approved templates, project data, evidence, scorecards, and simulation results with branding, versioning, checksum generation, and human-review readiness.",
+  "actor": "Sustainability Consultant",
+  "trigger": "User opens the Documents screen for a project and submits a document generation request selecting document type, format, template, and source content.",
+  "preconditions": [
+    "The user is authenticated and has project-scoped permission to generate narratives or documents.",
+    "The target project exists and is accessible to the actor within the tenant.",
+    "At least one active template exists for the requested document type and output format.",
+    "Required project master data, scorecard data, evidence artifacts, or simulation outputs are available for the requested document type.",
+    "Branding assets may be available; if not, document generation proceeds without tenant branding where allowed by template rules.",
+    "The requested output format is one of the supported formats: PDF, DOCX, XLSX, JSON, or PPTX.",
+    "No live portal integration or RPA submission is expected; generated outputs are for manual review, download, or subsequent package assembly.",
+    "If AI-assisted content generation is invoked within document generation, the self-hosted India-resident AI gateway path to GPT-5.1 is reachable; otherwise generation is limited to non-AI template rendering paths or fails gracefully depending on document type."
+  ],
+  "inputParameters": [
+    {
+      "name": "projectId",
+      "type": "string",
+      "required": true
+    },
+    {
+      "name": "documentType",
+      "type": "string",
+      "required": true
+    },
+    {
+      "name": "format",
+      "type": "string",
+      "required": true
+    },
+    {
+      "name": "templateId",
+      "type": "string",
+      "required": true
+    },
+    {
+      "name": "includeBranding",
+      "type": "boolean",
+      "required": true
+    },
+    {
+      "name": "watermarkText",
+      "type": "string",
+      "required": false
+    },
+    {
+      "name": "sourceIds",
+      "type": "array\u003Cstring\u003E",
+      "required": true
+    }
+  ],
+  "inputSource": "User input from scr-documents, projectId supplied as the API path parameter in api-documents-generate, request body fields for generation options, project-scoped system data, linked artifacts, scorecards, recommendations, pre-assessment outputs, and simulation results.",
+  "output": "A generated DocumentArtifact record with canonical fields including id, tenantId, createdAt, updatedAt, version, etag, projectId, documentType, format, templateId, templateVersion, brandingApplied, watermarkApplied, footerVersionText, storageUri, checksumSha256, and reviewStatus.",
+  "mainFlow": [
+    "The actor navigates to the project Documents screen.",
+    "The actor selects document type, output format, template, branding preference, optional watermark text, and the source records or artifacts to include.",
+    "The system submits the request to api-documents-generate using projectId in the path and generation options in the request body.",
+    "The system validates that the project, template, requested format, and source references are valid and accessible to the actor.",
+    "The system resolves the current published template version and binds the selected template to a pinned template version for deterministic output.",
+    "The system retrieves required project content such as project metadata, scorecard data, evidence artifacts, simulation outputs, pre-assessment outputs, or recommendations depending on document type.",
+    "If the document type requires AI-assisted narrative synthesis, the system sends a redacted and governed request through the self-hosted India-resident AI gateway to GPT-5.1 and receives generated content with explainability metadata.",
+    "The system merges source content into the template and renders the requested output format.",
+    "The system applies branding assets when requested and available.",
+    "The system applies version footer text and optional watermark if configured in the request or required by policy.",
+    "The system stores the generated output in managed storage and computes a SHA-256 checksum.",
+    "The system creates a document metadata record with review status set to draft.",
+    "The system records audit entries for the generation request and resulting document creation.",
+    "The system returns the generated document metadata to the UI for preview or download."
+  ],
+  "alternativeFlow": [
+    "If branding is requested but branding assets are not configured, the system generates the document without branding when the template supports unbranded output and records brandingApplied as false.",
+    "If watermark text is omitted, the system generates the output without watermark unless the selected template or tenant policy mandates watermarking.",
+    "If the requested document type is scorecard, checklist, calculator, or formReadyData, the system may complete generation using structured data rendering without AI-generated narrative content.",
+    "If the requested sourceIds include simulation job outputs, the system uses linked simulation result artifacts and summaries as document inputs.",
+    "If the requested format is JSON, the system produces a structured machine-readable output rather than a layout-focused branded visual document.",
+    "If a previously generated document of the same type already exists, the system creates a new document artifact rather than overwriting historical output."
+  ],
+  "exceptionFlow": [
+    "If the projectId does not exist or is outside the actor scope, the system rejects the request and logs an authorization or not-found event.",
+    "If the selected templateId is invalid, inactive, or not compatible with the requested document type or format, the system rejects the request.",
+    "If one or more sourceIds are invalid, inaccessible, or not suitable for the requested document type, the system rejects the request with validation details.",
+    "If mandatory project data required for the selected document type is missing, the system rejects the generation request and identifies missing dependencies.",
+    "If the self-hosted India AI gateway path is unavailable for a document type that depends on AI-assisted generation, the system fails the request or degrades to a non-AI path only when a compliant fallback exists.",
+    "If template rendering fails, storage write fails, checksum generation fails, or document persistence fails, the system marks the operation as failed, logs the error, and returns an error response without exposing partial sensitive content.",
+    "If the user loses permission during processing, the system prevents result access and records the incident in audit logs."
+  ],
+  "validationRules": [
+    "projectId must reference an existing project within the current tenant.",
+    "documentType must be one of narrative, calculator, simulationSummary, formReadyData, scorecard, checklist, report, or package.",
+    "format must be one of pdf, docx, xlsx, json, or pptx.",
+    "templateId must reference an existing active template.",
+    "templateId must support the requested documentType.",
+    "sourceIds must contain at least one valid source reference.",
+    "Each sourceId must belong to the same tenant and be accessible under the project scope.",
+    "sourceIds must resolve only to supported source entity types for document linkage: artifact, simulationJob, scorecard, preAssessmentRun, auditorQuery, or recommendation.",
+    "watermarkText, when provided, must meet configured length and character safety rules.",
+    "includeBranding must be boolean.",
+    "The request must include an idempotency context at the API level for side-effect-safe creation.",
+    "If AI is used, request content sent for generation must undergo redaction or minimization according to tenant AI governance policy."
+  ],
+  "businessRules": [
+    "Document generation supports only manual downstream use; no automated certification portal submission is performed at launch.",
+    "Generated outputs must use a pinned template version to preserve reproducibility and auditability.",
+    "Generated outputs must support AEON branding assets when configured and requested.",
+    "Generated outputs must include version footer text.",
+    "Optional watermarking is supported and may be applied based on request or tenant policy.",
+    "Each successful document generation must create a persistent document artifact with checksum and storage URI.",
+    "New document generation creates a new immutable output artifact rather than replacing prior generated history.",
+    "Review status for a newly generated document starts as draft until submitted into review workflow.",
+    "If AI-assisted generation is involved, the system must record explainability and audit metadata including rationale, evidence links where applicable, and model identifier.",
+    "Only supported formats and supported document types may be generated at MVP.",
+    "All generation actions and resulting metadata changes must be audit logged.",
+    "Branding and template administration are governed separately and do not require dual approval, but generated documents still inherit audited template and branding lineage."
+  ],
+  "databaseTablesUsed": [
+    "project.Project",
+    "content.Artifact",
+    "content.Template",
+    "content.TemplateVersion",
+    "content.BrandingAsset",
+    "content.DocumentArtifact",
+    "content.DocumentSource",
+    "project.Scorecard",
+    "project.ScorecardCredit",
+    "project.SimulationJob",
+    "project.PreAssessmentRun",
+    "project.Recommendation",
+    "project.RecommendationBackingAnalysis",
+    "ops.AuditLog",
+    "core.UserAccount"
+  ],
+  "externalServicesUsed": [
+    "api-documents-generate",
+    "Self-hosted India AI gateway to GPT-5.1 for AI-assisted content generation with PII minimization and provider training disabled",
+    "Object storage or NAS for generated document persistence"
+  ],
+  "methodsRequired": [
+    "validateGenerateDocumentRequest(projectId, documentType, format, templateId, sourceIds, actorUserId)",
+    "resolvePinnedTemplateVersion(templateId)",
+    "loadProjectDocumentSources(projectId, documentType, sourceIds)",
+    "generateNarrativeContentViaIndiaAIGateway(projectContext, sourceContent, templateContext)",
+    "renderDocumentOutput(documentType, format, templateVersion, mergedContent)",
+    "applyBranding(documentBinaryOrPayload, brandingAssetId)",
+    "applyWatermarkAndFooter(documentBinaryOrPayload, watermarkText, footerVersionText)",
+    "storeGeneratedDocument(projectId, renderedOutput, format)",
+    "computeDocumentChecksum(storageUriOrBinary)",
+    "createDocumentArtifactRecord(projectId, documentMetadata)",
+    "createDocumentSourceLinks(documentArtifactId, sourceIds)",
+    "writeAIInteractionLog(actorUserId, projectId, documentArtifactId, aiMetadata)",
+    "writeAuditLogForDocumentGeneration(actorUserId, projectId, documentArtifactId)"
+  ],
+  "configurationRequired": [
+    "Supported document types to template mappings",
+    "Supported output format matrix per document type",
+    "Template repository with active and published versions",
+    "Tenant branding asset configuration including logo, colors, and fonts",
+    "AI gateway endpoint, policy version, timeout, and redaction settings for AI-assisted document generation",
+    "Storage location configuration for generated documents",
+    "Footer version text format and watermark policy configuration",
+    "Retention policy for generated documents",
+    "RBAC permissions for document generation and document review submission"
+  ],
+  "loggingRequired": "Log request receipt, actor identity, tenant and project scope, selected document type and format, template resolution, source resolution summary, AI invocation metadata when used, render start and completion, storage outcome, checksum generation, document artifact creation, and any validation or processing failures using correlation identifiers.",
+  "retryRequirement": "Document generation request creation must be idempotent at the API boundary. Internal retries are allowed for transient storage or worker failures with bounded retry attempts, but AI-assisted content generation must avoid duplicate persisted document artifacts and must not create multiple outputs for the same idempotent request.",
+  "transactionRequirement": "Metadata persistence for generated document creation, source linkage creation, and audit logging should be transactionally consistent. Binary file generation and storage may occur outside the SQL transaction, but the final document artifact record must only be committed after successful storage and checksum calculation.",
+  "sampleInput": {
+    "projectId": "prj-001",
+    "documentType": "narrative",
+    "format": "docx",
+    "templateId": "tpl-credit-narrative-leed-v41",
+    "includeBranding": true,
+    "watermarkText": "Draft for internal review",
+    "sourceIds": [
+      "art-101",
+      "sim-204",
+      "sc-001"
+    ]
+  },
+  "sampleOutput": {
+    "id": "doc-789",
+    "tenantId": "ten-001",
+    "projectId": "prj-001",
+    "documentType": "narrative",
+    "format": "docx",
+    "templateId": "tpl-credit-narrative-leed-v41",
+    "templateVersion": "3.2",
+    "brandingApplied": true,
+    "watermarkApplied": true,
+    "footerVersionText": "v1.0",
+    "storageUri": "storage://tenant-001/projects/prj-001/documents/doc-789.docx",
+    "checksumSha256": "8f5c6f2f3d7b4f7a1d8f2a7e9c1b0d3f4a5b6c7d8e9f00112233445566778899",
+    "reviewStatus": "draft",
+    "createdAt": "2026-06-09T10:15:00Z",
+    "updatedAt": "2026-06-09T10:15:00Z",
+    "version": 1,
+    "etag": "\u00221-doc-789\u0022",
+    "tenantId": "ten-001"
+  }
+}

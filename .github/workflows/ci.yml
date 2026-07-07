@@ -1,0 +1,40 @@
+name: ci
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+      - name: Restore
+        run: dotnet restore AeonDocGen.slnx
+      - name: Dependency vulnerability scan (fail on critical)
+        shell: pwsh
+        run: |
+          dotnet list AeonDocGen.slnx package --vulnerable --include-transitive --format json > vulnerability-report.json
+          $report = Get-Content vulnerability-report.json -Raw | ConvertFrom-Json
+          $critical = @($report.projects | ForEach-Object {
+            $_.frameworks | ForEach-Object {
+              @($_.topLevelPackages) + @($_.transitivePackages)
+            }
+          } | Where-Object { $_ -and $_.vulnerabilities } | ForEach-Object { $_.vulnerabilities } | Where-Object { $_.severity -eq "Critical" })
+          if ($critical.Count -gt 0) {
+            Write-Host "Critical vulnerabilities found:"
+            $critical | ForEach-Object { Write-Host "$($_.advisoryurl) [$($_.severity)]" }
+            exit 1
+          }
+      - name: Build
+        run: dotnet build AeonDocGen.slnx --configuration Release --no-restore
+      - name: Test with coverage threshold
+        run: >
+          dotnet test AeonDocGen.slnx --configuration Release --no-build
+          /p:CollectCoverage=true
+          /p:Threshold=80
+          /p:ThresholdType=line

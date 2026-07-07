@@ -1,0 +1,11 @@
+{
+  "Gaps": [
+    "Checklist: Add Integration Catalog and Integration Catalog Detail coverage for malware-scanning integration and align with runtime MalwareScannerClient dependency."
+  ],
+  "Items": [
+    {
+      "Id": "GAP-0009",
+      "Text": "Checklist: Add Integration Catalog and Integration Catalog Detail coverage for malware-scanning integration and align with runtime MalwareScannerClient dependency."
+    }
+  ]
+}

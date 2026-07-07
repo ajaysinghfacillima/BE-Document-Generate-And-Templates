@@ -1,0 +1,46 @@
+{
+  "Gaps": [
+    "Coverage: Implement POST /api/v1/projects/{projectId}/documents/{documentId}/review exactly per the specified API contract.",
+    "Coverage: Persist AuditLog for every review evaluation outcome (success and failure), including before/after status, reason/comments, correlation id, and no-mutation failure outcome.",
+    "Coverage: Remove inferred external-provider request/response contracts and keep behavior within the documented unspecified external dependency contract.",
+    "Coverage: Add API contract tests that verify exact HTTP method and path for all 4 scoped endpoints.",
+    "Checklist: Add pagination to GET /api/v1/admin/templates with validated parameters and bounded query results.",
+    "Checklist: Enforce bounded template-list responses with server-side pagination and default/max page-size limits.",
+    "Coverage: Render documents, add supported footer version text, and compute checksumSha256 for the rendered output.",
+    "Coverage: Add header validation tests for required and optional headers exactly as specified per endpoint."
+  ],
+  "Items": [
+    {
+      "Id": "GAP-0001",
+      "Text": "Coverage: Implement POST /api/v1/projects/{projectId}/documents/{documentId}/review exactly per the specified API contract."
+    },
+    {
+      "Id": "GAP-0002",
+      "Text": "Coverage: Persist AuditLog for every review evaluation outcome (success and failure), including before/after status, reason/comments, correlation id, and no-mutation failure outcome."
+    },
+    {
+      "Id": "GAP-0003",
+      "Text": "Coverage: Remove inferred external-provider request/response contracts and keep behavior within the documented unspecified external dependency contract."
+    },
+    {
+      "Id": "GAP-0004",
+      "Text": "Coverage: Add API contract tests that verify exact HTTP method and path for all 4 scoped endpoints."
+    },
+    {
+      "Id": "GAP-0005",
+      "Text": "Checklist: Add pagination to GET /api/v1/admin/templates with validated parameters and bounded query results."
+    },
+    {
+      "Id": "GAP-0006",
+      "Text": "Checklist: Enforce bounded template-list responses with server-side pagination and default/max page-size limits."
+    },
+    {
+      "Id": "GAP-0007",
+      "Text": "Coverage: Render documents, add supported footer version text, and compute checksumSha256 for the rendered output."
+    },
+    {
+      "Id": "GAP-0008",
+      "Text": "Coverage: Add header validation tests for required and optional headers exactly as specified per endpoint."
+    }
+  ]
+}

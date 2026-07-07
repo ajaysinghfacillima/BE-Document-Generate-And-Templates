@@ -1,0 +1,20 @@
+[Unit]
+Description=AEON Document Render Store Worker
+After=network.target
+
+[Service]
+WorkingDirectory=/opt/aeondocgen
+ExecStart=/usr/bin/dotnet /opt/aeondocgen/AeonDocGen.Api.dll
+User=aeondocgen
+Group=aeondocgen
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+CapabilityBoundingSet=
+Restart=always
+RestartSec=5
+Environment=DocumentGeneration__EnableInlineRenderWorkerFallback=false
+
+[Install]
+WantedBy=multi-user.target

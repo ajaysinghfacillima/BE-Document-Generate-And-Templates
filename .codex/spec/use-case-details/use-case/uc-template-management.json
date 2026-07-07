@@ -1,0 +1,98 @@
+{
+  "useCaseId": "uc-template-management",
+  "useCaseName": "View document templates",
+  "purpose": "Allow Admin users to view available document templates, current and historical versions, and supported document types so they can review template options used for generated outputs and administration.",
+  "actor": "Admin",
+  "trigger": "Admin opens template listing from the Admin Branding and Templates screen.",
+  "preconditions": [
+    "The user is authenticated with a valid session or access token.",
+    "The tenant context is resolved and active.",
+    "The user has Admin permission to view template metadata within the tenant scope.",
+    "Template metadata is available through api-admin-templates-list."
+  ],
+  "inputParameters": [],
+  "inputSource": "User interaction from scr-admin-branding-templates, with tenant context provided through the required X-Tenant-Id request header and actor identity derived from Authorization/session.",
+  "output": "A list of available document templates returned by api-admin-templates-list, where each item contains id, name, currentVersion, versions, and documentTypes.",
+  "mainFlow": [
+    "Admin navigates to the Admin Branding and Templates screen.",
+    "System verifies authentication, tenant context, and Admin authorization for template viewing.",
+    "System invokes api-admin-templates-list.",
+    "System retrieves the available templates visible to the tenant.",
+    "System returns the template list containing id, name, currentVersion, versions, and documentTypes.",
+    "UI renders the list for read-only review and optional downstream template selection."
+  ],
+  "alternativeFlow": [
+    "If no templates are available, the system returns an empty items array and the UI shows an empty state with no error.",
+    "If multiple template versions exist, the system shows the configured current version and the available versions for visibility."
+  ],
+  "exceptionFlow": [
+    "If the user is not authenticated, the system rejects the request and returns an authorization failure.",
+    "If the user lacks Admin permission to view template metadata, the system denies access.",
+    "If the tenant context is missing or invalid, the system aborts processing and returns a validation error.",
+    "If template records cannot be retrieved, the system returns an internal error.",
+    "If the API dependency api-admin-templates-list is unavailable, the use case fails gracefully and the UI presents an error with retry guidance."
+  ],
+  "validationRules": [
+    "Access must be authenticated and authorized for Admin template viewing.",
+    "Tenant context must be supplied via the required X-Tenant-Id request header.",
+    "Returned template metadata must remain tenant-scoped according to the API contract."
+  ],
+  "businessRules": [
+    "Template viewing is read-only in this use case; no create, update, publish, or retire action is performed.",
+    "Admin users can view template metadata exposed by the admin template listing API.",
+    "Current template version must be identifiable for each template.",
+    "The use case supports downstream document generation selection but does not itself generate documents."
+  ],
+  "databaseTablesUsed": [
+    "content.Template",
+    "content.TemplateVersion"
+  ],
+  "externalServicesUsed": [
+    "api-admin-templates-list"
+  ],
+  "methodsRequired": [
+    "validateAuthenticatedSession",
+    "authorizeTemplateViewAccess",
+    "invokeAdminTemplatesList",
+    "mapTemplateListResponse",
+    "handleTemplateListingFailure"
+  ],
+  "configurationRequired": [
+    "Tenant-scoped template catalog configuration.",
+    "RBAC permission mapping for template view access."
+  ],
+  "loggingRequired": "Log request receipt, tenant context, actor identity from authenticated context, result count, latency, and failures with correlation id.",
+  "retryRequirement": "UI may allow manual retry on transient failures. The use case is read-only and has no duplicate side effects.",
+  "transactionRequirement": "No explicit multi-entity write transaction is required because the use case is read-only.",
+  "sampleInput": {},
+  "sampleOutput": {
+    "items": [
+      {
+        "id": "tpl-001",
+        "name": "LEED Report Template",
+        "currentVersion": "2.0",
+        "versions": [
+          "1.0",
+          "1.1",
+          "2.0"
+        ],
+        "documentTypes": [
+          "report",
+          "scorecard"
+        ]
+      },
+      {
+        "id": "tpl-004",
+        "name": "LEED Narrative Template",
+        "currentVersion": "1.1",
+        "versions": [
+          "1.0",
+          "1.1"
+        ],
+        "documentTypes": [
+          "narrative"
+        ]
+      }
+    ]
+  }
+}

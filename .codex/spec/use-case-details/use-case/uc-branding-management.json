@@ -1,0 +1,168 @@
+{
+  "useCaseId": "uc-branding-management",
+  "useCaseName": "Manage branding assets",
+  "purpose": "Enable an Admin to upload, update, validate, and maintain AEON branding assets including logo files, color palette definitions, and font packages so they can be consistently applied to customer-facing templates, generated documents, and exports.",
+  "actor": "Admin",
+  "trigger": "Admin opens the Branding and Templates administration area and submits new or updated branding assets for tenant use.",
+  "preconditions": [
+    "The actor is authenticated as an Admin within the tenant context.",
+    "The tenant exists and is active.",
+    "The Admin has permission to manage branding configuration.",
+    "At least one branding management entry point is available through the admin console screen scr-admin-branding-templates.",
+    "Storage for branding assets is available and writable.",
+    "Branding and template administration changes are audit logged.",
+    "Document generation templates exist or will consume branding settings after successful update."
+  ],
+  "inputParameters": [
+    {
+      "name": "tenantId",
+      "type": "string",
+      "required": true
+    },
+    {
+      "name": "adminUserId",
+      "type": "string",
+      "required": true
+    },
+    {
+      "name": "logoFile",
+      "type": "binary",
+      "required": false
+    },
+    {
+      "name": "colorsJson",
+      "type": "object",
+      "required": false
+    },
+    {
+      "name": "fontsZip",
+      "type": "binary",
+      "required": false
+    },
+    {
+      "name": "idempotencyKey",
+      "type": "string",
+      "required": true
+    }
+  ],
+  "inputSource": "Admin UI screen scr-admin-branding-templates invoking api-branding-assets-upload via multipart form submission with tenant and user context.",
+  "output": "Updated tenant branding asset configuration with persisted asset references, versioned metadata, validation outcome, and audit evidence available for downstream template and document generation processes.",
+  "mainFlow": [
+    "Admin navigates to the Branding and Templates administration screen.",
+    "System loads the current tenant branding configuration and allows the Admin to select updated branding inputs such as logo file, colors JSON, and fonts ZIP.",
+    "Admin submits one or more branding inputs.",
+    "System validates that the request is associated with an authenticated Admin and a valid tenant context.",
+    "System checks that at least one branding input is present in the request.",
+    "System validates the uploaded files and structured color configuration for allowed formats, file size, and content integrity.",
+    "System stores new branding files in secure storage and prepares normalized metadata for persistence.",
+    "System creates or updates the tenant branding record in the branding asset store.",
+    "System increments version and updates etag-style concurrency metadata for the branding asset record.",
+    "System records an immutable audit entry describing the branding change, actor, timestamps, and before or after values as applicable.",
+    "System returns the updated branding asset status and metadata to the Admin.",
+    "Subsequent template rendering and document generation flows use the updated branding assets for customer-facing outputs."
+  ],
+  "alternativeFlow": [
+    "Admin uploads only a logo file while retaining previously saved colors and fonts; system updates only the logo reference and preserves other existing branding elements.",
+    "Admin uploads only colorsJson; system updates palette configuration without changing stored logo or fonts.",
+    "Admin uploads only fontsZip; system updates font package reference while leaving logo and colors unchanged.",
+    "A tenant has no prior branding configuration; system creates the initial BrandingAsset record instead of updating an existing one.",
+    "Admin replays the same request with the same idempotency key; system returns the previously committed result without creating duplicate updates.",
+    "Branding assets are uploaded successfully but are not yet consumed by any generated document; system still persists the configuration for future document generation use."
+  ],
+  "exceptionFlow": [
+    "If the actor is not authenticated or tenant context is missing, the system rejects the request and records the failed access attempt.",
+    "If the actor lacks Admin privileges or branding management permission, the system denies the action and audits the authorization failure.",
+    "If no branding input is provided, the system rejects the request as invalid because at least one of logoFile, colorsJson, or fontsZip must be supplied.",
+    "If the uploaded logo file or fonts archive fails file validation, antivirus, or content checks, the system rejects the update and preserves the prior branding configuration.",
+    "If colorsJson is malformed or does not conform to expected color configuration structure, the system rejects the request and returns validation details.",
+    "If storage upload fails or the database update cannot be committed, the system rolls back the branding update and returns an error.",
+    "If an unexpected system exception occurs during persistence or audit logging, the system records diagnostic logs, returns a failure response, and leaves the previous branding state unchanged."
+  ],
+  "validationRules": [
+    "tenantId must reference an existing active tenant.",
+    "adminUserId must reference an authenticated active user.",
+    "The acting user must hold the Admin role or equivalent branding management permission.",
+    "At least one of logoFile, colorsJson, or fontsZip must be supplied.",
+    "logoFile, when present, must be an allowed image format supported by the branding workflow.",
+    "fontsZip, when present, must be a valid ZIP archive containing supported font files.",
+    "colorsJson, when present, must be valid JSON and parse successfully.",
+    "colorsJson should contain valid color values in approved format such as hex codes for configured brand color keys.",
+    "Uploaded files must pass content validation and malware scanning before being committed for use.",
+    "Request must include a non-empty idempotencyKey for safe retry behavior."
+  ],
+  "businessRules": [
+    "Branding changes are tenant-scoped and must not affect other tenants.",
+    "Branding and template administration changes do not require dual approval but must be fully audit logged.",
+    "The latest successful branding configuration becomes the active source for customer-facing document rendering.",
+    "If only part of the branding payload is supplied, unspecified branding components retain their previously active values.",
+    "Failed branding updates must not partially overwrite the active branding configuration.",
+    "Branding assets are used across customer-facing templates and generated documents in supported export formats.",
+    "Only Admin users can manage branding assets.",
+    "Idempotent retries must not create duplicate branding versions for the same logical request."
+  ],
+  "databaseTablesUsed": [
+    "BrandingAsset",
+    "Template",
+    "DocumentArtifact",
+    "AuditLog",
+    "Tenant",
+    "UserAccount",
+    "JobQueue"
+  ],
+  "externalServicesUsed": [
+    "Object storage or NAS for branding file persistence",
+    "Antivirus or file validation service used by ingestion pipeline"
+  ],
+  "methodsRequired": [
+    "authorizeAdminForBrandingManagement",
+    "validateBrandingUploadRequest",
+    "validateLogoFile",
+    "validateColorsJson",
+    "validateFontsArchive",
+    "scanUploadedFilesForThreats",
+    "storeBrandingFiles",
+    "createOrUpdateBrandingAssetRecord",
+    "writeAuditLogEntry",
+    "invalidateTemplateBrandingCache"
+  ],
+  "configurationRequired": [
+    "Allowed logo MIME types and file extensions",
+    "Allowed font file types within ZIP archives",
+    "Maximum upload size for branding assets",
+    "Tenant-scoped secure storage location for branding files",
+    "Audit retention policy for branding administration events",
+    "Template rendering configuration that resolves active BrandingAsset for a tenant"
+  ],
+  "loggingRequired": "Log request correlation id, tenant id, actor user id, validation outcomes, storage operations, database update result, and any failure diagnostics without logging sensitive file contents.",
+  "retryRequirement": "Client retries are supported through idempotency keys. Storage and transient persistence failures may be retried once internally when safe, but duplicate logical branding updates must be prevented.",
+  "transactionRequirement": "Database persistence of BrandingAsset metadata and audit creation should occur atomically. File storage and metadata update should follow a coordinated commit pattern so failed persistence does not leave an inconsistent active branding state.",
+  "sampleInput": {
+    "tenantId": "ten-001",
+    "adminUserId": "usr-admin-001",
+    "idempotencyKey": "9d694f5a-a49c-4b72-9707-36e7cc7c5f32",
+    "logoFile": "aeon-logo.png",
+    "colorsJson": {
+      "primary": "#003366",
+      "secondary": "#00A3E0",
+      "accent": "#F5A623",
+      "text": "#1F2937",
+      "background": "#FFFFFF"
+    },
+    "fontsZip": "aeon-brand-fonts.zip"
+  },
+  "sampleOutput": {
+    "brandingAssetId": "brand-001",
+    "tenantId": "ten-001",
+    "status": "updated",
+    "logoUpdated": true,
+    "colorsUpdated": true,
+    "fontsUpdated": true,
+    "updatedAt": "2026-06-09T10:45:00Z",
+    "appliesTo": [
+      "templates",
+      "generatedDocuments",
+      "exports"
+    ],
+    "auditRecorded": true
+  }
+}

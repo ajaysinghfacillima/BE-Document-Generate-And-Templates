@@ -1,0 +1,57 @@
+{
+  "integrationId": "bi-object-storage-or-nas",
+  "providerName": "Object Storage or NAS",
+  "capabilityName": "Artifact and generated-output storage",
+  "implementationScope": "backend",
+  "interactionMode": "storage_access",
+  "relatedApiIds": [
+    "api-branding-assets-upload",
+    "api-documents-generate",
+    "api-tool-export",
+    "api-iot-export",
+    "api-tenant-export-create"
+  ],
+  "relatedUseCaseIds": [
+    "uc-branding-management",
+    "uc-document-generation",
+    "uc-tool-data-import-export",
+    "uc-tenant-export-management"
+  ],
+  "httpMethod": null,
+  "endpointUrl": null,
+  "authenticationRequirement": null,
+  "requestHeaders": [],
+  "httpStatusCodes": [],
+  "failureResponses": [],
+  "officialDocumentationUrl": null,
+  "contractStatus": "missing_or_incomplete",
+  "warning": "External dependency contract: Not specified by provided official documentation.",
+  "providerContract": {},
+  "catalogItem": {
+    "IntegrationId": "bi-object-storage-or-nas",
+    "CapabilityName": "Artifact and generated-output storage",
+    "ProviderName": "Object Storage or NAS",
+    "ImplementationScope": "backend",
+    "InteractionMode": "storage_access",
+    "Category": "storage",
+    "Description": null,
+    "RelatedUseCaseIds": [
+      "uc-branding-management",
+      "uc-document-generation",
+      "uc-tool-data-import-export",
+      "uc-tenant-export-management"
+    ],
+    "RelatedApiIds": [
+      "api-branding-assets-upload",
+      "api-documents-generate",
+      "api-tool-export",
+      "api-iot-export",
+      "api-tenant-export-create"
+    ],
+    "DetailRefs": null,
+    "DetailBlobUri": null,
+    "TechStack": null,
+    "ImplementationNotes": null
+  },
+  "detail": {}
+}

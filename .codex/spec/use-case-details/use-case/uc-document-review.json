@@ -1,0 +1,174 @@
+{
+  "useCaseId": "uc-document-review",
+  "useCaseName": "Review generated documents",
+  "purpose": "Allow a Sustainability Consultant to submit generated project documents for human review, start review processing, and record approve or reject decisions with full auditability before downstream packaging or submission use.",
+  "actor": "Sustainability Consultant",
+  "trigger": "The user selects a generated document on the Documents screen and submits it for review or records a review decision using api-documents-review.",
+  "preconditions": [
+    "The user is authenticated and tenant context is resolved.",
+    "The user has project-scoped permission to manage narratives or document reviews.",
+    "The project exists and is accessible to the actor under RBAC scope rules.",
+    "The target document has already been generated and stored as a document artifact.",
+    "The document belongs to the specified project.",
+    "The document is in a mutable review state and has not been superseded by a newer immutable package context.",
+    "Required template and branding references for the document version are already pinned on generation."
+  ],
+  "inputParameters": [
+    {
+      "name": "projectId",
+      "type": "string",
+      "required": true
+    },
+    {
+      "name": "documentId",
+      "type": "string",
+      "required": true
+    },
+    {
+      "name": "action",
+      "type": "string",
+      "required": true
+    },
+    {
+      "name": "comments",
+      "type": "string",
+      "required": false
+    },
+    {
+      "name": "idempotencyKey",
+      "type": "string",
+      "required": true
+    },
+    {
+      "name": "ifMatch",
+      "type": "string",
+      "required": true
+    }
+  ],
+  "inputSource": "Documents screen scr-documents via POST /api/v1/projects/{projectId}/documents/{documentId}/review with authenticated session token, X-Tenant-Id header, Idempotency-Key header, and If-Match header.",
+  "output": "Updated document review status on the target document artifact, persisted document review event history, audit trail entry, and API response containing the updated document metadata.",
+  "mainFlow": [
+    "User opens the Documents screen and selects a generated document for review action.",
+    "System validates authentication, tenant context, project scope access, and permission to review generated documents.",
+    "System loads the project and target document artifact using projectId and documentId.",
+    "System verifies that the document belongs to the specified project and is eligible for the requested action.",
+    "If action is submit, system changes review status from draft to inReview and records a document review event.",
+    "If action is startReview, system records review-start intent and keeps the document in inReview state.",
+    "If action is approve, system updates the document review status to approved, records reviewer identity and review timestamp, and creates a document review event.",
+    "If action is reject, system updates the document review status to rejected, records reviewer identity and review timestamp, and creates a document review event with comments.",
+    "System writes an immutable audit log describing the state change, actor, target resource, correlation context, and before and after values.",
+    "System returns the updated document artifact to the caller.",
+    "System makes the updated review state available for subsequent package-building and document-list refresh operations."
+  ],
+  "alternativeFlow": [
+    "User submits a document that is already inReview; system treats the request idempotently and returns the current inReview document state.",
+    "User starts review on a document already inReview; system records the action idempotently or returns current state without duplicate status transition.",
+    "User approves a document that was previously rejected after a regenerated review cycle; system accepts the new decision only if the document remains mutable and current.",
+    "User rejects a document with explanatory comments; system stores the rejection comments and leaves the document available for regeneration or correction workflow.",
+    "A repeated request arrives with the same idempotency key; system returns the previously committed outcome without duplicating events.",
+    "An Admin with equivalent scoped permissions performs the action on behalf of the consultant under RBAC; system records the actual acting user in the audit trail."
+  ],
+  "exceptionFlow": [
+    "If authentication fails or tenant header is missing, system rejects the request and no review state is changed.",
+    "If the actor lacks project-scoped permission for document review, system denies the action and records an authorization failure audit event.",
+    "If projectId or documentId does not resolve to an existing accessible resource, system returns not found and no state is changed.",
+    "If the document does not belong to the specified project, system rejects the request as an invalid resource association.",
+    "If action is not one of submit, startReview, approve, or reject, system rejects the request as invalid input.",
+    "If an approve or reject action is attempted for a document that is not in a valid reviewable state, system rejects the transition.",
+    "If optimistic concurrency or duplicate processing safeguards detect a conflicting update, system returns a conflict-safe failure and preserves the last committed state.",
+    "If persistence of the document status update, review event, or audit log fails, system rolls back the transaction and returns an error.",
+    "If downstream audit logging is unavailable, system fails the operation rather than committing an unaudited sensitive state transition."
+  ],
+  "validationRules": [
+    "projectId must be a valid non-empty identifier.",
+    "documentId must be a valid non-empty identifier.",
+    "action must be one of submit, startReview, approve, or reject.",
+    "comments may be empty for submit or startReview but must not exceed configured maximum length.",
+    "comments should be provided for reject decisions to support human correction workflow traceability.",
+    "idempotencyKey is required for the review POST operation.",
+    "ifMatch must contain the current etag of the mutable DocumentArtifact being updated.",
+    "The referenced document must exist in content.DocumentArtifact.",
+    "The referenced project must exist in project.Project.",
+    "The document\u0027s projectId must equal the route projectId.",
+    "The document review status transition must comply with allowed state rules."
+  ],
+  "businessRules": [
+    "Document review is a human-in-the-loop control point before downstream submission usage.",
+    "Only users with appropriate RBAC permissions and project scope may submit or decide document reviews.",
+    "Review decisions must be fully auditable with actor, time, and comments where applicable.",
+    "Approved documents are eligible for downstream packaging and submission workflows.",
+    "Rejected documents remain traceable and may require regeneration or correction before reuse.",
+    "Normal review actions do not require dual approval.",
+    "Document review history is append-only through review events and separate from mutable current document status.",
+    "Idempotent processing must prevent duplicate review events for retried requests.",
+    "The system must preserve template pinning, branding, checksum, and version metadata generated before review.",
+    "Review state changes must not bypass project and tenant boundary enforcement."
+  ],
+  "databaseTablesUsed": [
+    "project.Project",
+    "content.DocumentArtifact",
+    "content.DocumentReviewEvent",
+    "core.UserAccount",
+    "ops.AuditLog"
+  ],
+  "externalServicesUsed": [],
+  "methodsRequired": [
+    "validateAuthenticatedUserContext",
+    "authorizeProjectScopedDocumentReview",
+    "getProjectById",
+    "getDocumentArtifactById",
+    "validateDocumentBelongsToProject",
+    "validateDocumentReviewTransition",
+    "validateIfMatchEtag",
+    "applyDocumentReviewStatusChange",
+    "recordDocumentReviewEvent",
+    "writeAuditLog",
+    "enforceIdempotencyKey",
+    "returnUpdatedDocumentArtifact"
+  ],
+  "configurationRequired": [
+    "RBAC permissions for Narratives and document review actions",
+    "Tenant business audit retention policy",
+    "Idempotency key retention configuration for POST operations",
+    "Maximum review comments length",
+    "Allowed document review state transition map",
+    "Audit logging enablement and immutable log policy"
+  ],
+  "loggingRequired": "Log correlation id, tenant id, project id, document id, actor user id, requested action, previous review status, resulting review status, idempotency outcome, authorization outcome, If-Match/etag validation outcome, and persistence result; create immutable audit entries for every successful or failed sensitive state transition.",
+  "retryRequirement": "Client retries are allowed only with the same idempotency key; server must ensure duplicate requests do not create duplicate review events or multiple status transitions. No automatic business retry after a validation or authorization failure.",
+  "transactionRequirement": "The document status update, reviewer metadata update, document review event insert, and audit log insert must execute in a single transactional unit and roll back together on failure.",
+  "sampleInput": {
+    "projectId": "prj-001",
+    "documentId": "doc-001",
+    "action": "approve",
+    "comments": "Reviewed and approved for submission package inclusion.",
+    "idempotencyKey": "9d2a4e4a-b9d2-4a6d-97dd-4d4f5e98b001",
+    "ifMatch": "\u00222-doc-001\u0022"
+  },
+  "sampleOutput": {
+    "id": "doc-001",
+    "tenantId": "ten-001",
+    "createdAt": "2026-06-09T10:15:00Z",
+    "updatedAt": "2026-06-09T11:05:24Z",
+    "version": 3,
+    "etag": "\u00223-doc-001\u0022",
+    "projectId": "prj-001",
+    "documentType": "narrative",
+    "format": "pdf",
+    "templateId": "tpl-narrative-leed-v41",
+    "templateVersion": "1.2",
+    "brandingApplied": true,
+    "watermarkApplied": false,
+    "footerVersionText": "v1.0",
+    "storageUri": "nas://tenant/ten-001/projects/prj-001/documents/doc-001.pdf",
+    "checksumSha256": "a3c55f0e8a7d1b53d6a76b8a9f0f4dd8d6b04f0fdcb6c8d3b0f0d1e2a3b4c5d6",
+    "reviewStatus": "approved",
+    "reviewedByUserId": "usr-014",
+    "reviewedAt": "2026-06-09T11:05:24Z"
+  },
+  "sourceDocuments": [
+    "FRD",
+    "HLD"
+  ],
+  "applicationType": "full_stack"
+}

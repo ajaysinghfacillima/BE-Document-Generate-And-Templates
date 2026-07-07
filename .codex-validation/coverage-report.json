@@ -1,0 +1,15 @@
+{
+  "isCovered": false,
+  "missingRequirements": [
+    "Expose POST /api/v1/projects/{projectId}/documents/generate exactly as specified.",
+    "Expose POST /api/v1/projects/{projectId}/documents/{documentId}/review exactly as specified.",
+    "Require authenticated access with Authorization and X-Tenant-Id and enforce project-level authorization for document generation.",
+    "Render the document, generate footer version text where supported, and compute checksumSha256 for the rendered file.",
+    "Create AuditLog records for every successful and failed review action evaluation, including before and after review status, reason/comments, correlation id, and failure outcome when no mutation occurs.",
+    "Execute validation, state update, review event insertion, and audit log persistence in a single database transaction with rollback on any failure.",
+    "Do not invent external provider request or response contracts beyond the documented statement that the external dependency contract is not specified by provided official documentation.",
+    "Add API contract tests for exact method and path coverage of all 4 scoped endpoints.",
+    "Add header validation tests covering required and optional headers exactly as specified for each endpoint."
+  ],
+  "summary": "Core implementation exists for all four areas, but contract-critical gaps remain in document generation/review route mappings, review audit/transaction guarantees, external-provider contract handling, and test alignment with the specified endpoint/header contracts."
+}

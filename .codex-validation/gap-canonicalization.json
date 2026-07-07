@@ -1,0 +1,152 @@
+{
+  "items": [
+    {
+      "original": "Expose POST /api/v1/projects/{projectId}/documents/generate exactly as specified.",
+      "canonical": "Implement POST /api/v1/projects/{projectId}/documents/generate exactly per the specified API contract."
+    },
+    {
+      "original": "Expose POST /api/v1/projects/{projectId}/documents/{documentId}/review exactly as specified.",
+      "canonical": "Implement POST /api/v1/projects/{projectId}/documents/{documentId}/review exactly per the specified API contract."
+    },
+    {
+      "original": "Return only tenant-scoped templates and ensure currentVersion reflects the latest effective template version.",
+      "canonical": "Restrict template listing to tenant-scoped templates and set currentVersion to the latest effective template version."
+    },
+    {
+      "original": "Create AuditLog records for every successful and failed review action evaluation, including before and after review status, reason/comments, correlation id, and failure outcome when no mutation occurs.",
+      "canonical": "Persist AuditLog for every review evaluation outcome (success and failure), including before/after status, reason/comments, correlation id, and no-mutation failure outcome."
+    },
+    {
+      "original": "On persistence failure after file upload, roll back metadata changes and mark orphaned files for cleanup by background process.",
+      "canonical": "On post-upload persistence failure, roll back metadata changes and enqueue orphaned files for background cleanup."
+    },
+    {
+      "original": "Do not invent external provider request or response contracts beyond the documented statement that the external dependency contract is not specified by provided official documentation.",
+      "canonical": "Remove inferred external-provider request/response contracts and keep behavior within the documented unspecified external dependency contract."
+    },
+    {
+      "original": "Add API contract tests for exact method and path coverage of all 4 scoped endpoints.",
+      "canonical": "Add API contract tests that verify exact HTTP method and path for all 4 scoped endpoints."
+    },
+    {
+      "original": "API-05 All list endpoints support pagination (limit/offset or cursor): GET /api/v1/admin/templates returns an unbounded list with no pagination query parameters or pagination metadata; add validated paging inputs and bounded queries.",
+      "canonical": "Add pagination to GET /api/v1/admin/templates with validated parameters and bounded query results."
+    },
+    {
+      "original": "PERF-04 Response payloads are bounded — no unbounded queries returning all rows: template listing currently returns all tenant templates at once; enforce server-side page limits and default/max page size.",
+      "canonical": "Enforce bounded template-list responses with server-side pagination and default/max page-size limits."
+    },
+    {
+      "original": "TEST-06A LLD coverage is verified — generated code is checked against approved Low-Level Design: implementation is not fully aligned with provided component spec flows (notably endpoint contract mismatch for document generation/review paths and a queued branding orphaned-file-cleanup job type without a corresponding worker handler); align routes/flows and add traceable tests.",
+      "canonical": "Align implementation with approved LLD flows by fixing document generation/review endpoint contract mismatches and adding a worker handler for queued branding orphaned-file cleanup, then add traceable tests."
+    },
+    {
+      "original": "CODE-02 No hardcoded values — magic numbers, strings, URLs, timeouts, and schedules are in constants or config: operational literals (job statuses/types/priorities, retry and timeout values, role/permission strings) are still embedded in service logic; centralize them in configuration/constants.",
+      "canonical": "Move operational literals (job statuses/types/priorities, retry/timeout values, role/permission strings) from service logic into configuration/constants."
+    },
+    {
+      "original": "Expose POST /api/v1/projects/{projectId}/documents/generate exactly as specified.",
+      "canonical": "Implement POST /api/v1/projects/{projectId}/documents/generate exactly per the specified API contract."
+    },
+    {
+      "original": "Expose POST /api/v1/projects/{projectId}/documents/{documentId}/review exactly as specified.",
+      "canonical": "Implement POST /api/v1/projects/{projectId}/documents/{documentId}/review exactly per the specified API contract."
+    },
+    {
+      "original": "X-Tenant-Id header is mandatory and must resolve to an active tenant context.",
+      "canonical": "Require X-Tenant-Id on requests and validate it resolves to an active tenant context."
+    },
+    {
+      "original": "Render the document, generate footer version text where supported, and compute checksumSha256 for the rendered file.",
+      "canonical": "Render documents, add supported footer version text, and compute checksumSha256 for the rendered output."
+    },
+    {
+      "original": "Do not invent external provider request or response contracts beyond the documented statement that the external dependency contract is not specified by provided official documentation.",
+      "canonical": "Remove inferred external-provider request/response contracts and keep behavior within the documented unspecified external dependency contract."
+    },
+    {
+      "original": "Add API contract tests for exact method and path coverage of all 4 scoped endpoints.",
+      "canonical": "Add API contract tests that verify exact HTTP method and path for all 4 scoped endpoints."
+    },
+    {
+      "original": "Add header validation tests covering required and optional headers exactly as specified for each endpoint.",
+      "canonical": "Add header validation tests for required and optional headers exactly as specified per endpoint."
+    },
+    {
+      "original": "API-05 List endpoints support pagination (limit/offset or cursor): `GET /api/v1/admin/templates` has no pagination query parameters or bounded page-size enforcement; add `limit`/`offset` (or cursor) handling with validated bounds in controller/service/repository.",
+      "canonical": "Add pagination to GET /api/v1/admin/templates with validated parameters and bounded query results."
+    },
+    {
+      "original": "PERF-04 Response payloads are bounded — no unbounded queries returning all rows: admin template listing currently returns the full tenant template set without pagination limits; enforce server-side paging and maximum page size.",
+      "canonical": "Enforce bounded template-list responses with server-side pagination and default/max page-size limits."
+    },
+    {
+      "original": "SEC-02 Rate limiting is applied to authentication and public endpoints: `TenantRateLimitMiddleware` bypasses limiting when `X-Tenant-Id` is missing, so anonymous/auth flows such as `POST /api/v1/auth/refresh` can avoid throttling; add an IP/client-based fallback limiter for requests without tenant context.",
+      "canonical": "Apply fallback IP/client rate limiting when X-Tenant-Id is missing so endpoints like POST /api/v1/auth/refresh cannot bypass throttling."
+    },
+    {
+      "original": "SEC-06 Dependencies are pinned and free of known critical CVEs: lockfiles and CI vulnerability-gate logic exist, but current dependency vulnerability status was not verifiable in this workspace (`dotnet` CLI unavailable); run `dotnet list AeonDocGen.slnx package --vulnerable --include-transitive --format json` in an executable environment and confirm zero critical CVEs.",
+      "canonical": "Run dependency vulnerability scanning (`dotnet list AeonDocGen.slnx package --vulnerable --include-transitive --format json`) in an environment with dotnet and verify zero critical CVEs."
+    },
+    {
+      "original": "Expose POST /api/v1/projects/{projectId}/documents/generate exactly as specified.",
+      "canonical": "Implement POST /api/v1/projects/{projectId}/documents/generate exactly per the specified API contract."
+    },
+    {
+      "original": "Expose POST /api/v1/projects/{projectId}/documents/{documentId}/review exactly as specified.",
+      "canonical": "Implement POST /api/v1/projects/{projectId}/documents/{documentId}/review exactly per the specified API contract."
+    },
+    {
+      "original": "Require authenticated access with Authorization and X-Tenant-Id and enforce project-level authorization for document generation.",
+      "canonical": "Enforce authenticated access with Authorization and X-Tenant-Id, plus project-level authorization for document generation."
+    },
+    {
+      "original": "Render the document, generate footer version text where supported, and compute checksumSha256 for the rendered file.",
+      "canonical": "Render documents, add supported footer version text, and compute checksumSha256 for the rendered output."
+    },
+    {
+      "original": "Create AuditLog records for every successful and failed review action evaluation, including before and after review status, reason/comments, correlation id, and failure outcome when no mutation occurs.",
+      "canonical": "Persist AuditLog for every review evaluation outcome (success and failure), including before/after status, reason/comments, correlation id, and no-mutation failure outcome."
+    },
+    {
+      "original": "Execute validation, state update, review event insertion, and audit log persistence in a single database transaction with rollback on any failure.",
+      "canonical": "Execute review validation, state update, review event insertion, and audit-log persistence in one transaction with rollback on any failure."
+    },
+    {
+      "original": "Do not invent external provider request or response contracts beyond the documented statement that the external dependency contract is not specified by provided official documentation.",
+      "canonical": "Remove inferred external-provider request/response contracts and keep behavior within the documented unspecified external dependency contract."
+    },
+    {
+      "original": "Add API contract tests for exact method and path coverage of all 4 scoped endpoints.",
+      "canonical": "Add API contract tests that verify exact HTTP method and path for all 4 scoped endpoints."
+    },
+    {
+      "original": "Add header validation tests covering required and optional headers exactly as specified for each endpoint.",
+      "canonical": "Add header validation tests for required and optional headers exactly as specified per endpoint."
+    },
+    {
+      "original": "List endpoints support pagination (limit/offset or cursor) — add pagination parameters and enforce page-bounded query execution for template listing.",
+      "canonical": "Add pagination to GET /api/v1/admin/templates with validated parameters and bounded query results."
+    },
+    {
+      "original": "Response payloads are bounded — no unbounded queries returning all rows — apply default/max page size and return only bounded template results.",
+      "canonical": "Enforce bounded template-list responses with server-side pagination and default/max page-size limits."
+    },
+    {
+      "original": "LLD coverage is verified — generated code is checked against the approved Low-Level Design to confirm all required modules, flows, interfaces, validations, and edge cases are implemented — align document generation/review endpoint contracts with the approved component spec paths and close the resulting traceability gap.",
+      "canonical": "Align document generation/review endpoint contracts with approved LLD component-spec paths and add traceable coverage for the resulting gap."
+    },
+    {
+      "original": "Sensitive data (passwords, tokens, PII) is not logged — stop logging Idempotency-Key values and redact token-like identifiers from service logs.",
+      "canonical": "Stop logging Idempotency-Key values and redact token-like identifiers from service logs."
+    },
+    {
+      "original": "Alerts or notifications are triggered on repeated job failures — integrate JobFailureAlert escalation with an actual notification channel (for example webhook/email/incident system), not only DB persistence.",
+      "canonical": "Integrate JobFailureAlert escalation with a real notification channel (webhook/email/incident system), not only DB persistence."
+    },
+    {
+      "original": "File path traversal is prevented in any file-serving or file-reading logic — harden BrandingStorageClient/DocumentStorageClient path canonicalization to reject rooted/drive-qualified inputs and enforce base-path containment checks.",
+      "canonical": "Harden BrandingStorageClient and DocumentStorageClient path canonicalization to reject rooted/drive-qualified inputs and enforce base-path containment checks."
+    }
+  ]
+}

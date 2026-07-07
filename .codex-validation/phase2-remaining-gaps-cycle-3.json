@@ -1,0 +1,11 @@
+{
+  "Gaps": [
+    "Coverage: Render documents and generate required output metadata, including footer version text where supported and checksumSha256."
+  ],
+  "Items": [
+    {
+      "Id": "GAP-0004",
+      "Text": "Coverage: Render documents and generate required output metadata, including footer version text where supported and checksumSha256."
+    }
+  ]
+}

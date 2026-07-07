@@ -1,0 +1,1391 @@
+{
+  "schemaVersion": 1,
+  "applicationType": "full_stack",
+  "generatedFromStepVersionId": "cc0216a6-0ddd-4cc9-81d7-1dfcc3906b3c",
+  "techStackContext": {
+    "backend": ".NET 10 microservices",
+    "frontend": "React + TypeScript",
+    "database": "SQL Server 2022 Standard",
+    "resolutionSource": "hld_mld_resolved",
+    "signals": [
+      "HLD Technology Stack Options Matrix",
+      "MLD Tech Stack"
+    ]
+  },
+  "backendIntegrations": [
+    {
+      "id": "bi-ai-gateway-openai",
+      "integrationId": "bi-ai-gateway-openai",
+      "name": "OpenAI GPT 5.1 via Self-hosted India AI Gateway",
+      "providerName": "Self-hosted India AI Gateway",
+      "capabilityName": "AI-assisted reasoning and generation via approved gateway path",
+      "category": "ai",
+      "providerProfileId": "pp-ai-gateway-openai",
+      "direction": "outbound",
+      "mode": "api",
+      "interactionMode": "api",
+      "implementationScope": "backend",
+      "protocols": [
+        "HTTPS REST"
+      ],
+      "relatedApiIds": [
+        "api-provider-credentials-create",
+        "api-preassessments-create",
+        "api-interpretations-create",
+        "api-standards-qa",
+        "api-recommendations-list",
+        "api-recommendations-backing-list"
+      ],
+      "relatedUseCaseIds": [
+        "uc-provider-credential-management",
+        "uc-preassessment",
+        "uc-credit-interpretation",
+        "uc-standards-qa",
+        "uc-recommendations"
+      ],
+      "status": "active",
+      "notes": "Approved AI path only. Domain services must use the self-hosted India AI Gateway, which invokes OpenAI GPT 5.1."
+    },
+    {
+      "id": "bi-sendgrid-email",
+      "integrationId": "bi-sendgrid-email",
+      "name": "SendGrid Email Delivery",
+      "providerName": "SendGrid",
+      "capabilityName": "Email notification delivery",
+      "category": "notification",
+      "providerProfileId": "pp-sendgrid",
+      "direction": "outbound",
+      "mode": "api_or_smtp",
+      "interactionMode": "api_or_smtp",
+      "implementationScope": "backend",
+      "protocols": [
+        "HTTPS API",
+        "SMTP"
+      ],
+      "relatedApiIds": [
+        "api-provider-credentials-create",
+        "api-notification-rules-create",
+        "api-notification-settings-update"
+      ],
+      "relatedUseCaseIds": [
+        "uc-provider-credential-management",
+        "uc-notification-rule-management",
+        "uc-notification-settings-management"
+      ],
+      "status": "active",
+      "notes": "Used by Notification Service for email notifications."
+    },
+    {
+      "id": "bi-meta-cloud-api-whatsapp",
+      "integrationId": "bi-meta-cloud-api-whatsapp",
+      "name": "Meta Cloud API WhatsApp Delivery",
+      "providerName": "Meta Cloud API",
+      "capabilityName": "WhatsApp workflow and operational notification delivery",
+      "category": "notification",
+      "providerProfileId": "pp-meta-cloud-api",
+      "direction": "outbound",
+      "mode": "api",
+      "interactionMode": "api",
+      "implementationScope": "backend",
+      "protocols": [
+        "HTTPS REST"
+      ],
+      "relatedApiIds": [
+        "api-provider-credentials-create",
+        "api-whatsapp-consent-create",
+        "api-whatsapp-unsubscribe",
+        "api-notification-rules-create"
+      ],
+      "relatedUseCaseIds": [
+        "uc-provider-credential-management",
+        "uc-whatsapp-consent-management",
+        "uc-notification-rule-management"
+      ],
+      "status": "active",
+      "notes": "Used for WhatsApp workflow and operational notifications with consent enforcement."
+    },
+    {
+      "id": "bi-weather-epw-sources",
+      "integrationId": "bi-weather-epw-sources",
+      "name": "EPW Weather Source Retrieval",
+      "providerName": "EPW / Weather Sources",
+      "capabilityName": "Weather file retrieval and caching",
+      "category": "weather",
+      "providerProfileId": "pp-weather-sources",
+      "direction": "outbound",
+      "mode": "download",
+      "interactionMode": "download",
+      "implementationScope": "backend",
+      "protocols": [
+        "HTTPS"
+      ],
+      "relatedApiIds": [
+        "api-simulations-create"
+      ],
+      "relatedUseCaseIds": [
+        "uc-simulation-orchestration"
+      ],
+      "status": "active",
+      "notes": "Used for regional weather mapping and simulation preflight; cached when available."
+    },
+    {
+      "id": "bi-webhook-subscribers",
+      "integrationId": "bi-webhook-subscribers",
+      "name": "External Webhook Subscribers",
+      "providerName": "External Webhook Subscribers",
+      "capabilityName": "Outbound event delivery to subscriber endpoints",
+      "category": "webhook",
+      "providerProfileId": "pp-webhook-subscribers",
+      "direction": "outbound",
+      "mode": "webhook",
+      "interactionMode": "webhook",
+      "implementationScope": "backend",
+      "protocols": [
+        "HTTPS callback",
+        "HMAC-SHA256"
+      ],
+      "relatedApiIds": [
+        "api-provider-credentials-create",
+        "api-webhooks-create"
+      ],
+      "relatedUseCaseIds": [
+        "uc-provider-credential-management",
+        "uc-webhook-subscription-management"
+      ],
+      "status": "active",
+      "notes": "Supports HMAC-signed outbound webhooks with rotating secrets and optional IP allowlisting."
+    },
+    {
+      "id": "bi-rhino-grasshopper",
+      "integrationId": "bi-rhino-grasshopper",
+      "name": "Rhino and Grasshopper Workflow Integration",
+      "providerName": "Rhino / Grasshopper",
+      "capabilityName": "Daylight and glare workflow support",
+      "category": "toolchain",
+      "providerProfileId": "pp-rhino-grasshopper",
+      "direction": "bidirectional",
+      "mode": "file_exchange_assisted_orchestration",
+      "interactionMode": "file_exchange_assisted_orchestration",
+      "implementationScope": "backend",
+      "protocols": [
+        "File exchange",
+        "Assisted orchestration"
+      ],
+      "relatedApiIds": [
+        "api-simulations-create",
+        "api-artifacts-create"
+      ],
+      "relatedUseCaseIds": [
+        "uc-simulation-orchestration",
+        "uc-tool-data-import-export"
+      ],
+      "status": "active",
+      "notes": "Supports daylight and glare workflows."
+    },
+    {
+      "id": "bi-designbuilder",
+      "integrationId": "bi-designbuilder",
+      "name": "DesignBuilder Simulation Integration",
+      "providerName": "DesignBuilder",
+      "capabilityName": "Energy and related simulation workflow support",
+      "category": "toolchain",
+      "providerProfileId": "pp-designbuilder",
+      "direction": "bidirectional",
+      "mode": "api_cli_or_file_exchange",
+      "interactionMode": "api_cli_or_file_exchange",
+      "implementationScope": "backend",
+      "protocols": [
+        "API",
+        "CLI",
+        "File exchange"
+      ],
+      "relatedApiIds": [
+        "api-simulations-create",
+        "api-artifacts-create",
+        "api-tool-import",
+        "api-tool-export"
+      ],
+      "relatedUseCaseIds": [
+        "uc-simulation-orchestration",
+        "uc-tool-data-import-export"
+      ],
+      "status": "active",
+      "notes": "Supports energy and related simulation workflows with license preflight."
+    },
+    {
+      "id": "bi-equest",
+      "integrationId": "bi-equest",
+      "name": "eQUEST Simulation Integration",
+      "providerName": "eQUEST",
+      "capabilityName": "Approved energy simulation workflow support",
+      "category": "toolchain",
+      "providerProfileId": "pp-equest",
+      "direction": "bidirectional",
+      "mode": "cli_or_file_exchange",
+      "interactionMode": "cli_or_file_exchange",
+      "implementationScope": "backend",
+      "protocols": [
+        "CLI",
+        "File exchange"
+      ],
+      "relatedApiIds": [
+        "api-simulations-create",
+        "api-artifacts-create",
+        "api-tool-import",
+        "api-tool-export"
+      ],
+      "relatedUseCaseIds": [
+        "uc-simulation-orchestration",
+        "uc-tool-data-import-export"
+      ],
+      "status": "active",
+      "notes": "Supports approved energy simulation workflows."
+    },
+    {
+      "id": "bi-iesve",
+      "integrationId": "bi-iesve",
+      "name": "IESVE Import Export Integration",
+      "providerName": "IESVE",
+      "capabilityName": "Result ingestion and import/export workflows",
+      "category": "toolchain",
+      "providerProfileId": "pp-iesve",
+      "direction": "bidirectional",
+      "mode": "file_exchange",
+      "interactionMode": "file_exchange",
+      "implementationScope": "backend",
+      "protocols": [
+        "File exchange",
+        "Supported interfaces"
+      ],
+      "relatedApiIds": [
+        "api-simulations-create",
+        "api-artifacts-create",
+        "api-tool-import",
+        "api-tool-export"
+      ],
+      "relatedUseCaseIds": [
+        "uc-simulation-orchestration",
+        "uc-tool-data-import-export"
+      ],
+      "status": "active",
+      "notes": "Supports result ingestion and import/export workflows."
+    },
+    {
+      "id": "bi-oneclick-lca",
+      "integrationId": "bi-oneclick-lca",
+      "name": "OneClick LCA Result Ingestion",
+      "providerName": "OneClick LCA",
+      "capabilityName": "Carbon and lifecycle result ingestion",
+      "category": "toolchain",
+      "providerProfileId": "pp-oneclick-lca",
+      "direction": "inbound",
+      "mode": "api_or_file_exchange",
+      "interactionMode": "api_or_file_exchange",
+      "implementationScope": "backend",
+      "protocols": [
+        "API",
+        "File exchange"
+      ],
+      "relatedApiIds": [
+        "api-artifacts-create",
+        "api-oneclick-import",
+        "api-oneclick-export"
+      ],
+      "relatedUseCaseIds": [
+        "uc-tool-data-import-export"
+      ],
+      "status": "active",
+      "notes": "Supports carbon and lifecycle result ingestion within MVP boundaries."
+    },
+    {
+      "id": "bi-revit",
+      "integrationId": "bi-revit",
+      "name": "Revit Import Export Reference Integration",
+      "providerName": "Revit",
+      "capabilityName": "Reference import/export workflows",
+      "category": "toolchain",
+      "providerProfileId": "pp-revit",
+      "direction": "bidirectional",
+      "mode": "file_import_export",
+      "interactionMode": "file_import_export",
+      "implementationScope": "backend",
+      "protocols": [
+        "File upload",
+        "File export"
+      ],
+      "relatedApiIds": [
+        "api-simulations-create",
+        "api-artifacts-create",
+        "api-tool-import",
+        "api-tool-export"
+      ],
+      "relatedUseCaseIds": [
+        "uc-simulation-orchestration",
+        "uc-tool-data-import-export"
+      ],
+      "status": "active",
+      "notes": "Reference-only at MVP; no headless automation."
+    },
+    {
+      "id": "bi-pyrosim",
+      "integrationId": "bi-pyrosim",
+      "name": "Pyrosim Connectivity Placeholder",
+      "providerName": "Pyrosim",
+      "capabilityName": "Future toolchain connectivity placeholder",
+      "category": "toolchain",
+      "providerProfileId": "pp-pyrosim",
+      "direction": "bidirectional",
+      "mode": "placeholder",
+      "interactionMode": "placeholder",
+      "implementationScope": "backend",
+      "protocols": [
+        "File exchange"
+      ],
+      "relatedApiIds": [
+        "api-artifacts-create"
+      ],
+      "relatedUseCaseIds": [
+        "uc-tool-data-import-export"
+      ],
+      "status": "placeholder",
+      "notes": "Connectivity represented as a future placeholder only; fire and smoke simulation workflows remain out of scope at MVP."
+    },
+    {
+      "id": "bi-iot-sources",
+      "integrationId": "bi-iot-sources",
+      "name": "IoT Data Source Ingestion",
+      "providerName": "IoT Data Sources",
+      "capabilityName": "Telemetry and structured data ingestion",
+      "category": "iot",
+      "providerProfileId": "pp-iot-sources",
+      "direction": "inbound",
+      "mode": "api_or_import_export",
+      "interactionMode": "api_or_import_export",
+      "implementationScope": "backend",
+      "protocols": [
+        "API",
+        "File import"
+      ],
+      "relatedApiIds": [
+        "api-artifacts-create",
+        "api-iot-import",
+        "api-iot-export"
+      ],
+      "relatedUseCaseIds": [
+        "uc-tool-data-import-export"
+      ],
+      "status": "active",
+      "notes": "Supports scheduled and on-demand ingestion of telemetry and structured data."
+    },
+    {
+      "id": "bi-autodesk-acc-manual-import",
+      "integrationId": "bi-autodesk-acc-manual-import",
+      "name": "Autodesk ACC Manual Import",
+      "providerName": "Autodesk ACC",
+      "capabilityName": "Manual content import",
+      "category": "content_source",
+      "providerProfileId": "pp-autodesk-acc",
+      "direction": "inbound",
+      "mode": "manual_import",
+      "interactionMode": "manual_import",
+      "implementationScope": "backend",
+      "protocols": [
+        "File download",
+        "File upload"
+      ],
+      "relatedApiIds": [
+        "api-artifacts-create"
+      ],
+      "relatedUseCaseIds": [
+        "uc-tool-data-import-export"
+      ],
+      "status": "active",
+      "notes": "Manual export/import only at MVP; AEON becomes system of record after ingestion."
+    },
+    {
+      "id": "bi-windows-onprem-connector",
+      "integrationId": "bi-windows-onprem-connector",
+      "name": "Windows On-Prem Connector Service",
+      "providerName": "Windows On-Prem Connector Service",
+      "capabilityName": "Secure file and API relay for restricted environments",
+      "category": "connector",
+      "providerProfileId": "pp-windows-onprem-connector",
+      "direction": "bidirectional",
+      "mode": "service_relay",
+      "interactionMode": "service_relay",
+      "implementationScope": "backend",
+      "protocols": [
+        "Windows service",
+        "File exchange",
+        "API relay"
+      ],
+      "relatedApiIds": [
+        "api-simulations-create",
+        "api-artifacts-create"
+      ],
+      "relatedUseCaseIds": [
+        "uc-simulation-orchestration",
+        "uc-tool-data-import-export"
+      ],
+      "status": "active",
+      "notes": "Supports restricted and on-prem environments through secure relay patterns. On-prem deployments must still allow outbound HTTPS to OpenAI endpoints and licensed simulation/tool servers or corresponding AI-assisted features will be disabled."
+    },
+    {
+      "id": "bi-certification-portals-placeholder",
+      "integrationId": "bi-certification-portals-placeholder",
+      "name": "Certification Portal Manual Placeholder Framework",
+      "providerName": "Certification Portals",
+      "capabilityName": "Portal configuration and manual submission packaging support",
+      "category": "portal",
+      "providerProfileId": "pp-certification-portals",
+      "direction": "outbound_by_user",
+      "mode": "manualPlaceholder",
+      "interactionMode": "manualPlaceholder",
+      "implementationScope": "backend",
+      "protocols": [
+        "User download/upload",
+        "File package"
+      ],
+      "relatedApiIds": [
+        "api-portal-configurations-upsert",
+        "api-packages-create"
+      ],
+      "relatedUseCaseIds": [
+        "uc-portal-configuration-management",
+        "uc-tool-data-import-export"
+      ],
+      "status": "placeholder",
+      "notes": "Future-ready per-portal configuration at MVP with manual packaging only; no live API integration and no RPA at MVP, while preserving enablement controls for future official portal APIs when available."
+    },
+    {
+      "id": "bi-object-storage-or-nas",
+      "integrationId": "bi-object-storage-or-nas",
+      "name": "Object Storage or NAS",
+      "providerName": "Object Storage or NAS",
+      "capabilityName": "Artifact and generated-output storage",
+      "category": "storage",
+      "providerProfileId": "pp-object-storage-or-nas",
+      "direction": "bidirectional",
+      "mode": "storage_access",
+      "interactionMode": "storage_access",
+      "implementationScope": "backend",
+      "protocols": [
+        "Object storage API",
+        "NAS/SMB"
+      ],
+      "relatedApiIds": [
+        "api-branding-assets-upload",
+        "api-documents-generate",
+        "api-tool-export",
+        "api-iot-export",
+        "api-tenant-export-create"
+      ],
+      "relatedUseCaseIds": [
+        "uc-branding-management",
+        "uc-document-generation",
+        "uc-tool-data-import-export",
+        "uc-tenant-export-management"
+      ],
+      "status": "active",
+      "notes": "SaaS deployments use object storage; on-prem deployments use NAS/SMB. Storage paths are tenant- and project-scoped. Branding assets, tool exports, IoT exports, and tenant export bundles use distinct paths."
+    },
+    {
+      "id": "bi-malware-scanning-service",
+      "integrationId": "bi-malware-scanning-service",
+      "name": "Malware Scanning Service",
+      "providerName": "Malware Scanning Service",
+      "capabilityName": "Malware and unsafe payload scanning for branding uploads",
+      "category": "security",
+      "providerProfileId": "pp-malware-scanning-service",
+      "direction": "outbound",
+      "mode": "api",
+      "interactionMode": "api",
+      "implementationScope": "backend",
+      "protocols": [
+        "HTTPS REST"
+      ],
+      "relatedApiIds": [
+        "api-branding-assets-upload"
+      ],
+      "relatedUseCaseIds": [
+        "uc-branding-management"
+      ],
+      "status": "active",
+      "notes": "Runtime alignment: BrandingAssetService depends on IMalwareScannerClient (MalwareScannerClient) to scan logo and fonts uploads before persistence."
+    },
+    {
+      "id": "bi-self-hosted-elasticsearch",
+      "integrationId": "bi-self-hosted-elasticsearch",
+      "name": "Self-hosted Elasticsearch",
+      "providerName": "Self-hosted Elasticsearch",
+      "capabilityName": "Search and indexing backbone",
+      "category": "search",
+      "providerProfileId": "pp-self-hosted-elasticsearch",
+      "direction": "bidirectional",
+      "mode": "service_dependency",
+      "interactionMode": "service_dependency",
+      "implementationScope": "backend",
+      "protocols": [
+        "HTTPS REST"
+      ],
+      "relatedApiIds": [
+        "api-artifacts-search",
+        "api-standards-corpus-list"
+      ],
+      "relatedUseCaseIds": [
+        "uc-evidence-repository-search",
+        "uc-standards-corpus-management",
+        "uc-standards-qa"
+      ],
+      "status": "active",
+      "notes": "Tenant-scoped indices for evidence and standards corpus. Degrades gracefully — transactional operations continue in SQL Server when Elasticsearch is unavailable."
+    },
+    {
+      "id": "bi-tesseract-ocr",
+      "integrationId": "bi-tesseract-ocr",
+      "name": "Tesseract OCR",
+      "providerName": "Tesseract OCR",
+      "capabilityName": "OCR and structured extraction dependency",
+      "category": "ocr",
+      "providerProfileId": "pp-tesseract-ocr",
+      "direction": "internal",
+      "mode": "local_service_or_cli",
+      "interactionMode": "local_service_or_cli",
+      "implementationScope": "backend",
+      "protocols": [
+        "Local process",
+        "CLI"
+      ],
+      "relatedApiIds": [
+        "api-artifact-extraction-get",
+        "api-artifact-extraction-review"
+      ],
+      "relatedUseCaseIds": [
+        "uc-extraction-review"
+      ],
+      "status": "active",
+      "notes": "Self-hosted local dependency on Windows VM workers. No external HTTP API — invoked as local process via file-based input/output."
+    },
+    {
+      "id": "bi-signalr-hub",
+      "integrationId": "bi-signalr-hub",
+      "name": "SignalR Hub",
+      "providerName": "SignalR Hub",
+      "capabilityName": "Server-side realtime event push",
+      "category": "realtime",
+      "providerProfileId": "pp-signalr-hub",
+      "direction": "outbound",
+      "mode": "wss_push",
+      "interactionMode": "wss_push",
+      "implementationScope": "backend",
+      "protocols": [
+        "WSS",
+        "SSE fallback"
+      ],
+      "relatedApiIds": [
+        "api-notifications-list"
+      ],
+      "relatedUseCaseIds": [
+        "uc-notification-monitoring"
+      ],
+      "status": "active",
+      "notes": "Backend hub pushes simulation status, notification inbox, artifact processing, auditor query events, and submission package status to connected React clients."
+    },
+    {
+      "id": "bi-sftp-export-delivery",
+      "integrationId": "bi-sftp-export-delivery",
+      "name": "SFTP Export Delivery",
+      "providerName": "SFTP Export Delivery",
+      "capabilityName": "Optional secure file transfer for export delivery",
+      "category": "file_transfer",
+      "providerProfileId": "pp-sftp-export-delivery",
+      "direction": "outbound",
+      "mode": "sftp",
+      "interactionMode": "sftp",
+      "implementationScope": "backend",
+      "protocols": [
+        "SFTP"
+      ],
+      "relatedApiIds": [
+        "api-iot-export",
+        "api-tenant-export-create"
+      ],
+      "relatedUseCaseIds": [
+        "uc-tool-data-import-export",
+        "uc-tenant-export-management"
+      ],
+      "status": "active",
+      "notes": "Optional secondary delivery channel — only active when SFTP provider credentials are configured per tenant. Primary persistence via Object Storage must succeed first."
+    }
+  ],
+  "frontendIntegrations": [
+    {
+      "integrationCode": "fi-signalr-realtime-notifications",
+      "integrationId": "fi-signalr-realtime-notifications",
+      "displayName": "SignalR Realtime Notifications",
+      "category": "realtime",
+      "providerCode": "signalr-realtime",
+      "providerName": "SignalR Hub",
+      "capabilityName": "Realtime in-app updates",
+      "implementationScope": "frontend",
+      "interactionMode": "wss_with_sse_fallback",
+      "direction": "inbound",
+      "mode": "wss_with_sse_fallback",
+      "protocols": [
+        "WSS",
+        "SSE"
+      ],
+      "status": "required",
+      "purpose": "Realtime in-app delivery of notifications, artifact processing updates, simulation status, packaging status, auditor query events, and inbox updates."
+    }
+  ],
+  "providerProfiles": [
+    {
+      "id": "pp-ai-gateway-openai",
+      "providerCode": "india-ai-gateway-openai-gpt-5-1",
+      "providerName": "Self-hosted India AI Gateway",
+      "providerType": "ai",
+      "status": "approved",
+      "usageConstraint": "OpenAI GPT 5.1 accessed only through self-hosted India AI Gateway; no direct provider calls",
+      "capabilities": [
+        "pre_assessment",
+        "credit_interpretation",
+        "recommendations",
+        "auditor_qa_assistance",
+        "standards_qa"
+      ]
+    },
+    {
+      "id": "pp-sendgrid",
+      "providerCode": "sendgrid",
+      "providerName": "SendGrid",
+      "providerType": "notification",
+      "status": "approved",
+      "usageConstraint": "Email notifications only",
+      "capabilities": [
+        "email_delivery"
+      ]
+    },
+    {
+      "id": "pp-meta-cloud-api",
+      "providerCode": "meta-cloud-api",
+      "providerName": "Meta Cloud API",
+      "providerType": "notification",
+      "status": "approved",
+      "usageConstraint": "WhatsApp workflow and operational notifications only with consent",
+      "capabilities": [
+        "whatsapp_delivery"
+      ]
+    },
+    {
+      "id": "pp-weather-sources",
+      "providerCode": "epw-weather-sources",
+      "providerName": "EPW / Weather Sources",
+      "providerType": "weather",
+      "status": "approved",
+      "usageConstraint": "Weather file retrieval and caching for simulation workflows",
+      "capabilities": [
+        "weather_file_download"
+      ]
+    },
+    {
+      "id": "pp-webhook-subscribers",
+      "providerCode": "external-webhook-subscribers",
+      "providerName": "External Webhook Subscribers",
+      "providerType": "webhook",
+      "status": "approved",
+      "usageConstraint": "Outbound event delivery with HMAC signing",
+      "capabilities": [
+        "event_subscription"
+      ]
+    },
+    {
+      "id": "pp-rhino-grasshopper",
+      "providerCode": "rhino-grasshopper",
+      "providerName": "Rhino / Grasshopper",
+      "providerType": "toolchain",
+      "status": "approved",
+      "usageConstraint": "File exchange and assisted orchestration",
+      "capabilities": [
+        "simulation_workflow_support"
+      ]
+    },
+    {
+      "id": "pp-designbuilder",
+      "providerCode": "designbuilder",
+      "providerName": "DesignBuilder",
+      "providerType": "toolchain",
+      "status": "approved",
+      "usageConstraint": "API/CLI where applicable or file exchange",
+      "capabilities": [
+        "energy_simulation_workflow"
+      ]
+    },
+    {
+      "id": "pp-equest",
+      "providerCode": "equest",
+      "providerName": "eQUEST",
+      "providerType": "toolchain",
+      "status": "approved",
+      "usageConstraint": "CLI or file exchange workflow",
+      "capabilities": [
+        "energy_simulation_workflow"
+      ]
+    },
+    {
+      "id": "pp-iesve",
+      "providerCode": "iesve",
+      "providerName": "IESVE",
+      "providerType": "toolchain",
+      "status": "approved",
+      "usageConstraint": "Import/export and result ingestion",
+      "capabilities": [
+        "result_ingestion",
+        "import_export"
+      ]
+    },
+    {
+      "id": "pp-oneclick-lca",
+      "providerCode": "oneclick-lca",
+      "providerName": "OneClick LCA",
+      "providerType": "toolchain",
+      "status": "approved",
+      "usageConstraint": "Inbound result ingestion only within MVP boundaries",
+      "capabilities": [
+        "carbon_result_ingestion"
+      ]
+    },
+    {
+      "id": "pp-revit",
+      "providerCode": "revit",
+      "providerName": "Revit",
+      "providerType": "toolchain",
+      "status": "approved",
+      "usageConstraint": "Import/export reference workflows only; no headless automation",
+      "capabilities": [
+        "reference_import_export"
+      ]
+    },
+    {
+      "id": "pp-pyrosim",
+      "providerCode": "pyrosim",
+      "providerName": "Pyrosim",
+      "providerType": "toolchain",
+      "status": "placeholder",
+      "usageConstraint": "Connectivity placeholder only; fire/smoke workflows out of scope at MVP",
+      "capabilities": [
+        "future_toolchain_connectivity"
+      ]
+    },
+    {
+      "id": "pp-iot-sources",
+      "providerCode": "iot-data-sources",
+      "providerName": "IoT Data Sources",
+      "providerType": "iot",
+      "status": "approved",
+      "usageConstraint": "Approved source ingestion through API or import/export",
+      "capabilities": [
+        "telemetry_ingestion"
+      ]
+    },
+    {
+      "id": "pp-autodesk-acc",
+      "providerCode": "autodesk-acc",
+      "providerName": "Autodesk ACC",
+      "providerType": "content_source",
+      "status": "approved",
+      "usageConstraint": "Manual export/import only at MVP",
+      "capabilities": [
+        "manual_content_import"
+      ]
+    },
+    {
+      "id": "pp-windows-onprem-connector",
+      "providerCode": "windows-onprem-connector-service",
+      "providerName": "Windows On-Prem Connector Service",
+      "providerType": "connector",
+      "status": "approved",
+      "usageConstraint": "Secure relay for restricted or air-gapped environments",
+      "capabilities": [
+        "file_relay",
+        "api_relay"
+      ]
+    },
+    {
+      "id": "pp-certification-portals",
+      "providerCode": "certification-portals-manual-placeholder",
+      "providerName": "Certification Portals",
+      "providerType": "portal",
+      "status": "placeholder",
+      "usageConstraint": "manualPlaceholder mode only at MVP",
+      "capabilities": [
+        "portal_configuration",
+        "manual_submission_packaging"
+      ]
+    },
+    {
+      "id": "pp-object-storage-or-nas",
+      "providerCode": "object-storage-or-nas",
+      "providerName": "Object Storage or NAS",
+      "providerType": "storage",
+      "status": "approved",
+      "usageConstraint": "SaaS deployments use object storage; on-prem deployments use NAS/SMB. All stored content must remain India-resident.",
+      "capabilities": [
+        "artifact_storage",
+        "document_storage",
+        "export_storage",
+        "branding_asset_storage"
+      ]
+    },
+    {
+      "id": "pp-malware-scanning-service",
+      "providerCode": "malware-scanning-service",
+      "providerName": "Malware Scanning Service",
+      "providerType": "security",
+      "status": "approved",
+      "usageConstraint": "Used for branding asset upload malware scanning; external dependency contract is not specified by provided official documentation",
+      "capabilities": [
+        "file_malware_scanning"
+      ]
+    },
+    {
+      "id": "pp-self-hosted-elasticsearch",
+      "providerCode": "self-hosted-elasticsearch",
+      "providerName": "Self-hosted Elasticsearch",
+      "providerType": "search",
+      "status": "approved",
+      "usageConstraint": "Self-hosted deployment only; tenant-scoped indices; search degrades gracefully when unavailable",
+      "capabilities": [
+        "evidence_search",
+        "standards_corpus_search",
+        "artifact_indexing"
+      ]
+    },
+    {
+      "id": "pp-tesseract-ocr",
+      "providerCode": "tesseract-ocr",
+      "providerName": "Tesseract OCR",
+      "providerType": "ocr",
+      "status": "approved",
+      "usageConstraint": "Local process on Windows VM workers only; no external API calls",
+      "capabilities": [
+        "ocr_extraction",
+        "document_text_extraction"
+      ]
+    },
+    {
+      "id": "pp-signalr-hub",
+      "providerCode": "signalr-hub",
+      "providerName": "SignalR Hub",
+      "providerType": "realtime",
+      "status": "approved",
+      "usageConstraint": "Platform-managed hub; tenant and user scoped group targeting enforced",
+      "capabilities": [
+        "realtime_push",
+        "event_streaming"
+      ]
+    },
+    {
+      "id": "pp-sftp-export-delivery",
+      "providerCode": "sftp-export-delivery",
+      "providerName": "SFTP Export Delivery",
+      "providerType": "file_transfer",
+      "status": "approved",
+      "usageConstraint": "Optional; only active when governed provider credentials are configured per tenant",
+      "capabilities": [
+        "sftp_file_delivery"
+      ]
+    }
+  ],
+  "integrationMappings": [
+    {
+      "integrationId": "bi-ai-gateway-openai",
+      "actionOrApi": "api-provider-credentials-create",
+      "integrationIds": [
+        "bi-ai-gateway-openai",
+        "bi-sendgrid-email",
+        "bi-meta-cloud-api-whatsapp",
+        "bi-webhook-subscribers"
+      ],
+      "consumesApiIds": [],
+      "consumesScreenIds": [
+        "scr-admin-data-governance"
+      ],
+      "consumesUseCaseIds": [
+        "uc-provider-credential-management"
+      ]
+    },
+    {
+      "integrationId": "bi-webhook-subscribers",
+      "actionOrApi": "api-webhooks-create",
+      "integrationIds": [
+        "bi-webhook-subscribers"
+      ],
+      "consumesApiIds": [],
+      "consumesScreenIds": [
+        "scr-admin-governance"
+      ],
+      "consumesUseCaseIds": [
+        "uc-webhook-subscription-management"
+      ]
+    },
+    {
+      "integrationId": "bi-certification-portals-placeholder",
+      "actionOrApi": "api-portal-configurations-upsert",
+      "integrationIds": [
+        "bi-certification-portals-placeholder"
+      ],
+      "consumesApiIds": [],
+      "consumesScreenIds": [
+        "scr-admin-data-governance"
+      ],
+      "consumesUseCaseIds": [
+        "uc-portal-configuration-management"
+      ]
+    },
+    {
+      "integrationId": "bi-designbuilder",
+      "actionOrApi": "api-simulations-create",
+      "integrationIds": [
+        "bi-rhino-grasshopper",
+        "bi-designbuilder",
+        "bi-equest",
+        "bi-iesve",
+        "bi-revit",
+        "bi-weather-epw-sources",
+        "bi-windows-onprem-connector"
+      ],
+      "consumesApiIds": [],
+      "consumesScreenIds": [
+        "scr-simulations"
+      ],
+      "consumesUseCaseIds": [
+        "uc-simulation-orchestration"
+      ]
+    },
+    {
+      "integrationId": "bi-autodesk-acc-manual-import",
+      "actionOrApi": "api-artifacts-create",
+      "integrationIds": [
+        "bi-autodesk-acc-manual-import",
+        "bi-revit",
+        "bi-oneclick-lca",
+        "bi-iot-sources",
+        "bi-rhino-grasshopper",
+        "bi-designbuilder",
+        "bi-equest",
+        "bi-iesve",
+        "bi-pyrosim"
+      ],
+      "consumesApiIds": [],
+      "consumesScreenIds": [
+        "scr-evidence"
+      ],
+      "consumesUseCaseIds": [
+        "uc-artifact-upload"
+      ]
+    },
+    {
+      "integrationId": "bi-certification-portals-placeholder",
+      "actionOrApi": "api-packages-create",
+      "integrationIds": [
+        "bi-certification-portals-placeholder"
+      ],
+      "consumesApiIds": [],
+      "consumesScreenIds": [
+        "scr-packages"
+      ],
+      "consumesUseCaseIds": [
+        "uc-submission-package-build"
+      ]
+    },
+    {
+      "integrationId": "bi-ai-gateway-openai",
+      "actionOrApi": "api-preassessments-create",
+      "integrationIds": [
+        "bi-ai-gateway-openai"
+      ],
+      "consumesApiIds": [],
+      "consumesScreenIds": [
+        "scr-preassessment"
+      ],
+      "consumesUseCaseIds": [
+        "uc-preassessment"
+      ]
+    },
+    {
+      "integrationId": "bi-ai-gateway-openai",
+      "actionOrApi": "api-interpretations-create",
+      "integrationIds": [
+        "bi-ai-gateway-openai"
+      ],
+      "consumesApiIds": [],
+      "consumesScreenIds": [
+        "scr-interpretation"
+      ],
+      "consumesUseCaseIds": [
+        "uc-credit-interpretation"
+      ]
+    },
+    {
+      "integrationId": "bi-ai-gateway-openai",
+      "actionOrApi": "api-standards-qa",
+      "integrationIds": [
+        "bi-ai-gateway-openai"
+      ],
+      "consumesApiIds": [],
+      "consumesScreenIds": [
+        "scr-standards-qa"
+      ],
+      "consumesUseCaseIds": [
+        "uc-standards-qa"
+      ]
+    },
+    {
+      "integrationId": "bi-ai-gateway-openai",
+      "actionOrApi": "api-recommendations-list",
+      "integrationIds": [
+        "bi-ai-gateway-openai"
+      ],
+      "consumesApiIds": [],
+      "consumesScreenIds": [
+        "scr-recommendations"
+      ],
+      "consumesUseCaseIds": [
+        "uc-recommendations"
+      ]
+    },
+    {
+      "integrationId": "bi-ai-gateway-openai",
+      "actionOrApi": "api-recommendations-backing-list",
+      "integrationIds": [
+        "bi-ai-gateway-openai"
+      ],
+      "consumesApiIds": [],
+      "consumesScreenIds": [
+        "scr-recommendations"
+      ],
+      "consumesUseCaseIds": [
+        "uc-recommendations"
+      ]
+    },
+    {
+      "integrationId": "bi-object-storage-or-nas",
+      "actionOrApi": "api-branding-assets-upload",
+      "integrationIds": [
+        "bi-object-storage-or-nas",
+        "bi-malware-scanning-service"
+      ],
+      "consumesApiIds": [],
+      "consumesScreenIds": [
+        "scr-admin-branding-templates"
+      ],
+      "consumesUseCaseIds": [
+        "uc-branding-management"
+      ]
+    },
+    {
+      "integrationId": "bi-object-storage-or-nas",
+      "actionOrApi": "api-documents-generate",
+      "integrationIds": [
+        "bi-object-storage-or-nas"
+      ],
+      "consumesApiIds": [],
+      "consumesScreenIds": [
+        "scr-documents"
+      ],
+      "consumesUseCaseIds": [
+        "uc-document-generation"
+      ]
+    },
+    {
+      "integrationId": "bi-object-storage-or-nas",
+      "actionOrApi": "api-tool-export",
+      "integrationIds": [
+        "bi-object-storage-or-nas"
+      ],
+      "consumesApiIds": [],
+      "consumesScreenIds": [
+        "scr-tool-mappings"
+      ],
+      "consumesUseCaseIds": [
+        "uc-tool-data-import-export"
+      ]
+    },
+    {
+      "integrationId": "bi-object-storage-or-nas",
+      "actionOrApi": "api-iot-export",
+      "integrationIds": [
+        "bi-object-storage-or-nas"
+      ],
+      "consumesApiIds": [],
+      "consumesScreenIds": [
+        "scr-tool-mappings"
+      ],
+      "consumesUseCaseIds": [
+        "uc-tool-data-import-export"
+      ]
+    },
+    {
+      "integrationId": "bi-object-storage-or-nas",
+      "actionOrApi": "api-tenant-export-create",
+      "integrationIds": [
+        "bi-object-storage-or-nas"
+      ],
+      "consumesApiIds": [],
+      "consumesScreenIds": [
+        "scr-admin-governance"
+      ],
+      "consumesUseCaseIds": [
+        "uc-tenant-export-management"
+      ]
+    },
+    {
+      "integrationId": "bi-self-hosted-elasticsearch",
+      "actionOrApi": "api-artifacts-search",
+      "integrationIds": [
+        "bi-self-hosted-elasticsearch"
+      ],
+      "consumesApiIds": [],
+      "consumesScreenIds": [
+        "scr-evidence"
+      ],
+      "consumesUseCaseIds": [
+        "uc-evidence-repository-search"
+      ]
+    },
+    {
+      "integrationId": "bi-self-hosted-elasticsearch",
+      "actionOrApi": "api-standards-corpus-list",
+      "integrationIds": [
+        "bi-self-hosted-elasticsearch"
+      ],
+      "consumesApiIds": [],
+      "consumesScreenIds": [
+        "scr-standards-qa"
+      ],
+      "consumesUseCaseIds": [
+        "uc-standards-corpus-management",
+        "uc-standards-qa"
+      ]
+    },
+    {
+      "integrationId": "bi-meta-cloud-api-whatsapp",
+      "actionOrApi": "api-whatsapp-consent-create",
+      "integrationIds": [
+        "bi-meta-cloud-api-whatsapp"
+      ],
+      "consumesApiIds": [],
+      "consumesScreenIds": [
+        "scr-admin-notifications"
+      ],
+      "consumesUseCaseIds": [
+        "uc-whatsapp-consent-management"
+      ]
+    },
+    {
+      "integrationId": "bi-meta-cloud-api-whatsapp",
+      "actionOrApi": "api-whatsapp-unsubscribe",
+      "integrationIds": [
+        "bi-meta-cloud-api-whatsapp"
+      ],
+      "consumesApiIds": [],
+      "consumesScreenIds": [
+        "scr-admin-notifications"
+      ],
+      "consumesUseCaseIds": [
+        "uc-whatsapp-consent-management"
+      ]
+    },
+    {
+      "integrationId": "bi-meta-cloud-api-whatsapp",
+      "actionOrApi": "api-notification-rules-create",
+      "integrationIds": [
+        "bi-meta-cloud-api-whatsapp",
+        "bi-sendgrid-email"
+      ],
+      "consumesApiIds": [],
+      "consumesScreenIds": [
+        "scr-admin-notifications"
+      ],
+      "consumesUseCaseIds": [
+        "uc-notification-rule-management"
+      ]
+    },
+    {
+      "integrationId": "bi-sendgrid-email",
+      "actionOrApi": "api-notification-settings-update",
+      "integrationIds": [
+        "bi-sendgrid-email"
+      ],
+      "consumesApiIds": [],
+      "consumesScreenIds": [
+        "scr-admin-notifications"
+      ],
+      "consumesUseCaseIds": [
+        "uc-notification-settings-management"
+      ]
+    },
+    {
+      "integrationId": "bi-designbuilder",
+      "actionOrApi": "api-tool-import",
+      "integrationIds": [
+        "bi-designbuilder",
+        "bi-equest",
+        "bi-iesve",
+        "bi-revit"
+      ],
+      "consumesApiIds": [],
+      "consumesScreenIds": [
+        "scr-tool-mappings"
+      ],
+      "consumesUseCaseIds": [
+        "uc-tool-data-import-export"
+      ]
+    },
+    {
+      "integrationId": "bi-designbuilder",
+      "actionOrApi": "api-tool-export",
+      "integrationIds": [
+        "bi-designbuilder",
+        "bi-equest",
+        "bi-iesve",
+        "bi-revit"
+      ],
+      "consumesApiIds": [],
+      "consumesScreenIds": [
+        "scr-tool-mappings"
+      ],
+      "consumesUseCaseIds": [
+        "uc-tool-data-import-export"
+      ]
+    },
+    {
+      "integrationId": "bi-iot-sources",
+      "actionOrApi": "api-iot-import",
+      "integrationIds": [
+        "bi-iot-sources"
+      ],
+      "consumesApiIds": [],
+      "consumesScreenIds": [
+        "scr-tool-mappings"
+      ],
+      "consumesUseCaseIds": [
+        "uc-tool-data-import-export"
+      ]
+    },
+    {
+      "integrationId": "bi-iot-sources",
+      "actionOrApi": "api-iot-export",
+      "integrationIds": [
+        "bi-iot-sources"
+      ],
+      "consumesApiIds": [],
+      "consumesScreenIds": [
+        "scr-tool-mappings"
+      ],
+      "consumesUseCaseIds": [
+        "uc-tool-data-import-export"
+      ]
+    },
+    {
+      "integrationId": "bi-oneclick-lca",
+      "actionOrApi": "api-oneclick-import",
+      "integrationIds": [
+        "bi-oneclick-lca"
+      ],
+      "consumesApiIds": [],
+      "consumesScreenIds": [
+        "scr-tool-mappings"
+      ],
+      "consumesUseCaseIds": [
+        "uc-tool-data-import-export"
+      ]
+    },
+    {
+      "integrationId": "bi-oneclick-lca",
+      "actionOrApi": "api-oneclick-export",
+      "integrationIds": [
+        "bi-oneclick-lca"
+      ],
+      "consumesApiIds": [],
+      "consumesScreenIds": [
+        "scr-tool-mappings"
+      ],
+      "consumesUseCaseIds": [
+        "uc-tool-data-import-export"
+      ]
+    },
+    {
+      "integrationId": "bi-tesseract-ocr",
+      "actionOrApi": "api-artifact-extraction-get",
+      "integrationIds": [
+        "bi-tesseract-ocr"
+      ],
+      "consumesApiIds": [],
+      "consumesScreenIds": [
+        "scr-evidence"
+      ],
+      "consumesUseCaseIds": [
+        "uc-extraction-review"
+      ]
+    },
+    {
+      "integrationId": "bi-tesseract-ocr",
+      "actionOrApi": "api-artifact-extraction-review",
+      "integrationIds": [
+        "bi-tesseract-ocr"
+      ],
+      "consumesApiIds": [],
+      "consumesScreenIds": [
+        "scr-evidence"
+      ],
+      "consumesUseCaseIds": [
+        "uc-extraction-review"
+      ]
+    },
+    {
+      "integrationId": "bi-signalr-hub",
+      "actionOrApi": "api-notifications-list",
+      "integrationIds": [
+        "bi-signalr-hub"
+      ],
+      "consumesApiIds": [],
+      "consumesScreenIds": [
+        "scr-notifications"
+      ],
+      "consumesUseCaseIds": [
+        "uc-notification-monitoring"
+      ]
+    },
+    {
+      "integrationId": "bi-sftp-export-delivery",
+      "actionOrApi": "api-iot-export",
+      "integrationIds": [
+        "bi-sftp-export-delivery"
+      ],
+      "consumesApiIds": [],
+      "consumesScreenIds": [
+        "scr-tool-mappings"
+      ],
+      "consumesUseCaseIds": [
+        "uc-tool-data-import-export"
+      ]
+    },
+    {
+      "integrationId": "bi-sftp-export-delivery",
+      "actionOrApi": "api-tenant-export-create",
+      "integrationIds": [
+        "bi-sftp-export-delivery"
+      ],
+      "consumesApiIds": [],
+      "consumesScreenIds": [
+        "scr-admin-governance"
+      ],
+      "consumesUseCaseIds": [
+        "uc-tenant-export-management"
+      ]
+    }
+  ],
+  "detailRefs": []
+}

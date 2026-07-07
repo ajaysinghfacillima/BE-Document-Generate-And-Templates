@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aeondocgen-document-render-store-worker
+  labels:
+    app.kubernetes.io/name: aeondocgen-document-render-store-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: aeondocgen-document-render-store-worker
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: aeondocgen-document-render-store-worker
+    spec:
+      serviceAccountName: aeondocgen-document-render-store-worker
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+      containers:
+        - name: worker
+          image: aeondocgen-api:latest
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
+          env:
+            - name: ASPNETCORE_URLS
+              value: http://+:8080
+            - name: DocumentGeneration__EnableInlineRenderWorkerFallback
+              value: "false"
+          command:
+            - dotnet
+            - AeonDocGen.Api.dll
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: aeondocgen-document-render-store-worker
+  labels:
+    app.kubernetes.io/name: aeondocgen-document-render-store-worker
