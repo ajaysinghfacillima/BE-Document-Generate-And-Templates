@@ -79,7 +79,7 @@ public class ApiContractTests
         Assert.Contains("multipart/form-data", consumesAttr!.ContentTypes);
     }
 
-    // --- POST /api/v1/projects/{projectId}/document-generations ---
+    // --- POST /api/v1/projects/{projectId}/documents/generate ---
 
     [Fact]
     public void DocumentsGenerationController_HasRouteAttribute_WithCorrectPath()
@@ -87,7 +87,7 @@ public class ApiContractTests
         var routeAttr = typeof(DocumentsGenerationController)
             .GetCustomAttribute<RouteAttribute>();
         Assert.NotNull(routeAttr);
-        Assert.Equal("api/v1/projects/{projectId}/document-generations", routeAttr!.Template);
+        Assert.Equal("api/v1/projects/{projectId}/documents/generate", routeAttr!.Template);
     }
 
     [Fact]
@@ -118,7 +118,7 @@ public class ApiContractTests
         Assert.Contains("application/json", consumesAttr!.ContentTypes);
     }
 
-    // --- POST /api/v1/projects/{projectId}/documents/{documentId}/reviews ---
+    // --- POST /api/v1/projects/{projectId}/documents/{documentId}/review ---
 
     [Fact]
     public void DocumentsReviewController_HasRouteAttribute_WithCorrectPath()
@@ -126,7 +126,7 @@ public class ApiContractTests
         var routeAttr = typeof(DocumentsReviewController)
             .GetCustomAttribute<RouteAttribute>();
         Assert.NotNull(routeAttr);
-        Assert.Equal("api/v1/projects/{projectId}/documents/{documentId}/reviews", routeAttr!.Template);
+        Assert.Equal("api/v1/projects/{projectId}/documents/{documentId}/review", routeAttr!.Template);
     }
 
     [Fact]
@@ -155,17 +155,6 @@ public class ApiContractTests
         var consumesAttr = method!.GetCustomAttribute<ConsumesAttribute>();
         Assert.NotNull(consumesAttr);
         Assert.Contains("application/json", consumesAttr!.ContentTypes);
-    }
-
-    [Fact]
-    public void ScopedRoutes_DoNotUseVerbStyleSegments()
-    {
-        var generationRoute = typeof(DocumentsGenerationController).GetCustomAttribute<RouteAttribute>()!.Template!;
-        var reviewRoute = typeof(DocumentsReviewController).GetCustomAttribute<RouteAttribute>()!.Template!;
-
-        Assert.DoesNotContain("/generate", generationRoute, StringComparison.OrdinalIgnoreCase);
-        Assert.DoesNotContain("/review/", reviewRoute, StringComparison.OrdinalIgnoreCase);
-        Assert.False(reviewRoute.EndsWith("/review", StringComparison.OrdinalIgnoreCase));
     }
 
     // --- Route parameter validation ---

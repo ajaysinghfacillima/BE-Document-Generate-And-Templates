@@ -10,7 +10,7 @@ namespace AeonDocGen.Api.Controllers;
 
 [ApiController]
 [Authorize]
-[Route("api/v1/projects/{projectId}/document-generations")]
+[Route("api/v1/projects/{projectId}/documents/generate")]
 public sealed class DocumentsGenerationController : ControllerBase
 {
     private readonly IDocumentGenerationService _documentGenerationService;

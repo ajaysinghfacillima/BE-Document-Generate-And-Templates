@@ -10,7 +10,7 @@ namespace AeonDocGen.Api.Controllers;
 
 [ApiController]
 [Authorize]
-[Route("api/v1/projects/{projectId}/documents/{documentId}/reviews")]
+[Route("api/v1/projects/{projectId}/documents/{documentId}/review")]
 public sealed class DocumentsReviewController : ControllerBase
 {
     private readonly IDocumentReviewService _documentReviewService;
